@@ -1,0 +1,130 @@
+{
+  "name": "sigus",
+  "version": "0.0.1",
+  "author": "Won Kyung Up <wonko93@naver.com>",
+  "description": "ssh2 port forwarding tools",
+  "private": true,
+  "main": "./dist/electron/main.js",
+  "scripts": {
+    "dev:win": "set ELECTRON_ENABLE_LOGGING=true && node .electron-vue/dev-runner.js  --ignore-gpu-blacklist",
+    "dev:linux": "export ELECTRON_ENABLE_LOGGING=true && node .electron-vue/dev-runner.js  --ignore-gpu-blacklist",
+    "dev:mac": "export ELECTRON_ENABLE_LOGGING=true && node .electron-vue/dev-runner.js  --ignore-gpu-blacklist",
+    "build:win": "SET NODE_OPTIONS=\"--max-old-space-size=8192\" && SET CSC_IDENTITY_AUTO_DISCOVERY=false && node .electron-vue/build.js && electron-builder",
+    "build:mac": "export NODE_OPTIONS=\"--max-old-space-size=81192\" && export CSC_IDENTITY_AUTO_DISCOVERY=false && node .electron-vue/build.js && electron-builder",
+    "build:linux": "export NODE_OPTIONS=\"--max-old-space-size=4096\" && export CSC_IDENTITY_AUTO_DISCOVERY=false && node .electron-vue/build.js && electron-builder",
+    "build:dir": "node .electron-vue/build.js && electron-builder --dir",
+    "build:clean": "cross-env BUILD_TARGET=clean node .electron-vue/build.js",
+    "build:web": "cross-env BUILD_TARGET=web node .electron-vue/build.js",
+    "lint": "eslint --ext .js,.vue -f ./node_modules/eslint-friendly-formatter src",
+    "lint:fix": "eslint --ext .js,.vue -f ./node_modules/eslint-friendly-formatter --fix src",
+    "pack": "npm run pack:main && npm run pack:renderer",
+    "pack:main": "cross-env NODE_ENV=production webpack --progress --colors --config .electron-vue/webpack.main.config.js",
+    "pack:renderer": "cross-env NODE_ENV=production webpack --progress --colors --config .electron-vue/webpack.renderer.config.js",
+    "postinstall": "npm run lint:fix"
+  },
+  "build": {
+    "productName": "sigus",
+    "appId": "com.example.example",
+    "copyright": "",
+    "directories": {
+      "output": "build"
+    },
+    "files": [
+      "dist/electron/**/*"
+    ],
+    "extraResources": [
+      {
+        "from": "./src/extraResources/",
+        "to": "extraResources",
+        "filter": [
+          "**/*"
+        ]
+      }
+    ],
+    "dmg": {
+      "contents": [
+        {
+          "x": 410,
+          "y": 150,
+          "type": "link",
+          "path": "/Applications"
+        },
+        {
+          "x": 130,
+          "y": 150,
+          "type": "file"
+        }
+      ]
+    },
+    "mac": {
+      "artifactName": "${productName}-${version}.${ext}",
+      "icon": "build/icons/icon.icns",
+      "type": "distribution",
+      "target": {
+        "target": "dmg",
+        "arch": [
+          "x64"
+        ]
+      }
+    },
+    "win": {
+      "artifactName": "${productName}-${version}.${ext}",
+      "icon": "build/icons/icon.ico",
+      "target": [
+        "nsis"
+      ]
+    },
+    "linux": {
+      "executableName": "example",
+      "icon": "build/icons",
+      "target": [
+        "snap"
+      ]
+    }
+  },
+  "dependencies": {
+    "vue": "2.6.14",
+    "vue-electron": "1.0.6",
+    "vue-router": "3.0.1",
+    "vuex": "3.6.0"
+  },
+  "devDependencies": {
+    "@babel/core": "7.14.3",
+    "@babel/plugin-transform-runtime": "7.14.3",
+    "@babel/preset-env": "7.14.4",
+    "axios": "0.21.1",
+    "babel-eslint": "10.1.0",
+    "babel-loader": "8.2.2",
+    "chalk": "2.4.1",
+    "copy-webpack-plugin": "9.0.0",
+    "cross-env": "7.0.3",
+    "css-loader": "5.2.6",
+    "del": "3.0.0",
+    "electron": "13.6.0",
+    "electron-builder": "23.0.2",
+    "electron-debug": "3.2.0",
+    "electron-devtools-installer": "3.2.0",
+    "electron-log": "4.3.5",
+    "eslint": "7.29.0",
+    "eslint-friendly-formatter": "4.0.1",
+    "eslint-loader": "4.0.2",
+    "eslint-plugin-html": "6.1.2",
+    "eslint-plugin-vue": "7.10.0",
+    "file-loader": "6.2.0",
+    "html-webpack-plugin": "5.3.1",
+    "javascript-obfuscator": "2.12.0",
+    "mini-css-extract-plugin": "1.6.0",
+    "multispinner": "0.2.1",
+    "node-loader": "0.6.0",
+    "style-loader": "0.21.0",
+    "terser-webpack-plugin": "5.1.3",
+    "url-loader": "4.1.1",
+    "vue-html-loader": "1.2.4",
+    "vue-loader": "15.9.7",
+    "vue-style-loader": "4.1.3",
+    "vue-template-compiler": "2.6.14",
+    "webpack": "5.38.1",
+    "webpack-dev-server": "3.11.2",
+    "webpack-hot-middleware": "2.25.0"
+  }
+}
