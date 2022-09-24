@@ -1,10 +1,5 @@
-## Example electron vue
-> An Example electron vue project
-
-## Preparation before use
-> Install the latest version of nodejs
->
-> https://nodejs.org/
+## Sigus
+> This program was created to make ssh tunneling easier.
 
 ### Commonly run before developers and packages
 ```
