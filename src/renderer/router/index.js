@@ -7,8 +7,8 @@ Vue.use(Router)
 export default new Router({
   routes: [
     {
-      path: '/',
-      name: 'sameple',
+      path: '/port-forwarding',
+      name: 'port-forwarding',
       component: sameple
     },
     {

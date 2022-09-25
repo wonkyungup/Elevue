@@ -1,54 +1,88 @@
 'use strict'
 
-import { app, BrowserWindow } from 'electron'
+import { 
+  app,
+  Tray,
+  Menu,
+  path,
+  BrowserWindow
+ } from './assets/lib'
+import Defs from './assets/constants'
+import Utils from './assets/utils'
 
-/**
- * Set `__static` path to static files in production
- * https://simulatedgreg.gitbooks.io/electron-vue/content/en/using-static-assets.html
- */
-if (process.env.NODE_ENV !== 'development') {
-  global.__static = require('path').join(__dirname, '/static').replace(/\\/g, '\\\\')
+let tray = null
+let portForwading = null
+let winURL = ''
+
+if (Defs.APP_IS_PRODUCTION) {
+  global.__static = path.join(__dirname, '/static').replace(/\\/g, '\\\\')
+  winURL = `file://${__dirname}/index.html`
+} else {
+  winURL = `http://localhost:9082/index.html`
 }
 
-let mainWindow
-const winURL = process.env.NODE_ENV === 'development' ? `http://localhost:9082/index.html` : `file://${__dirname}/index.html`
+if (!app.requestSingleInstanceLock()) {
+  app.exit()
+}
 
-function createWindow () {
-  /**
-   * Initial window options
-   */
-  mainWindow = new BrowserWindow({
-    height: 563,
+function createPortForwading () {
+  portForwading = new BrowserWindow({
+    frame: true,
+    title: Defs.MENU_PORT_FORWARDING,
+    minWidth: 700,
+    width: 700,
+    height: 400,
+    minHeight: 250,
     useContentSize: true,
-    width: 1000,
+    center: true,
+    show: false,
     webPreferences: {
-      nodeIntegration: true,
-      contextIsolation: false,
-      nodeIntegrationInWorker: true,
-      enableRemoteModule: true,
-      backgroundThrottling: false
+      ...Utils.getCommonWebPreferences()
     }
   })
 
-  mainWindow.loadURL(winURL)
+  // settings
+  portForwading.setMenu(null)
+  portForwading.loadURL(`${winURL}#/port-forwarding`)
 
-  mainWindow.on('closed', () => {
-    mainWindow = null
+  // event
+  portForwading.on('page-title-updated', event => {
+    event.preventDefault()
+  })
+  portForwading.on('close', event => {
+    event.sender.hide()
+    event.preventDefault()
   })
 }
 
-app.on('ready', createWindow)
+app.on('ready', () => {
+  createPortForwading()
 
-app.on('window-all-closed', () => {
-  if (process.platform !== 'darwin') {
-    app.quit()
+  if (Defs.ICON_APP) {
+    app.dock.hide()
   }
-})
 
-app.on('activate', () => {
-  if (mainWindow === null) {
-    createWindow()
-  }
+  tray = new Tray(path.join(__static, path.sep, Defs.ICON_APP))
+  tray.setContextMenu(Menu.buildFromTemplate([
+    {
+      label: Defs.MENU_PORT_FORWARDING,
+       click: () => {
+        portForwading.show()
+      }
+    },
+    { 
+      type: Defs.TYPE_SEPARATOR
+    },
+    { label: Defs.MENU_QUIT,
+      click: () => {
+        if (portForwading) {
+          portForwading = null
+        }
+
+        app.exit()
+      }
+    }
+  ]))
 })
 
 /**
