@@ -1,6 +1,12 @@
 <template>
   <div>
-    <h1>Hello World</h1>
+    <v-card dark>
+      <v-card-title>Sigus</v-card-title>
+      <v-card-text></v-card-text>
+      <v-card-actions>
+        <v-icon>mdi-menu</v-icon>
+      </v-card-actions>
+    </v-card>
   </div>
 </template>
 
