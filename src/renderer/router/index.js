@@ -1,15 +1,15 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import { sameple } from '../components/Screen'
+import * as view from '../view'
 
 Vue.use(Router)
 
 export default new Router({
   routes: [
     {
-      path: '/port-forwarding',
-      name: 'port-forwarding',
-      component: sameple
+      path: '/main-port-forwarding',
+      name: 'main-port-forwarding',
+      component: view.mainPortForwarding
     },
     {
       path: '*',
