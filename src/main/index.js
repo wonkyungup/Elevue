@@ -1,6 +1,6 @@
 'use strict'
 
-import { 
+import {
   app,
   Tray,
   Menu,
@@ -43,7 +43,7 @@ function createPortForwading () {
 
   // settings
   portForwading.setMenu(null)
-  portForwading.loadURL(`${winURL}#/port-forwarding`)
+  portForwading.loadURL(`${winURL}#/main-port-forwarding`)
 
   // event
   portForwading.on('page-title-updated', event => {
@@ -70,7 +70,7 @@ app.on('ready', () => {
         portForwading.show()
       }
     },
-    { 
+    {
       type: Defs.TYPE_SEPARATOR
     },
     { label: Defs.MENU_QUIT,

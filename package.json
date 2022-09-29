@@ -30,16 +30,12 @@
       "output": "build"
     },
     "files": [
-      "dist/electron/**/*"
-    ],
-    "extraResources": [
-      {
-        "from": "./src/extraResources/",
-        "to": "extraResources",
-        "filter": [
-          "**/*"
-        ]
-      }
+      "dist/electron/**/*",
+      "!node_modules/vuetify/json/**/*",
+      "!node_modules/vuetify/src/**/*",
+      "!node_modules/vuetify/es5/**/*",
+      "!node_modules/vuetify/lib/**/*",
+      "!node_modules/vue/src/*"
     ],
     "dmg": {
       "contents": [

@@ -1,12 +1,17 @@
 <template>
-  <div id="app">
+  <v-app id="app">
     <router-view></router-view>
-  </div>
+  </v-app>
 </template>
 
 <script>
   export default {
-    name: 'sigus'
+    name: 'sigus',
+    mounted() {
+      window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => {
+        this.$vuetify.theme.dark = window.matchMedia('(prefers-color-scheme: dark)').matches
+      })
+    }
   }
 </script>
 

@@ -6,6 +6,7 @@ import VueElectron from 'vue-electron'
 import Vuetify from 'vuetify'
 import 'vuetify/dist/vuetify.min.css'
 import '@mdi/font/css/materialdesignicons.css'
+import './assets/css/style.css'
 
 Vue.config.productionTip = false
 if (!process.env.IS_WEB) Vue.use(VueElectron)
