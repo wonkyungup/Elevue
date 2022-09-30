@@ -22,9 +22,9 @@ html, body {overflow-x:hidden;overflow-y:hidden;user-select: none !important;}
 header {-webkit-app-region: drag;}
 header button, header button:before {-webkit-app-region: no-drag;text-transform: none !important;bottom: unset !important;}
 
-
 /* main-port-forwarding */
-.main-port-forwarding > header,
-.main-port-forwarding > header > div {
-    height: 80px !important;
+.main-port-forwarding > .v-card__text,
+.main-port-forwarding > .v-card__text > div,
+.main-port-forwarding > .v-card__text > div > div {
+    height: calc(100% - 100px) !important;
 }

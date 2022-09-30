@@ -1,5 +1,5 @@
 {
-  "name": "sigus",
+  "name": "toolus",
   "version": "0.0.1",
   "private": true,
   "description": "ssh2 port forwarding tools",
@@ -23,7 +23,7 @@
     "postinstall": "npm run lint:fix"
   },
   "build": {
-    "productName": "sigus",
+    "productName": "toolus",
     "appId": "com.example.example",
     "copyright": "",
     "directories": {
