@@ -23,8 +23,6 @@ header {-webkit-app-region: drag;}
 header button, header button:before {-webkit-app-region: no-drag;text-transform: none !important;bottom: unset !important;}
 
 /* main-port-forwarding */
-.main-port-forwarding > .v-card__text,
-.main-port-forwarding > .v-card__text > div,
 .main-port-forwarding > .v-card__text > div > div {
-    height: calc(100% - 100px) !important;
+    height: calc(100vh - 100px);
 }

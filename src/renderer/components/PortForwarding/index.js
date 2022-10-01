@@ -1,7 +1,11 @@
-import Header from './Header'
-import Body from './Body'
+import Header from './Title/Header'
+import WelcomeBody from './Content/WelcomeBody'
+import SessionBody from './Content/SessionBody'
+import SessionDirection from './Drawer/SessionDirection'
 
 export {
     Header,
-    Body
+    WelcomeBody,
+    SessionBody,
+    SessionDirection
 }
