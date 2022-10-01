@@ -4,25 +4,59 @@
       :titleClass="'pa-0'"
       :textClass="'pa-0'"
       :isSubTitle="false"
-      :isActions="false"
   >
     <template v-slot:title>
-      <Header />
+      <Header v-on:msgClickNewButton="onClickNewButton"></Header>
     </template>
 
     <template v-slot:text>
-      <Body />
+      <WelcomeBody v-if="isWelcomePage()" />
+      <SessionBody v-else />
+    </template>
+
+    <template v-slot:actions>
+      <SessionDirection ref="SessionDirection" />
     </template>
   </Card>
 </template>
 
 <script>
+import { mapState, mapGetters } from 'vuex'
 import { Card } from '@/components/layout'
-import { Header, Body } from '@/components/PortForwarding'
+import {
+  Header,
+  WelcomeBody,
+  SessionBody,
+  SessionDirection
+} from '@/components/PortForwarding'
 
 export default {
   name: "MainPortForwarding",
-  components: { Card, Header, Body }
+  components: {
+    Card,
+    Header,
+    WelcomeBody,
+    SessionBody,
+    SessionDirection
+},
+  computed: {
+    ...mapState({ state: 'PortForwarding' }),
+    ...mapGetters('PortForwarding', ['isWelcomePage'])
+  },
+  watch: {
+    state: {
+      handler () {
+        console.log(this.state)
+      },
+      immediate: true,
+      deep: true
+    }
+  },
+  methods: {
+    onClickNewButton () {
+      this.$refs.SessionDirection.open()
+    }
+  }
 }
 </script>
 

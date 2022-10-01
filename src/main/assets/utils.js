@@ -1,3 +1,4 @@
+import Defs from './constants'
 import { os } from './lib'
 
 export default class Utils {
@@ -13,20 +14,20 @@ export default class Utils {
 
     static getOsFromMain () {
         switch(os.platform()) {
-            case 'linux':
-            case 'aix':
-            case 'sunos':
-            case 'netbsd':
-            case 'openbsd':
-            case 'freebsd':
-            case 'cygwin':
-            case 'android':
-                return 'Linux'
-            case 'darwin':
-                return 'Mac'
-            case 'win32':
+            case Defs.STR_LINUX:
+            case Defs.STR_AIX:
+            case Defs.STR_SUNOS:
+            case Defs.STR_NETBSD:
+            case Defs.STR_OEPNBSD:
+            case Defs.STR_FREEBSD:
+            case Defs.STR_CYGWIN:
+            case Defs.STR_ANDROID:
+                return Defs.STR_LINUX.Defs.STR_LINUX.replace(/\b[a-z]/, value => value.toUpperCase())
+            case Defs.STR_DARWIN:
+                return Defs.STR_MAC
+            case Defs.STR_WIN32:
             default:
-                return 'Windows'
+                return Defs.STR_WINDOWS
             }
     }
 }

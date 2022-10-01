@@ -7,15 +7,8 @@
           dense
           class="pt-5"
       >
-        <v-col
-            align="left"
-            :cols="12"
-        >
-          <v-btn
-              outlined
-              small
-              @click="onClickNewButton"
-          >
+        <v-col align="left" cols="12">
+          <v-btn outlined small @click="onClickNewButton">
             <v-icon left>{{ iconPlus }}</v-icon>
             <strong>{{ titlePlus }}</strong>
           </v-btn>
@@ -26,19 +19,19 @@
 </template>
 
 <script>
-import Con from '@/assets/js/constants'
+import Defs from '@/assets/js/constants'
 
 export default {
   name: "Header",
   data: () => {
     return {
-      iconPlus: Con.ICON_PLUS,
+      iconPlus: Defs.ICON_PLUS,
       titlePlus: 'NEW'
     }
   },
   methods: {
     onClickNewButton() {
-      console.log('onClickNewButton')
+      this.$emit('msgClickNewButton')
     }
   }
 }
