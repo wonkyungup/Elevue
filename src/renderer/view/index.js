@@ -1,5 +1,5 @@
-import mainPortForwarding from './MainPortForwarding'
+import portForwarding from './PortForwarding/Main'
 
 export {
-    mainPortForwarding
+    portForwarding
 }

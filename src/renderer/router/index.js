@@ -7,9 +7,9 @@ Vue.use(Router)
 export default new Router({
   routes: [
     {
-      path: '/main-port-forwarding',
-      name: 'main-port-forwarding',
-      component: view.mainPortForwarding
+      path: '/port-forwarding',
+      name: 'port-forwarding',
+      component: view.portForwarding
     },
     {
       path: '*',

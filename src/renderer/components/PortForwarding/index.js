@@ -1,11 +1,11 @@
 import Header from './Title/Header'
 import WelcomeBody from './Content/WelcomeBody'
 import SessionBody from './Content/SessionBody'
-import SessionDirection from './Drawer/SessionDirection'
+import SessionDrawer from './Drawer/SessionDrawer'
 
 export {
     Header,
     WelcomeBody,
     SessionBody,
-    SessionDirection
+    SessionDrawer
 }

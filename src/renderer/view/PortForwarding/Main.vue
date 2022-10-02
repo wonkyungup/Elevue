@@ -6,7 +6,9 @@
       :isSubTitle="false"
   >
     <template v-slot:title>
-      <Header v-on:msgClickNewButton="onClickNewButton"></Header>
+      <Header
+          v-on:msgClickNewButton="onClickNewButton"
+      ></Header>
     </template>
 
     <template v-slot:text>
@@ -15,7 +17,10 @@
     </template>
 
     <template v-slot:actions>
-      <SessionDirection ref="SessionDirection" />
+      <SessionDrawer
+          ref="SessionDrawer"
+          v-on:msgClickDirectionContinue="onClickDirectionContinue"
+      ></SessionDrawer>
     </template>
   </Card>
 </template>
@@ -27,18 +32,18 @@ import {
   Header,
   WelcomeBody,
   SessionBody,
-  SessionDirection
+  SessionDrawer
 } from '@/components/PortForwarding'
 
 export default {
-  name: "MainPortForwarding",
+  name: "Main",
   components: {
     Card,
     Header,
     WelcomeBody,
     SessionBody,
-    SessionDirection
-},
+    SessionDrawer
+  },
   computed: {
     ...mapState({ state: 'PortForwarding' }),
     ...mapGetters('PortForwarding', ['isWelcomePage'])
@@ -46,7 +51,7 @@ export default {
   watch: {
     state: {
       handler () {
-        console.log(this.state)
+        console.log(this.state.session)
       },
       immediate: true,
       deep: true
@@ -54,7 +59,10 @@ export default {
   },
   methods: {
     onClickNewButton () {
-      this.$refs.SessionDirection.open()
+      this.$refs.SessionDrawer.open()
+    },
+    onClickDirectionContinue () {
+      console.log('onClickDirectionContinue')
     }
   }
 }

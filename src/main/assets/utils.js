@@ -22,7 +22,7 @@ export default class Utils {
             case Defs.STR_FREEBSD:
             case Defs.STR_CYGWIN:
             case Defs.STR_ANDROID:
-                return Defs.STR_LINUX.Defs.STR_LINUX.replace(/\b[a-z]/, value => value.toUpperCase())
+                return Defs.STR_LINUX.replace(/\b[a-z]/, value => value.toUpperCase())
             case Defs.STR_DARWIN:
                 return Defs.STR_MAC
             case Defs.STR_WIN32:

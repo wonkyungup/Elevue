@@ -34,7 +34,7 @@ export default {
     isSubTitle: { type: Boolean, default: true },
     subTitleClass: { type: String, default: '' },
     isText: { type: Boolean, default: true },
-    textClass: { type: String, default: '' },
+    textClass: { type: String, default: 'pb-0' },
     isActions: { type: Boolean, default: true },
     actionsClass: { type: String, default: '' }
   }

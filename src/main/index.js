@@ -43,7 +43,7 @@ function createPortForwading () {
 
   // settings
   portForwading.setMenu(null)
-  portForwading.loadURL(`${winURL}#/main-port-forwarding`)
+  portForwading.loadURL(`${winURL}#/port-forwarding`)
 
   // event
   portForwading.on('page-title-updated', event => {
