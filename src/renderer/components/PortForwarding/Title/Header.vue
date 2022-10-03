@@ -9,8 +9,8 @@
       >
         <v-col align="left" cols="12">
           <v-btn outlined small @click="onClickNewButton">
-            <v-icon left>{{ iconPlus }}</v-icon>
-            <strong>{{ titlePlus }}</strong>
+            <v-icon left>{{ plus }}</v-icon>
+            <strong>{{ content }}</strong>
           </v-btn>
         </v-col>
       </v-row>
@@ -25,8 +25,8 @@ export default {
   name: "Header",
   data: () => {
     return {
-      iconPlus: Defs.ICON_PLUS,
-      titlePlus: 'NEW'
+      plus: Defs.ICON_PLUS,
+      content: 'NEW'
     }
   },
   methods: {

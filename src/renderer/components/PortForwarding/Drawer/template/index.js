@@ -1,7 +1,7 @@
 import directTitle from './Direction/Title'
 import directContext from './Direction/Content'
-import step1Title from './Step1/Title'
-import step1Context from './Step1/Content'
+import step1Title from './StageUpper/Title'
+import step1Context from './StageUpper/Content'
 
 export {
     directTitle,
