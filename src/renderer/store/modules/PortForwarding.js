@@ -5,18 +5,14 @@ const state = {
     session: {
         id: null,
         direction: '',
-        localSrcHostName: '',
-        localSrcPort: 0,
-        localDstHostname: '',
-        localDstPort: 0,
-        serverHostName: '',
-        serverPort: 0,
-        serverUserName: '',
-        serverPassword: '',
-        remoteSrcHostName: '',
-        remoteSrcPort: 0,
-        remoteDstHostName: '',
-        remoteDstPort: 0
+        localHost: '',
+        localPort: null,
+        remoteHost: '',
+        remotePort: null,
+        serverHost: '',
+        serverPort: null,
+        serverUsername: '',
+        serverPassword: ''
     }
 }
 
@@ -27,8 +23,14 @@ const getters = {
     getDirectionTitle: state => () => {
         return state.session.direction.replace(/\b[a-z]/, value => value.toUpperCase())
     },
-    isDirectionRemote: state => () => {
-        return state.session.direction === Defs.DIRECTION_REMOTE.TARGET
+    isLocal: state => () => {
+        return state.session.direction === Defs.STR_LOCAL
+    },
+    isRemote: state => () => {
+        return state.session.direction === Defs.STR_REMOTE
+    },
+    isSocksv5: state => () => {
+        return state.session.direction === Defs.STR_SOCKSV5
     }
 }
 
@@ -39,13 +41,13 @@ const mutations ={
     SET_DIRECTION (state, payload) {
         state.session.direction = payload
     },
-    SET_STEP_1 (state, payload) {
-        if (state.session.direction !== Defs.DIRECTION_REMOTE.TARGET) {
-            state.session.localSrcHostName = payload._host
-            state.session.localSrcPort = payload._port
+    SET_STAGE_UPPER (state, payload) {
+        if (state.session.direction !== Defs.STR_REMOTE) {
+            state.session.localHost = payload._host
+            state.session.localPort = payload._port
         } else {
-            state.session.remoteSrcHostName = payload._host
-            state.session.remoteSrcPort = payload._port
+            state.session.remoteHost = payload._host
+            state.session.remotePort = payload._port
         }
     }
 }
@@ -57,9 +59,10 @@ const actions = {
     setDirection ({ commit }, payload) {
         commit('SET_DIRECTION', payload)
     },
-    setStep1 ({ commit }, payload) {
-        commit('SET_STEP_1', payload)
+    setStageUpper ({ commit }) {
+        commit('SET_STAGE_UPPER')
     }
+
 }
 
 export default {

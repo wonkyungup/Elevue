@@ -42,7 +42,7 @@ export default {
       this.$emit('msgClickClose')
     },
     onClickBack () {
-      this.$emit('msgClickBack', 'step1')
+      this.$emit('msgClickBack', Defs.STR_STAGE_UPPER)
     }
   }
 }

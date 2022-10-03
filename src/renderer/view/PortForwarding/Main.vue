@@ -27,7 +27,7 @@
 
 <script>
 import { mapState, mapGetters } from 'vuex'
-import { Card } from '@/components/layout'
+import { Card } from '@/components/Layout'
 import {
   Header,
   WelcomeBody,

@@ -8,11 +8,11 @@
   >
 
   <directTitle
-      v-show="isOrder.direction"
+      v-show="isDirection"
       v-on:msgClickClose="onClickClose"
   ></directTitle>
   <step1Title
-      v-show="isOrder.step1"
+      v-show="isStageUpper"
       v-on:msgClickBack="onClickBack"
       v-on:msgClickClose="onClickClose"
   ></step1Title>
@@ -20,11 +20,11 @@
   <v-divider></v-divider>
 
   <directContext
-      v-show="isOrder.direction"
+      v-show="isDirection"
       v-on:msgClickContinue="onClickContinue"
   ></directContext>
   <step1Context
-      v-show="isOrder.step1"
+      v-show="isStageUpper"
       v-on:msgClickContinue="onClickContinue"
   ></step1Context>
 
@@ -51,25 +51,21 @@ export default {
   data: () => {
     return {
       drawer: false,
-      isOrder: {
-        direction: true,
-        step1: false,
-        step2: false,
-        step3: false
-      }
+      isDirection: true,
+      isStageUpper: false,
+      isStageMiddle: false,
+      isStageLower: false
     }
   },
   methods: {
-    clearValue () {
-      const _isOrder = this.isOrder
-      _isOrder.direction = true
-      _isOrder.step1 = false
-      _isOrder.step2 = false
-      _isOrder.step3 = false
-    },
     open () {
+      const _this = this
+
       this.drawer = true
-      this.clearValue()
+      _this.isDirection = true
+      _this.isStageUpper = false
+      _this.isStageMiddle = false
+      _this.isRmoteConfig = false
     },
     close () {
       this.drawer = false
@@ -78,30 +74,28 @@ export default {
       this.close()
     },
     onClickBack (target) {
-      const _isOrder = this.isOrder
+      const _this = this
       switch (target) {
-        case Defs.STR_STEP_1:
-          if (_isOrder.step1) _isOrder.step1 = false
-          _isOrder.direction = true
+        case Defs.STR_STAGE_UPPER:
+          if (_this.isStageUpper) _this.isStageUpper = false
+          _this.isDirection = true
         default:
           break
       }
     },
     onClickContinue (target) {
-      const _isOrder = this.isOrder
+      const _this = this
       switch (target) {
         case Defs.STR_DIRECTION:
-          if (_isOrder.direction) _isOrder.direction = false
-          _isOrder.step1 = true
+          if (_this.isDirection) _this.isDirection = false
+          _this.isStageUpper = true
           break
-        case Defs.STR_STEP_1:
-          if (_isOrder.step1) _isOrder.step1 = false
-          _isOrder.step2 = true
+        case Defs.STR_STAGE_UPPER:
+          if (_this.isStageUpper) _this.isStageUpper = false
+          _this.isStageMiddle = true
         default:
           break
       }
-
-      console.log(this.isOrder)
     }
   }
 }

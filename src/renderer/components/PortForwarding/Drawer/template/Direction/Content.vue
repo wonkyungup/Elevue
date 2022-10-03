@@ -9,41 +9,16 @@
             class="rounded-lg"
             mandatory
         >
-          <v-btn width="100" :value="local.TARGET">Local</v-btn>
-          <v-btn width="100" :value="remote.TARGET">Remote</v-btn>
-          <v-btn width="100" :value="socksv5.TARGET">Socksv5</v-btn>
+          <v-btn width="100" :value="local">Local</v-btn>
+          <v-btn width="100" :value="remote">Remote</v-btn>
+          <v-btn width="100" :value="socksv5">Socksv5</v-btn>
         </v-btn-toggle>
       </template>
 
       <template v-slot:text>
-        <v-container>
-          <v-row align="center" dense>
-            <v-col cols="2" align="center">
-              <v-icon x-large>{{ account }}</v-icon>
-            </v-col>
-            <v-col cols="4" align="center">
-              <v-progress-linear
-                  color="primary"
-                  indeterminate
-                  rounded
-                  height="10"
-              ></v-progress-linear>
-            </v-col>
-            <v-col cols="2" align="center">
-              <v-icon x-large>{{ ethernet }}</v-icon>
-            </v-col>
-          </v-row>
-        </v-container>
-
-        <v-container>
-          <v-row align="center" dense>
-            <v-col cols="12" align="left">
-              <strong v-show="direction === local.TARGET">{{ local.CONTENT }}</strong>
-              <strong v-show="direction === remote.TARGET">{{ remote.CONTENT }}</strong>
-              <strong v-show="direction === socksv5.TARGET">{{ socksv5.CONTENT }}</strong>
-            </v-col>
-          </v-row>
-        </v-container>
+        <Local v-show="direction === local"></Local>
+        <Remote v-show="direction === remote"></Remote>
+        <Socksv5 v-show="direction === socksv5"></Socksv5>
       </template>
 
       <template v-slot:actions>
@@ -64,20 +39,19 @@
 </template>
 
 <script>
+import { Card } from '@/components/Layout'
 import { mapActions } from 'vuex'
-import { Card } from '@/components/layout'
+import { Local, Remote, Socksv5 } from './Text'
 import Defs from '@/assets/js/constants'
 
 export default {
   name: "Content",
-  components: { Card },
+  components: { Card, Local, Remote, Socksv5 },
   data: () => {
     return {
-      account: Defs.ICON_ACCOUNT,
-      ethernet: Defs.ICON_ETHERNET,
-      local: Defs.DIRECTION_LOCAL,
-      remote: Defs.DIRECTION_REMOTE,
-      socksv5: Defs.DIRECTION_SOCKSV5,
+      local: Defs.STR_LOCAL,
+      remote: Defs.STR_REMOTE,
+      socksv5: Defs.STR_SOCKSV5,
       direction: ''
     }
   },
