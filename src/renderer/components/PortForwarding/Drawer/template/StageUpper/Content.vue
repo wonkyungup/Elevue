@@ -17,20 +17,20 @@
           <v-row align="center" dense>
             <v-col cols="10">
               <v-text-field
-                  autofocus
-                  v-model="hostname"
-                  placeholder="Binding Hostname"
-                  outlined
-                  dense
+                autofocus
+                v-model="address"
+                placeholder="Binding Address"
+                outlined
+                dense
               ></v-text-field>
             </v-col>
             <v-col cols="10">
               <v-text-field
-                  v-model="port"
-                  placeholder="Source Port"
-                  outlined
-                  dense
-                  type="number"
+                v-model="port"
+                placeholder="Port"
+                outlined
+                dense
+                type="number"
               ></v-text-field>
             </v-col>
           </v-row>
@@ -48,9 +48,8 @@
 
 <script>
 import { mapState, mapGetters, mapActions } from 'vuex'
-import { Card } from '@/components/Layout'
 import { TextLocal, TextRemote, TextSocksv5 } from './Text'
-import Defs from '@/assets/js/constants'
+import { Card } from '@/components/Layout'
 
 export default {
   name: "Content",
@@ -62,8 +61,18 @@ export default {
   },
   data: () => {
     return {
-      hostname: '',
-      port: ''
+      address: '',
+      port: null
+    }
+  },
+  watch: {
+    'state.isDirection': {
+      handler () {
+        this.address = ''
+        this.port = ''
+      },
+      immediate: false,
+      deep: true
     }
   },
   computed: {
@@ -71,15 +80,15 @@ export default {
     ...mapGetters('PortForwarding', ['isLocal', 'isRemote', 'isSocksv5'])
   },
   methods: {
-    ...mapActions('PortForwarding', ['setStageUpper']),
+    ...mapActions('PortForwarding', ['setContinueStageUpper', 'setSessionStageUpper']),
     onClickContinue () {
-      const _host = this.hostname
-      const _port = this.port
-      if (_host.length > 0 && _port > 0) {
-        this.setStageUpper({ _host, _port })
-      }
+      const address = this.address
+      const port = this.port
 
-      this.$emit('msgClickContinue', Defs.STR_STAGE_UPPER)
+      if (address && port) {
+        this.setSessionStageUpper({ address, port })
+        this.setContinueStageUpper()
+      }
     }
   }
 }

@@ -1,14 +1,10 @@
 <template>
   <v-list-item>
-    <v-btn
-        icon
-        color="primary"
-        @click="onClickBack"
-    >
-      <v-icon>{{ back }}</v-icon>
+    <v-btn icon color="primary" @click="onClickBack">
+      <v-icon>{{ arrowLeft }}</v-icon>
     </v-btn>
 
-    <v-list-item-content class="pt-4">
+    <v-list-item-content>
       <v-list-item-title class="text-h6 font-weight-bold">
         {{ getDirectionTitle() }} Port Forwarding
       </v-list-item-title>
@@ -23,7 +19,7 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 import Defs from '@/assets/js/constants'
 
 export default {
@@ -31,18 +27,19 @@ export default {
   data: () => {
     return {
       arrowCollapseRight: Defs.ICON_ARROW_COLLAPSE_RIGHT,
-      back: Defs.ICON_ARROW_LEFT,
+      arrowLeft: Defs.ICON_ARROW_LEFT,
     }
   },
   computed: {
     ...mapGetters('PortForwarding', ['getDirectionTitle'])
   },
   methods: {
+    ...mapActions('PortForwarding', ['backStageUpper']),
     close () {
-      this.$emit('msgClickClose')
+      this.$emit('msgClose')
     },
     onClickBack () {
-      this.$emit('msgClickBack', Defs.STR_STAGE_UPPER)
+      this.backStageUpper()
     }
   }
 }
