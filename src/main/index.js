@@ -26,63 +26,61 @@ if (!app.requestSingleInstanceLock()) {
 }
 
 function createPortForwading () {
-  portForwading = new BrowserWindow({
-    frame: true,
-    title: Defs.MENU_PORT_FORWARDING,
-    minWidth: 700,
-    width: 700,
-    height: 400,
-    minHeight: 250,
-    useContentSize: true,
-    center: true,
-    show: false,
-    webPreferences: {
-      ...Utils.getCommonWebPreferences()
-    }
-  })
+  return new Promise(resolve => {
+    portForwading = new BrowserWindow({
+      frame: true,
+      title: Defs.MENU_PORT_FORWARDING,
+      minWidth: 700,
+      width: 700,
+      height: 400,
+      minHeight: 250,
+      useContentSize: true,
+      center: true,
+      show: false,
+      webPreferences: {
+        ...Utils.getCommonWebPreferences()
+      }
+    })
 
-  // settings
-  portForwading.setMenu(null)
-  portForwading.loadURL(`${winURL}#/port-forwarding`)
-
-  // event
-  portForwading.on('page-title-updated', event => {
-    event.preventDefault()
-  })
-  portForwading.on('close', event => {
-    event.sender.hide()
-    event.preventDefault()
+    portForwading.setMenu(null)
+    portForwading.loadURL(`${winURL}#/port-forwarding`)
+    portForwading.on('page-title-updated', event => { event.preventDefault() })
+    portForwading.on('close', event => {
+      event.sender.hide()
+      event.preventDefault()
+    })
+    resolve()
   })
 }
 
 app.on('ready', () => {
-  createPortForwading()
-
-  if (Defs.ICON_APP) {
-    app.dock.hide()
-  }
-
-  tray = new Tray(path.join(__static, path.sep, Defs.ICON_APP))
-  tray.setContextMenu(Menu.buildFromTemplate([
-    {
-      label: Defs.MENU_PORT_FORWARDING,
-       click: () => {
-        portForwading.show()
-      }
-    },
-    {
-      type: Defs.TYPE_SEPARATOR
-    },
-    { label: Defs.MENU_QUIT,
-      click: () => {
-        if (portForwading) {
-          portForwading = null
-        }
-
-        app.exit()
-      }
+  createPortForwading().then(() => {
+    if (Utils.getOsFromMain() === Defs.STR_MAC) {
+      app.dock.hide()
     }
-  ]))
+  
+    tray = new Tray(path.join(__static, path.sep, Defs.ICON_APP))
+    tray.setContextMenu(Menu.buildFromTemplate([
+      {
+        label: Defs.MENU_PORT_FORWARDING,
+         click: () => {
+          portForwading.show()
+        }
+      },
+      {
+        type: Defs.TYPE_SEPARATOR
+      },
+      { label: Defs.MENU_QUIT,
+        click: () => {
+          if (portForwading) {
+            portForwading = null
+          }
+  
+          app.exit()
+        }
+      }
+    ]))
+  })
 })
 
 /**

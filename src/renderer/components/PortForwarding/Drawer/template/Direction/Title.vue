@@ -1,6 +1,6 @@
 <template>
   <v-list-item>
-    <v-list-item-content class="pt-4">
+    <v-list-item-content>
       <v-list-item-title class="text-h6 font-weight-bold">
         New Port Forwarding
       </v-list-item-title>
@@ -26,7 +26,7 @@ export default {
   },
   methods: {
     close () {
-      this.$emit('msgClickClose')
+      this.$emit('msgClose')
     }
   }
 }

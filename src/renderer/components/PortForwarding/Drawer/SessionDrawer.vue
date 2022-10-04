@@ -8,31 +8,28 @@
   >
 
   <directTitle
-      v-show="isDirection"
-      v-on:msgClickClose="onClickClose"
+      v-show="state.isDirection"
+      v-on:msgClose="close"
   ></directTitle>
   <step1Title
-      v-show="isStageUpper"
-      v-on:msgClickBack="onClickBack"
-      v-on:msgClickClose="onClickClose"
+      v-show="state.isStageUpper"
+      v-on:msgClose="close"
   ></step1Title>
 
   <v-divider></v-divider>
 
   <directContext
-      v-show="isDirection"
-      v-on:msgClickContinue="onClickContinue"
+      v-show="state.isDirection"
   ></directContext>
   <step1Context
-      v-show="isStageUpper"
-      v-on:msgClickContinue="onClickContinue"
+      v-show="state.isStageUpper"
   ></step1Context>
 
   </v-navigation-drawer>
 </template>
 
 <script>
-import Defs from '@/assets/js/constants'
+import { mapState, mapActions } from 'vuex'
 import {
     directTitle,
     directContext,
@@ -50,52 +47,29 @@ export default {
   },
   data: () => {
     return {
-      drawer: false,
-      isDirection: true,
-      isStageUpper: false,
-      isStageMiddle: false,
-      isStageLower: false
+      drawer: false
+    }
+  },
+  computed: {
+    ...mapState({ state: 'PortForwarding' })
+  },
+  watch: {
+    state: {
+      handler () {
+        console.log(this.state)
+      },
+      immediate: false,
+      deep: true
     }
   },
   methods: {
+    ...mapActions('PortForwarding', ['clearSessionValue']),
     open () {
-      const _this = this
-
       this.drawer = true
-      _this.isDirection = true
-      _this.isStageUpper = false
-      _this.isStageMiddle = false
-      _this.isRmoteConfig = false
+      this.clearSessionValue()
     },
     close () {
       this.drawer = false
-    },
-    onClickClose () {
-      this.close()
-    },
-    onClickBack (target) {
-      const _this = this
-      switch (target) {
-        case Defs.STR_STAGE_UPPER:
-          if (_this.isStageUpper) _this.isStageUpper = false
-          _this.isDirection = true
-        default:
-          break
-      }
-    },
-    onClickContinue (target) {
-      const _this = this
-      switch (target) {
-        case Defs.STR_DIRECTION:
-          if (_this.isDirection) _this.isDirection = false
-          _this.isStageUpper = true
-          break
-        case Defs.STR_STAGE_UPPER:
-          if (_this.isStageUpper) _this.isStageUpper = false
-          _this.isStageMiddle = true
-        default:
-          break
-      }
     }
   }
 }

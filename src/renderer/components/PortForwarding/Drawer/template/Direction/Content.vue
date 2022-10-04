@@ -4,21 +4,35 @@
       <template v-slot:title>
         <p class="text-sm-body-1">Select the port forwarding type:</p>
         <v-btn-toggle
-            v-model="direction"
+            :value="state.session.direction"
             dense
             class="rounded-lg"
             mandatory
         >
-          <v-btn width="100" :value="local">Local</v-btn>
-          <v-btn width="100" :value="remote">Remote</v-btn>
-          <v-btn width="100" :value="socksv5">Socksv5</v-btn>
+          <v-btn
+            width="100"
+            :value="local"
+            @click="onClickDirection(local)"
+           >Local</v-btn>
+
+          <v-btn
+            width="100"
+            :value="remote"
+            @click="onClickDirection(remote)"
+          >Remote</v-btn>
+
+          <v-btn
+           width="100"
+           :value="socksv5"
+           @click="onClickDirection(socksv5)"
+           >Socksv5</v-btn>
         </v-btn-toggle>
       </template>
 
       <template v-slot:text>
-        <Local v-show="direction === local"></Local>
-        <Remote v-show="direction === remote"></Remote>
-        <Socksv5 v-show="direction === socksv5"></Socksv5>
+        <Local v-show="isLocal()"></Local>
+        <Remote v-show="isRemote()"></Remote>
+        <Socksv5 v-show="isSocksv5()"></Socksv5>
       </template>
 
       <template v-slot:actions>
@@ -39,9 +53,9 @@
 </template>
 
 <script>
-import { Card } from '@/components/Layout'
-import { mapActions } from 'vuex'
+import { mapState, mapGetters, mapActions } from 'vuex'
 import { Local, Remote, Socksv5 } from './Text'
+import { Card } from '@/components/Layout'
 import Defs from '@/assets/js/constants'
 
 export default {
@@ -51,19 +65,20 @@ export default {
     return {
       local: Defs.STR_LOCAL,
       remote: Defs.STR_REMOTE,
-      socksv5: Defs.STR_SOCKSV5,
-      direction: ''
+      socksv5: Defs.STR_SOCKSV5
     }
   },
+  computed: {
+    ...mapState({ state: 'PortForwarding' }),
+    ...mapGetters('PortForwarding', ['isLocal', 'isRemote', 'isSocksv5'])
+  },
   methods: {
-    ...mapActions('PortForwarding', ['setDirection']),
+    ...mapActions('PortForwarding', ['setSessionDirection', 'setContinueDirection']),
+    onClickDirection (target) {
+      this.setSessionDirection(target)
+    },
     onClickContinue () {
-      const _direction = this.direction
-      if (_direction.length > 0) {
-        this.setDirection(_direction)
-      }
-
-      this.$emit('msgClickContinue', Defs.STR_DIRECTION)
+      this.setContinueDirection()
     }
   }
 }

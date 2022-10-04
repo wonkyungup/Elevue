@@ -17,10 +17,7 @@
     </template>
 
     <template v-slot:actions>
-      <SessionDrawer
-          ref="SessionDrawer"
-          v-on:msgClickDirectionContinue="onClickDirectionContinue"
-      ></SessionDrawer>
+      <SessionDrawer ref="SessionDrawer"></SessionDrawer>
     </template>
   </Card>
 </template>
@@ -48,21 +45,9 @@ export default {
     ...mapState({ state: 'PortForwarding' }),
     ...mapGetters('PortForwarding', ['isWelcomePage'])
   },
-  watch: {
-    state: {
-      handler () {
-        console.log(this.state.session)
-      },
-      immediate: true,
-      deep: true
-    }
-  },
   methods: {
     onClickNewButton () {
       this.$refs.SessionDrawer.open()
-    },
-    onClickDirectionContinue () {
-      console.log('onClickDirectionContinue')
     }
   }
 }

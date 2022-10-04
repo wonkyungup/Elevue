@@ -1,17 +1,9 @@
-import Utils from './utils'
-
 export default class Constants {
     static ICON_APP = '16x16.png'
-
-    static OS_WINDOW = Utils.getOsFromMain() === Constants.STR_WINDOWS
-    static OS_MAC = Utils.getOsFromMain() === Constants.STR_MAC
-
     static APP_IS_PRODUCTION = process.env.NODE_ENV !== 'development'
-
     static TYPE_SEPARATOR = 'separator'
     static MENU_PORT_FORWARDING = 'Port Forwarding'
     static MENU_QUIT = 'Quit'
-
     static STR_LINUX = 'linux'
     static STR_AIX = 'aix'
     static STR_SUNOS = 'sunos'
