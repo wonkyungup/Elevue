@@ -86,12 +86,22 @@ const mutations ={
         state.isDirection = true
     },
     SET_SESSION_STAGE_UPPER (state, payload) {
-        if (state.session.direction !== Defs.STR_REMOTE) {
-            state.session.localHost = payload.address
-            state.session.localPort = payload.port
-        } else {
-            state.session.remoteHost = payload.address
-            state.session.remotePort = payload.port
+        switch (state.session.direction) {
+            case Defs.STR_LOCAL:
+                state.session.localHost = payload.address
+                state.session.localPort = payload.port
+                break
+            case Defs.STR_REMOTE:
+                state.session.remoteHost = payload.address
+                state.session.remotePort = payload.port
+                break
+            case Defs.STR_SOCKSV5:
+                state.session.localHost = payload.address
+                state.session.localPort = payload.port
+                state.session.remoteHost = state.session.localHost
+                state.session.remotePort = state.session.localPort
+            default:
+                break
         }
     },
     SET_CONTINUE_STAGE_UPPER (state) {
@@ -125,7 +135,6 @@ const actions = {
     setContinueStageUpper ({ commit }) {
         commit('SET_CONTINUE_STAGE_UPPER')
     }
-
 }
 
 export default {

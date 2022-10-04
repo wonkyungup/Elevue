@@ -6,16 +6,10 @@ export default class Constants {
     static ICON_ARROW_COLLAPSE_RIGHT = 'mdi-arrow-collapse-right'
     static ICON_ARROW_LEFT = 'mdi-arrow-left'
     static ICON_SERVER = 'mdi-server'
-    static ICON_SERVER_SECURITY = 'mdi-server-security'
     static ICON_ETHERNET = 'mdi-ethernet'
-    static ICON_WALL = 'mdi-wall'
     static ICON_CLOUD = 'mdi-cloud'
 
     static STR_LOCAL = 'local'
     static STR_REMOTE = 'remote'
     static STR_SOCKSV5 = 'socksv5'
-    static STR_DIRECTION = 'direction'
-    static STR_STAGE_UPPER = 'stageUpper'
-    static STR_STAGE_MIDDLE = 'stageMiddle'
-    static STR_STAGE_LOWER = 'stageLower'
 }

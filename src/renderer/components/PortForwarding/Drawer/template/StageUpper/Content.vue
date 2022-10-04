@@ -27,7 +27,7 @@
             <v-col cols="10">
               <v-text-field
                 v-model="port"
-                placeholder="Source Port"
+                placeholder="Port"
                 outlined
                 dense
                 type="number"
@@ -48,8 +48,8 @@
 
 <script>
 import { mapState, mapGetters, mapActions } from 'vuex'
-import { Card } from '@/components/Layout'
 import { TextLocal, TextRemote, TextSocksv5 } from './Text'
+import { Card } from '@/components/Layout'
 
 export default {
   name: "Content",
@@ -66,7 +66,7 @@ export default {
     }
   },
   watch: {
-    'state.isStageUpper': {
+    'state.isDirection': {
       handler () {
         this.address = ''
         this.port = ''
