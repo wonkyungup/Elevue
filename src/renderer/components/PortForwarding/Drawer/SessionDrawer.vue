@@ -1,49 +1,43 @@
 <template>
   <v-navigation-drawer
-      v-model="drawer"
-      width="450"
-      right
-      absolute
-      temporary
+    v-model="drawer"
+    width="450"
+    right
+    absolute
+    temporary
   >
 
-  <directTitle
-      v-show="state.isDirection"
-      v-on:msgClose="close"
-  ></directTitle>
-  <firstStepTitle
-      v-show="state.isFirstStep"
-      v-on:msgClose="close"
-  ></firstStepTitle>
+  <directionPage
+    v-show="state.isDirectionPage"
+    v-on:msgClose="close"
+  ></directionPage>
 
-  <v-divider></v-divider>
+  <sourcePage
+    v-show="state.isSourcePage"
+    v-on:msgClose="close"
+  ></sourcePage>
 
-  <directContext
-      v-show="state.isDirection"
-  ></directContext>
-  <firstStepContext
-      v-show="state.isFirstStep"
-  ></firstStepContext>
-
+  <serverPage
+    v-show="state.isServerPage"
+    v-on:msgClose="close"
+  ></serverPage>
   </v-navigation-drawer>
 </template>
 
 <script>
 import { mapState, mapActions } from 'vuex'
 import {
-    directTitle,
-    directContext,
-    firstStepTitle,
-    firstStepContext
-} from './template'
+  directionPage,
+  sourcePage,
+  serverPage
+} from './components'
 
 export default {
   name: "SessionDrawer",
   components: {
-    directTitle,
-    directContext,
-    firstStepTitle,
-    firstStepContext
+    directionPage,
+    sourcePage,
+    serverPage
   },
   data: () => {
     return {

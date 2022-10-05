@@ -1,0 +1,155 @@
+<template>
+  <div>
+    <!-- Title -->
+    <v-list-item>
+      <v-list-item-content>
+        <v-list-item-title class="text-h6 font-weight-bold">
+          New Port Forwarding
+        </v-list-item-title>
+      </v-list-item-content>
+      <v-list-item-avatar>
+        <v-btn icon @click="close">
+          <v-icon>{{ arrowCollapseRight }}</v-icon>
+        </v-btn>
+      </v-list-item-avatar>
+    </v-list-item>
+
+    <v-divider></v-divider>
+
+    <!-- Context -->
+    <v-list dense>
+      <Card :isSubTitle="false">
+        <template v-slot:title>
+          <p class="text-sm-body-1">Select the port forwarding type:</p>
+          <v-btn-toggle
+              :value="state.session.direction"
+              dense
+              class="rounded-lg"
+              mandatory
+          >
+            <v-btn
+                width="100"
+                :value="local"
+                @click="onClickDirection(local)"
+            >Local</v-btn>
+
+            <v-btn
+                width="100"
+                :value="remote"
+                @click="onClickDirection(remote)"
+            >Remote</v-btn>
+
+            <v-btn
+                width="100"
+                :value="socksv5"
+                @click="onClickDirection(socksv5)"
+            >Socksv5</v-btn>
+          </v-btn-toggle>
+        </template>
+
+        <template v-slot:text>
+          <v-container>
+            <v-row align="center" dense>
+              <v-col cols="2" align="center">
+                <v-icon x-large v-show="isLocal() || isSocksv5()">{{ account }}</v-icon>
+                <v-icon x-large v-show="isRemote()">{{ server }}</v-icon>
+              </v-col>
+              <v-col cols="2" align="center">
+                <v-progress-linear
+                    color="primary"
+                    indeterminate
+                    rounded
+                    height="6"
+                ></v-progress-linear>
+              </v-col>
+              <v-col cols="2" align="center">
+                <v-icon x-large>{{ server }}</v-icon>
+              </v-col>
+              <v-col cols="2" align="center">
+                <v-progress-linear
+                    color="primary"
+                    indeterminate
+                    rounded
+                    height="6"
+                ></v-progress-linear>
+              </v-col>
+              <v-col cols="2" align="center">
+                <v-icon x-large v-show="isLocal()">{{ server }}</v-icon>
+                <v-icon x-large v-show="isRemote()">{{ account }}</v-icon>
+                <v-icon x-large v-show="isSocksv5()">{{ cloud }}</v-icon>
+              </v-col>
+            </v-row>
+          </v-container>
+
+          <v-container>
+            <v-row align="center" dense>
+              <v-col cols="12" align="left">
+                <strong v-show="isLocal()">Local forwarding lets you access a remote server's listening port as though it were local.</strong>
+                <strong v-show="isRemote()">Remote forwarding opens a port on the remote machine and forwards connections to the local (current) host.</strong>
+                <strong v-show="isSocksv5()">Dynamic port forwarding turns Toolus into a SOCKSsv5 proxy server. SOCKsv5 proxy server is a protocol to request any connection via a remote host.</strong>
+              </v-col>
+            </v-row>
+          </v-container>
+        </template>
+
+        <template v-slot:actions>
+          <v-container>
+            <v-row align="center" dense>
+              <v-col cols="10">
+                <v-btn
+                    block
+                    color="primary"
+                    @click="onClickContinue"
+                >Continue</v-btn>
+              </v-col>
+            </v-row>
+          </v-container>
+        </template>
+      </Card>
+    </v-list>
+  </div>
+</template>
+
+<script>
+import { mapState, mapGetters, mapActions } from 'vuex'
+import { Card } from '@/components/Layout'
+import Defs from '@/assets/js/constants'
+
+export default {
+  name: "Direction",
+  components: {
+    Card
+  },
+  data: () => {
+    return {
+      arrowCollapseRight: Defs.ICON_ARROW_COLLAPSE_RIGHT,
+      account: Defs.ICON_ACCOUNT,
+      server: Defs.ICON_SERVER,
+      cloud: Defs.ICON_CLOUD,
+      local: Defs.STR_LOCAL,
+      remote: Defs.STR_REMOTE,
+      socksv5: Defs.STR_SOCKSV5
+    }
+  },
+  computed: {
+    ...mapState({ state: 'PortForwarding' }),
+    ...mapGetters('PortForwarding', ['isLocal', 'isRemote', 'isSocksv5'])
+  },
+  methods: {
+    ...mapActions('PortForwarding', ['setSessionDirection', 'setContinueDirection']),
+    close () {
+      this.$emit('msgClose')
+    },
+    onClickDirection (target) {
+      this.setSessionDirection(target)
+    },
+    onClickContinue () {
+      this.setContinueDirection()
+    }
+  }
+}
+</script>
+
+<style scoped>
+
+</style>
