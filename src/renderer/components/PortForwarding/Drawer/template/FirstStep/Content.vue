@@ -18,7 +18,7 @@
             <v-col cols="10">
               <v-text-field
                 autofocus
-                v-model="address"
+                v-model="hostname"
                 placeholder="Binding Address"
                 outlined
                 dense
@@ -61,14 +61,14 @@ export default {
   },
   data: () => {
     return {
-      address: '',
+      hostname: '',
       port: null
     }
   },
   watch: {
     'state.isDirection': {
       handler () {
-        this.address = ''
+        this.hostname = ''
         this.port = ''
       },
       immediate: false,
@@ -82,11 +82,11 @@ export default {
   methods: {
     ...mapActions('PortForwarding', ['setContinueFirstStep', 'setSessionFirstStep']),
     onClickContinue () {
-      const address = this.address
+      const hostname = this.hostname
       const port = this.port
 
-      if (address && port) {
-        this.setSessionFirstStep({ address, port })
+      if (hostname && port) {
+        this.setSessionFirstStep({ hostname, port })
         this.setContinueFirstStep()
       }
     }

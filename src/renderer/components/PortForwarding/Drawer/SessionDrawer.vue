@@ -8,22 +8,29 @@
   >
 
   <directTitle
-      v-show="state.isDirection"
-      v-on:msgClose="close"
+    v-show="state.isDirection"
+    v-on:msgClose="close"
   ></directTitle>
   <firstStepTitle
-      v-show="state.isFirstStep"
-      v-on:msgClose="close"
+    v-show="state.isFirstStep"
+    v-on:msgClose="close"
   ></firstStepTitle>
+  <secondStepTitle
+    v-show="state.isSecondStep"
+    v-on:msgClose="close"
+  ></secondStepTitle>
 
   <v-divider></v-divider>
 
   <directContext
-      v-show="state.isDirection"
+     v-show="state.isDirection"
   ></directContext>
   <firstStepContext
-      v-show="state.isFirstStep"
+    v-show="state.isFirstStep"
   ></firstStepContext>
+  <secondStepContext
+    v-show="state.isSecondStep"
+  ></secondStepContext>
 
   </v-navigation-drawer>
 </template>
@@ -34,7 +41,9 @@ import {
     directTitle,
     directContext,
     firstStepTitle,
-    firstStepContext
+    firstStepContext,
+    secondStepTitle,
+    secondStepContext
 } from './template'
 
 export default {
@@ -43,7 +52,9 @@ export default {
     directTitle,
     directContext,
     firstStepTitle,
-    firstStepContext
+    firstStepContext,
+    secondStepTitle,
+    secondStepContext
   },
   data: () => {
     return {
