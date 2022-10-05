@@ -17,7 +17,7 @@
         </v-col>
 
         <v-col cols="2" align="center">
-          <v-icon x-large>{{ account }}</v-icon>
+          <v-icon x-large>{{ server }}</v-icon>
         </v-col>
 
         <v-col cols="2" align="center">
@@ -30,7 +30,7 @@
         </v-col>
 
         <v-col cols="2" align="center">
-          <v-icon x-large>{{ server }}</v-icon>
+          <v-icon x-large>{{ account }}</v-icon>
         </v-col>
 
       </v-row>

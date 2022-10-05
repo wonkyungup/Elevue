@@ -11,19 +11,19 @@
       v-show="state.isDirection"
       v-on:msgClose="close"
   ></directTitle>
-  <stageUpperTitle
-      v-show="state.isStageUpper"
+  <firstStepTitle
+      v-show="state.isFirstStep"
       v-on:msgClose="close"
-  ></stageUpperTitle>
+  ></firstStepTitle>
 
   <v-divider></v-divider>
 
   <directContext
       v-show="state.isDirection"
   ></directContext>
-  <stageUpperContext
-      v-show="state.isStageUpper"
-  ></stageUpperContext>
+  <firstStepContext
+      v-show="state.isFirstStep"
+  ></firstStepContext>
 
   </v-navigation-drawer>
 </template>
@@ -33,8 +33,8 @@ import { mapState, mapActions } from 'vuex'
 import {
     directTitle,
     directContext,
-    stageUpperTitle,
-    stageUpperContext
+    firstStepTitle,
+    firstStepContext
 } from './template'
 
 export default {
@@ -42,8 +42,8 @@ export default {
   components: {
     directTitle,
     directContext,
-    stageUpperTitle,
-    stageUpperContext
+    firstStepTitle,
+    firstStepContext
   },
   data: () => {
     return {

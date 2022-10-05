@@ -14,7 +14,7 @@
           ></v-progress-linear>
         </v-col>
         <v-col cols="2" align="center">
-          <v-icon x-large disabled>{{ account }}</v-icon>
+          <v-icon x-large disabled>{{ server }}</v-icon>
         </v-col>
         <v-col cols="2" align="center">
           <v-progress-linear
@@ -25,7 +25,7 @@
           ></v-progress-linear>
         </v-col>
         <v-col cols="2" align="center">
-          <v-icon x-large disabled>{{ server }}</v-icon>
+          <v-icon x-large disabled>{{ account }}</v-icon>
         </v-col>
       </v-row>
     </v-container>

@@ -34,12 +34,12 @@ export default {
     ...mapGetters('PortForwarding', ['getDirectionTitle'])
   },
   methods: {
-    ...mapActions('PortForwarding', ['backStageUpper']),
+    ...mapActions('PortForwarding', ['backFirstStep']),
     close () {
       this.$emit('msgClose')
     },
     onClickBack () {
-      this.backStageUpper()
+      this.backFirstStep()
     }
   }
 }
