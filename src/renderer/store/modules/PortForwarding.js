@@ -3,9 +3,9 @@ import Defs from '@/assets/js/constants'
 const state = {
     isWelcomePage: true,
     isDirection: true,
-    isStageUpper: false,
-    isStageMiddle: false,
-    isStageLower: false,
+    isFirstStep: false,
+    isSecondStep: false,
+    isThirdStep: false,
     session: {
         id: null,
         direction: Defs.STR_LOCAL,
@@ -44,9 +44,9 @@ const mutations ={
     },
     CLEAR_SESSION_VALUE (state) {
         state.isDirection = true
-        state.isStageUpper =  false
-        state.isStageMiddle = false
-        state.isStageLower = false
+        state.isFirstStep =  false
+        state.isSecondStep = false
+        state.isThirdStep = false
         state.session = {
             id: null,
             direction: Defs.STR_LOCAL,
@@ -68,9 +68,9 @@ const mutations ={
             state.isDirection = !state.isDirection
         }
 
-        state.isStageUpper = true
+        state.isFirstStep = true
     },
-    BACK_STAGE_UPPER (state) {
+    BACK_FIRST_STEP (state) {
         if (state.session.direction !== Defs.STR_REMOTE) {
             state.session.localHost = ''
             state.session.localPort = null
@@ -79,13 +79,13 @@ const mutations ={
             state.session.remotePort = null
         }
 
-        if (state.isStageUpper) {
-            state.isStageUpper = !state.isStageUpper
+        if (state.isFirstStep) {
+            state.isFirstStep = !state.isFirstStep
         }
 
         state.isDirection = true
     },
-    SET_SESSION_STAGE_UPPER (state, payload) {
+    SET_SESSION_FIRST_STEP (state, payload) {
         switch (state.session.direction) {
             case Defs.STR_LOCAL:
                 state.session.localHost = payload.address
@@ -104,12 +104,12 @@ const mutations ={
                 break
         }
     },
-    SET_CONTINUE_STAGE_UPPER (state) {
-        if (state.isStageUpper) {
-            state.isStageUpper = false
+    SET_CONTINUE_FIRST_STEP (state) {
+        if (state.isFirstStep) {
+            state.isFirstStep = false
         }
 
-        state.isStageMiddle = true
+        state.isSecondStep = true
     }
 }
 
@@ -126,14 +126,14 @@ const actions = {
     setContinueDirection ({ commit }) {
         commit('SET_CONTINUE_DIRECTION')
     },
-    backStageUpper ({ commit }) {
-        commit('BACK_STAGE_UPPER')
+    backFirstStep ({ commit }) {
+        commit('BACK_FIRST_STEP')
     },
-    setSessionStageUpper ({ commit }, payload) {
-        commit('SET_SESSION_STAGE_UPPER', payload)
+    setSessionFirstStep ({ commit }, payload) {
+        commit('SET_SESSION_FIRST_STEP', payload)
     },
-    setContinueStageUpper ({ commit }) {
-        commit('SET_CONTINUE_STAGE_UPPER')
+    setContinueFirstStep ({ commit }) {
+        commit('SET_CONTINUE_FIRST_STEP')
     }
 }
 

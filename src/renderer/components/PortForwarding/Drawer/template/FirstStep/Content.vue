@@ -80,14 +80,14 @@ export default {
     ...mapGetters('PortForwarding', ['isLocal', 'isRemote', 'isSocksv5'])
   },
   methods: {
-    ...mapActions('PortForwarding', ['setContinueStageUpper', 'setSessionStageUpper']),
+    ...mapActions('PortForwarding', ['setContinueFirstStep', 'setSessionFirstStep']),
     onClickContinue () {
       const address = this.address
       const port = this.port
 
       if (address && port) {
-        this.setSessionStageUpper({ address, port })
-        this.setContinueStageUpper()
+        this.setSessionFirstStep({ address, port })
+        this.setContinueFirstStep()
       }
     }
   }
