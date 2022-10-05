@@ -2,10 +2,10 @@ import Defs from '@/assets/js/constants'
 
 const state = {
     isWelcomePage: true,
-    isDirection: true,
-    isFirstStep: false,
-    isSecondStep: false,
-    isThirdStep: false,
+    isDirectionPage: true,
+    isSourcePage: false,
+    isServerPage: false,
+    isDestinationPage: false,
     session: {
         id: null,
         direction: Defs.STR_LOCAL,
@@ -43,10 +43,10 @@ const mutations ={
         state.isWelcomePage = payload
     },
     CLEAR_SESSION_VALUE (state) {
-        state.isDirection = true
-        state.isFirstStep =  false
-        state.isSecondStep = false
-        state.isThirdStep = false
+        state.isDirectionPage = true
+        state.isSourcePage =  false
+        state.isServerPage = false
+        state.isDestinationPage = false
         state.session = {
             id: null,
             direction: Defs.STR_LOCAL,
@@ -60,7 +60,7 @@ const mutations ={
             serverPassword: ''
         }
     },
-    BACK_FIRST_STEP (state) {
+    BACK_SOURCE_PAGE (state) {
         if (state.session.direction !== Defs.STR_REMOTE) {
             state.session.localHost = ''
             state.session.localPort = null
@@ -69,13 +69,13 @@ const mutations ={
             state.session.remotePort = null
         }
 
-        if (state.isFirstStep) {
-            state.isFirstStep = !state.isFirstStep
+        if (state.isSourcePage) {
+            state.isSourcePage = !state.isSourcePage
         }
 
-        state.isDirection = true
+        state.isDirectionPage = true
     },
-    BACK_SECOND_STEP (state) {
+    BACK_SERVER_PAGE (state) {
         if (state.session.direction !== Defs.STR_REMOTE) {
             state.session.serverHost = ''
             state.session.serverPort = null
@@ -83,16 +83,16 @@ const mutations ={
             state.session.serverPassword = ''
         }
 
-        if (state.isSecondStep) {
-            state.isSecondStep = !state.isSecondStep
+        if (state.isServerPage) {
+            state.isServerPage = !state.isServerPage
         }
 
-        state.isFirstStep = true
+        state.isSourcePage = true
     },
     SET_SESSION_DIRECTION (state, payload) {
         state.session.direction = payload
     },
-    SET_SESSION_FIRST_STEP (state, payload) {
+    SET_SESSION_SOURCE_PAGE (state, payload) {
         switch (state.session.direction) {
             case Defs.STR_LOCAL:
                 state.session.localHost = payload.hostname
@@ -111,32 +111,32 @@ const mutations ={
                 break
         }
     },
-    SET_SESSION_SECOND_STEP (state, payload) {
+    SET_SESSION_SERVER_PAGE (state, payload) {
         state.session.serverHost = payload.hostname
         state.session.serverPort = payload.port
         state.session.serverUsername = payload.username
         state.session.serverPassword = payload.password
     },
     SET_CONTINUE_DIRECTION (state) {
-        if (state.isDirection) {
-            state.isDirection = !state.isDirection
+        if (state.isDirectionPage) {
+            state.isDirectionPage = !state.isDirectionPage
         }
 
-        state.isFirstStep = true
+        state.isSourcePage = true
     },
-    SET_CONTINUE_FIRST_STEP (state) {
-        if (state.isFirstStep) {
-            state.isFirstStep = !state.isFirstStep
+    SET_CONTINUE_SOURCE_PAGE (state) {
+        if (state.isSourcePage) {
+            state.isSourcePage = !state.isSourcePage
         }
 
-        state.isSecondStep = true
+        state.isServerPage = true
     },
-    SET_CONTINUE_SECOND_STEP (state) {
-        if (state.isSecondStep) {
-            state.isSecondStep = !state.isSecondStep
+    SET_CONTINUE_SERVER_PAGE (state) {
+        if (state.isServerPage) {
+            state.isServerPage = !state.isServerPage
         }
 
-        state.isThirdStep = true
+        state.isDestinationPage = true
     }
 }
 
@@ -147,29 +147,29 @@ const actions = {
     clearSessionValue ({ commit }) {
         commit('CLEAR_SESSION_VALUE')
     },
-    backFirstStep ({ commit }) {
-        commit('BACK_FIRST_STEP')
+    backSourcePage ({ commit }) {
+        commit('BACK_SOURCE_PAGE')
     },
-    backSecondStep ({ commit }) {
-        commit('BACK_SECOND_STEP')
+    backServerPage ({ commit }) {
+        commit('BACK_SERVER_PAGE')
     },
     setSessionDirection ({ commit }, payload) {
         commit('SET_SESSION_DIRECTION', payload)
     },
-    setSessionFirstStep ({ commit }, payload) {
-        commit('SET_SESSION_FIRST_STEP', payload)
+    setSessionSourcePage ({ commit }, payload) {
+        commit('SET_SESSION_SOURCE_PAGE', payload)
     },
-    setSessionSecondStep ({ commit }, payload) {
-        commit('SET_SESSION_SECOND_STEP', payload)
+    setSessionServerPage ({ commit }, payload) {
+        commit('SET_SESSION_SERVER_PAGE', payload)
     },
     setContinueDirection ({ commit }) {
         commit('SET_CONTINUE_DIRECTION')
     },
-    setContinueFirstStep ({ commit }) {
-        commit('SET_CONTINUE_FIRST_STEP')
+    setContinueSourcePage ({ commit }) {
+        commit('SET_CONTINUE_SOURCE_PAGE')
     },
-    setContinueSecondStep ({ commit }) {
-        commit('SET_CONTINUE_SECOND_STEP')
+    setContinueServerPage ({ commit }) {
+        commit('SET_CONTINUE_SERVER_PAGE')
     }
 }
 
