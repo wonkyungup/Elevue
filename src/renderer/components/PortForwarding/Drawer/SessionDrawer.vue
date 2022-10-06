@@ -21,6 +21,11 @@
     v-show="state.isServerPage"
     v-on:msgClose="close"
   ></serverPage>
+
+  <destinationPage
+      v-show="state.isDestinationPage"
+      v-on:msgClose="close"
+  ></destinationPage>
   </v-navigation-drawer>
 </template>
 
@@ -29,7 +34,8 @@ import { mapState, mapActions } from 'vuex'
 import {
   directionPage,
   sourcePage,
-  serverPage
+  serverPage,
+  destinationPage
 } from './components'
 
 export default {
@@ -37,7 +43,8 @@ export default {
   components: {
     directionPage,
     sourcePage,
-    serverPage
+    serverPage,
+    destinationPage
   },
   data: () => {
     return {
