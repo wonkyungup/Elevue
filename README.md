@@ -7,8 +7,9 @@
 
 ![header](https://capsule-render.vercel.app/api?text=Evue!)
 
-# Toolus
-> Provides convenient server Tools!
+# Evue
+> Electron + Vue
+> Tools for managing servers
 
 ### Commonly run before developers and packages
 ```
