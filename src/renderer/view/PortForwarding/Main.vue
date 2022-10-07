@@ -6,9 +6,9 @@
       :isSubTitle="false"
   >
     <template v-slot:title>
-      <Header
+      <Title
           v-on:msgClickNewButton="onClickNewButton"
-      ></Header>
+      ></Title>
     </template>
 
     <template v-slot:text>
@@ -26,7 +26,7 @@
 import { mapState, mapGetters } from 'vuex'
 import { Card } from '@/components/Layout'
 import {
-  Header,
+  Title,
   WelcomeBody,
   SessionBody,
   SessionDrawer
@@ -36,7 +36,7 @@ export default {
   name: "Main",
   components: {
     Card,
-    Header,
+    Title,
     WelcomeBody,
     SessionBody,
     SessionDrawer

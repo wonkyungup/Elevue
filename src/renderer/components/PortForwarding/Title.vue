@@ -8,9 +8,9 @@
           class="pt-5"
       >
         <v-col align="left" cols="12">
-          <v-btn outlined small @click="onClickNewButton">
+          <v-btn outlined @click="onClickNewButton">
             <v-icon left>{{ plus }}</v-icon>
-            <strong>{{ content }}</strong>
+              <strong>{{ content }}</strong>
           </v-btn>
         </v-col>
       </v-row>

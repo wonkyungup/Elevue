@@ -1,12 +1,9 @@
 export default class Constants {
     static ICON_PLUS = 'mdi-plus'
     static ICON_ACCOUNT = 'mdi-account'
-    static ICON_ACCOUNT_HEART = 'mdi-account-heart'
-    static ICON_ARROW_RIGHT_BOLD = 'mdi-arrow-right'
     static ICON_ARROW_COLLAPSE_RIGHT = 'mdi-arrow-collapse-right'
     static ICON_ARROW_LEFT = 'mdi-arrow-left'
     static ICON_SERVER = 'mdi-server'
-    static ICON_ETHERNET = 'mdi-ethernet'
     static ICON_CLOUD = 'mdi-cloud'
 
     static STR_LOCAL = 'local'
