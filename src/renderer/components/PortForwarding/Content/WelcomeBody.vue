@@ -2,36 +2,12 @@
   <v-container fluid class="pa-0">
     <v-row align="center" justify="center" dense>
       <v-col align="center" cols="12">
-        <v-row
-            align="center"
-            justify="center"
-            dense
-            class="pb-8"
-        >
-          <v-col cols="2" align="right">
-            <v-icon x-large>{{ account }}</v-icon>
-          </v-col>
-
-          <v-col cols="2" align="left">
-            <v-icon x-large>{{ arrowRightBold }}</v-icon>
-            <v-icon x-large>{{ ethernet }}</v-icon>
-          </v-col>
-
-          <v-col cols="2" align="left">
-            <v-icon x-large>{{ arrowRightBold }}</v-icon>
-            <v-icon x-large>{{ server }}</v-icon>
-          </v-col>
-
-          <v-col cols="2" align="left">
-            <v-icon x-large>{{ arrowRightBold }}</v-icon>
-            <v-icon x-large>{{ ethernet }}</v-icon>
-          </v-col>
-
-          <v-col cols="2" align="left">
-            <v-icon x-large>{{ accountHeart }}</v-icon>
-          </v-col>
-        </v-row>
-
+        <v-img
+           :src="$vuetify.theme.dark ? 'static/PortForwarding-dark.png' : 'static/PortForwarding-light.png'"
+           max-width="400"
+           max-height="400"
+        ></v-img>
+        <br/>
         <strong>Redirect communication requests with port forwarding rules.</strong>
         <br/>
         <strong>포트 전달 규칙으로 통신 요청 리디렉션.</strong>
@@ -41,23 +17,14 @@
 </template>
 
 <script>
-import Defs from '@/assets/js/constants'
 
 export default {
-  name: "WelcomeBody",
-  data: () => {
-    return {
-      account: Defs.ICON_ACCOUNT,
-      accountHeart: Defs.ICON_ACCOUNT_HEART,
-      server: Defs.ICON_SERVER,
-      plus: Defs.ICON_PLUS,
-      arrowRightBold: Defs.ICON_ARROW_RIGHT_BOLD,
-      ethernet: Defs.ICON_ETHERNET
-    }
-  }
+  name: "WelcomeBody"
 }
 </script>
 
 <style scoped>
-
+.row {
+  height: calc(100vh - 100px);
+}
 </style>
