@@ -5,7 +5,6 @@ export default class Constants {
     static ICON_ARROW_LEFT = 'mdi-arrow-left'
     static ICON_SERVER = 'mdi-server'
     static ICON_CLOUD = 'mdi-cloud'
-
     static STR_LOCAL = 'local'
     static STR_REMOTE = 'remote'
     static STR_SOCKSV5 = 'socksv5'

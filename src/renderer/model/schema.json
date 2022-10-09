@@ -1,0 +1,32 @@
+[
+  {
+    "table": "sessions",
+    "columns": [
+      { "name": "id", "type": "integer", "primary": true, "autoIncrement": true },
+      { "name": "host", "type": "text" },
+      { "name": "port", "type": "integer" },
+      { "name": "username", "type": "text" },
+      { "name": "authentication_method", "type": "integer", "unsigned": true },
+      { "name": "private_key_id", "type": "integer" },
+      { "name": "passphrase", "type": "text" },
+      { "name": "password", "type": "text" },
+      { "name": "x11", "type": "text" },
+      { "name": "use_agent_forwarding", "type": "integer", "default": 0 },
+      { "name": "tcp_keep_alive", "type": "tinyint(1)", "default": 1 },
+      { "name": "keep_alive_interval", "type": "smallint", "default": 60 },
+      { "name": "keep_alive_countmax", "type": "smallint", "default": 3 }
+    ]
+  },
+  {
+    "table": "portForwarding",
+    "columns": [
+      { "name": "id", "type": "integer", "primary": true, "autoIncrement": true },
+      { "name": "name", "type": "text" },
+      { "name": "session_id", "type": "integer" },
+      { "name": "source_host", "type": "text" },
+      { "name": "source_port", "type": "integer" },
+      { "name": "destination_host", "type": "text" },
+      { "name": "destination_port", "type": "integer" }
+    ]
+  }
+]
