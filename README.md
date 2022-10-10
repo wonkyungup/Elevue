@@ -8,7 +8,6 @@
 ![header](https://capsule-render.vercel.app/api?text=Elevue!)
 
 # Elevue
-> Electron + Vue
 > Tools for managing servers
 
 ### Commonly run before developers and packages
