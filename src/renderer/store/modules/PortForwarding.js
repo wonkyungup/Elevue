@@ -1,4 +1,6 @@
-import Defs from '@/assets/js/constants'
+import Constants from './Constants'
+
+const Defs = Constants.state 
 
 const state = {
     isWelcomePage: true,

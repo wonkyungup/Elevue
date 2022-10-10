@@ -1,7 +1,8 @@
 export default class Constants {
-    static ICON_APP = '16x16.png'
     static APP_IS_PRODUCTION = process.env.NODE_ENV !== 'development'
+
     static TYPE_SEPARATOR = 'separator'
+
     static MENU_PORT_FORWARDING = 'Port Forwarding'
     static MENU_QUIT = 'Quit'
     static STR_LINUX = 'linux'
@@ -16,4 +17,15 @@ export default class Constants {
     static STR_WIN32 = 'win32'
     static STR_MAC = 'Mac'
     static STR_WINDOWS = 'Windows'
+    static STR_LOCAL = 'local'
+    static STR_REMOTE = 'remote'
+    static STR_SOCKSV5 = 'socksv5'
+
+    static ICON_APP = '16x16.png'
+    static ICON_PLUS = 'mdi-plus'
+    static ICON_ACCOUNT = 'mdi-account'
+    static ICON_ARROW_COLLAPSE_RIGHT = 'mdi-arrow-collapse-right'
+    static ICON_ARROW_LEFT = 'mdi-arrow-left'
+    static ICON_SERVER = 'mdi-server'
+    static ICON_CLOUD = 'mdi-cloud'
 }

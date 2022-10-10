@@ -4,11 +4,12 @@ import {
   app,
   Tray,
   Menu,
-  path,
-  BrowserWindow
+  path
  } from './assets/lib'
 import Defs from './assets/constants'
 import Utils from './assets/utils'
+
+require('@electron/remote/main').initialize()
 
 let tray = null
 let portForwading = null
@@ -21,66 +22,66 @@ if (Defs.APP_IS_PRODUCTION) {
   winURL = `http://localhost:9082/index.html`
 }
 
+global.Constants = Defs
+
+function createPortForwading () {
+  if (portForwading === null) {
+    portForwading = Utils.getPortForwardingBrowserWindow()
+  }
+  portForwading.loadURL(`${winURL}#/port-forwarding`)
+
+  portForwading.on('page-title-updated', event => {
+    event.preventDefault()
+  })
+
+  portForwading.on('close', event => {
+    event.sender.hide()
+    event.preventDefault()
+  })
+}
+
+function createTray () {
+  if (tray === null) {
+    tray = new Tray(path.join(__static, path.sep, Defs.ICON_APP))
+  }
+
+  const config = [
+    {
+      label: Defs.MENU_PORT_FORWARDING,
+       click: () => {
+        portForwading.show()
+      }
+    },
+    {
+      type: Defs.TYPE_SEPARATOR
+    },
+    { label: Defs.MENU_QUIT,
+      click: () => {
+        if (portForwading) {
+          portForwading = null
+        }
+
+        app.exit()
+      }
+    }
+  ]
+
+  if (tray && config) {
+    tray.setContextMenu(Menu.buildFromTemplate(config))
+  }
+}
+
 if (!app.requestSingleInstanceLock()) {
   app.exit()
 }
 
-function createPortForwading () {
-  return new Promise(resolve => {
-    portForwading = new BrowserWindow({
-      frame: true,
-      title: Defs.MENU_PORT_FORWARDING,
-      minWidth: 700,
-      width: 700,
-      height: 400,
-      minHeight: 250,
-      useContentSize: true,
-      center: true,
-      show: false,
-      webPreferences: {
-        ...Utils.getCommonWebPreferences()
-      }
-    })
-
-    portForwading.setMenu(null)
-    portForwading.loadURL(`${winURL}#/port-forwarding`)
-    portForwading.on('page-title-updated', event => { event.preventDefault() })
-    portForwading.on('close', event => {
-      event.sender.hide()
-      event.preventDefault()
-    })
-    resolve()
-  })
+if (Utils.getOsFromMain() === Defs.STR_MAC) {
+  app.dock.hide()
 }
 
 app.on('ready', () => {
-  createPortForwading().then(() => {
-    if (Utils.getOsFromMain() === Defs.STR_MAC) {
-      app.dock.hide()
-    }
-  
-    tray = new Tray(path.join(__static, path.sep, Defs.ICON_APP))
-    tray.setContextMenu(Menu.buildFromTemplate([
-      {
-        label: Defs.MENU_PORT_FORWARDING,
-         click: () => {
-          portForwading.show()
-        }
-      },
-      {
-        type: Defs.TYPE_SEPARATOR
-      },
-      { label: Defs.MENU_QUIT,
-        click: () => {
-          if (portForwading) {
-            portForwading = null
-          }
-  
-          app.exit()
-        }
-      }
-    ]))
-  })
+  createTray()
+  createPortForwading()
 })
 
 /**
