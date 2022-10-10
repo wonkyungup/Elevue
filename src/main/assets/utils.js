@@ -1,7 +1,24 @@
 import Defs from './constants'
-import { os } from './lib'
+import { os, BrowserWindow } from './lib'
 
 export default class Utils {
+    static getPortForwardingBrowserWindow () {
+        return new BrowserWindow({
+            frame: true,
+            title: Defs.MENU_PORT_FORWARDING,
+            minWidth: 700,
+            width: 700,
+            height: 400,
+            minHeight: 250,
+            useContentSize: true,
+            center: true,
+            show: false,
+            webPreferences: {
+              ...Utils.getCommonWebPreferences()
+            }
+          })
+    }
+
     static getCommonWebPreferences () {
         return {
             nodeIntegration: true,

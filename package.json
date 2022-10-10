@@ -79,6 +79,7 @@
     }
   },
   "dependencies": {
+    "@electron/remote": "2.0.8",
     "net": "1.0.2",
     "socksv5": "0.0.6",
     "sqlite3": "5.1.2",

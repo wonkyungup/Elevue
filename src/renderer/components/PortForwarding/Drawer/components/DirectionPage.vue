@@ -9,7 +9,7 @@
       </v-list-item-content>
       <v-list-item-avatar>
         <v-btn icon @click="close">
-          <v-icon>{{ arrowCollapseRight }}</v-icon>
+          <v-icon>{{ Defs.ICON_ARROW_COLLAPSE_RIGHT }}</v-icon>
         </v-btn>
       </v-list-item-avatar>
     </v-list-item>
@@ -29,20 +29,20 @@
           >
             <v-btn
                 width="100"
-                :value="local"
-                @click="onClickDirection(local)"
+                :value="Defs.STR_LOCAL"
+                @click="onClickDirection(Defs.STR_LOCAL)"
             >Local</v-btn>
 
             <v-btn
                 width="100"
-                :value="remote"
-                @click="onClickDirection(remote)"
+                :value="Defs.STR_REMOTE"
+                @click="onClickDirection(Defs.STR_REMOTE)"
             >Remote</v-btn>
 
             <v-btn
                 width="100"
-                :value="socksv5"
-                @click="onClickDirection(socksv5)"
+                :value="Defs.STR_SOCKSV5"
+                @click="onClickDirection(Defs.STR_SOCKSV5)"
             >Socksv5</v-btn>
           </v-btn-toggle>
         </template>
@@ -51,8 +51,8 @@
           <v-container>
             <v-row align="center" dense>
               <v-col cols="2" align="center">
-                <v-icon x-large v-show="isLocal() || isSocksv5()">{{ account }}</v-icon>
-                <v-icon x-large v-show="isRemote()">{{ server }}</v-icon>
+                <v-icon x-large v-show="isLocal() || isSocksv5()">{{ Defs.ICON_ACCOUNT }}</v-icon>
+                <v-icon x-large v-show="isRemote()">{{ Defs.ICON_SERVER }}</v-icon>
               </v-col>
               <v-col cols="2" align="center">
                 <v-progress-linear
@@ -63,7 +63,7 @@
                 ></v-progress-linear>
               </v-col>
               <v-col cols="2" align="center">
-                <v-icon x-large>{{ server }}</v-icon>
+                <v-icon x-large>{{ Defs.ICON_SERVER }}</v-icon>
               </v-col>
               <v-col cols="2" align="center">
                 <v-progress-linear
@@ -74,9 +74,9 @@
                 ></v-progress-linear>
               </v-col>
               <v-col cols="2" align="center">
-                <v-icon x-large v-show="isLocal()">{{ server }}</v-icon>
-                <v-icon x-large v-show="isRemote()">{{ account }}</v-icon>
-                <v-icon x-large v-show="isSocksv5()">{{ cloud }}</v-icon>
+                <v-icon x-large v-show="isLocal()">{{ Defs.ICON_SERVER }}</v-icon>
+                <v-icon x-large v-show="isRemote()">{{ Defs.ICON_ACCOUNT }}</v-icon>
+                <v-icon x-large v-show="isSocksv5()">{{ Defs.ICON_CLOUD }}</v-icon>
               </v-col>
             </v-row>
           </v-container>
@@ -113,26 +113,14 @@
 <script>
 import { mapState, mapGetters, mapActions } from 'vuex'
 import { Card } from '@/components/Layout'
-import Defs from '@/assets/js/constants'
 
 export default {
   name: "Direction",
   components: {
     Card
   },
-  data: () => {
-    return {
-      arrowCollapseRight: Defs.ICON_ARROW_COLLAPSE_RIGHT,
-      account: Defs.ICON_ACCOUNT,
-      server: Defs.ICON_SERVER,
-      cloud: Defs.ICON_CLOUD,
-      local: Defs.STR_LOCAL,
-      remote: Defs.STR_REMOTE,
-      socksv5: Defs.STR_SOCKSV5
-    }
-  },
   computed: {
-    ...mapState({ state: 'PortForwarding' }),
+    ...mapState({ Defs: 'Constants', state: 'PortForwarding' }),
     ...mapGetters('PortForwarding', ['isLocal', 'isRemote', 'isSocksv5'])
   },
   methods: {

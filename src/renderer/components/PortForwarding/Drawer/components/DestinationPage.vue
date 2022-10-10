@@ -3,7 +3,7 @@
     <!-- Title -->
     <v-list-item>
       <v-btn icon color="primary" @click="onClickBack">
-        <v-icon>{{ arrowLeft }}</v-icon>
+        <v-icon>{{ Defs.ICON_ARROW_LEFT }}</v-icon>
       </v-btn>
 
       <v-list-item-content>
@@ -14,7 +14,7 @@
 
       <v-list-item-avatar>
         <v-btn icon @click="close">
-          <v-icon>{{ arrowCollapseRight }}</v-icon>
+          <v-icon>{{ Defs.ICON_ARROW_COLLAPSE_RIGHT }}</v-icon>
         </v-btn>
       </v-list-item-avatar>
     </v-list-item>
@@ -35,12 +35,12 @@
                     x-large
                     v-show="isLocal() || isSocksv5()"
                     :disabled="state.isDestinationPage"
-                >{{ account }}</v-icon>
+                >{{ Defs.ICON_ACCOUNT }}</v-icon>
                 <v-icon
                     x-large
                     v-show="isRemote()"
                     :disabled="state.isDestinationPage"
-                >{{ server }}</v-icon>
+                >{{ Defs.ICON_SERVER }}</v-icon>
               </v-col>
               <v-col cols="2" align="center">
                 <v-progress-linear
@@ -51,7 +51,7 @@
                 ></v-progress-linear>
               </v-col>
               <v-col cols="2" align="center">
-                <v-icon x-large :disabled="state.isDestinationPage">{{ server }}</v-icon>
+                <v-icon x-large :disabled="state.isDestinationPage">{{ Defs.ICON_SERVER }}</v-icon>
               </v-col>
               <v-col cols="2" align="center">
                 <v-progress-linear
@@ -65,17 +65,17 @@
                 <v-icon
                     x-large
                     v-show="isLocal()"
-                >{{ server }}</v-icon>
+                >{{ Defs.ICON_SERVER }}</v-icon>
 
                 <v-icon
                     x-large
                     v-show="isRemote()"
-                >{{ account }}</v-icon>
+                >{{ Defs.ICON_ACCOUNT }}</v-icon>
 
                 <v-icon
                     x-large
                     v-show="isSocksv5()"
-                >{{ cloud }}</v-icon>
+                >{{ Defs.ICON_CLOUD }}</v-icon>
               </v-col>
             </v-row>
           </v-container>
@@ -149,7 +149,6 @@
 <script>
 import { mapState, mapGetters, mapActions } from 'vuex'
 import { Card } from '@/components/Layout'
-import Defs from '@/assets/js/constants'
 
 export default {
   name: "DestinationPage",
@@ -158,11 +157,6 @@ export default {
   },
   data: () => {
     return {
-      arrowCollapseRight: Defs.ICON_ARROW_COLLAPSE_RIGHT,
-      arrowLeft: Defs.ICON_ARROW_LEFT,
-      account: Defs.ICON_ACCOUNT,
-      server: Defs.ICON_SERVER,
-      cloud: Defs.ICON_CLOUD,
       hostname: '',
       port: null
     }
@@ -178,7 +172,7 @@ export default {
     }
   },
   computed: {
-    ...mapState({ state: 'PortForwarding' }),
+    ...mapState({ Defs: 'Constants', state: 'PortForwarding' }),
     ...mapGetters('PortForwarding', ['getDirectionTitle', 'isLocal', 'isRemote', 'isSocksv5'])
   },
   methods: {

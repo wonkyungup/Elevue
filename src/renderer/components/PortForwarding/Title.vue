@@ -9,8 +9,8 @@
       >
         <v-col align="left" cols="12">
           <v-btn outlined @click="onClickNewButton">
-            <v-icon left>{{ plus }}</v-icon>
-              <strong>{{ content }}</strong>
+            <v-icon left>{{ Defs.ICON_PLUS }}</v-icon>
+              <strong>NEW</strong>
           </v-btn>
         </v-col>
       </v-row>
@@ -19,15 +19,12 @@
 </template>
 
 <script>
-import Defs from '@/assets/js/constants'
+import { mapState } from 'vuex'
 
 export default {
   name: "Header",
-  data: () => {
-    return {
-      plus: Defs.ICON_PLUS,
-      content: 'NEW'
-    }
+  computed: {
+    ...mapState({ Defs: 'Constants' })
   },
   methods: {
     onClickNewButton() {
