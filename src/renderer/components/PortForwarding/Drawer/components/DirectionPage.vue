@@ -86,7 +86,7 @@
               <v-col cols="12" align="left">
                 <strong v-show="isLocal()">Local forwarding lets you access a remote server's listening port as though it were local.</strong>
                 <strong v-show="isRemote()">Remote forwarding opens a port on the remote machine and forwards connections to the local (current) host.</strong>
-                <strong v-show="isSocksv5()">Dynamic port forwarding turns Evue into a SOCKSsv5 proxy server. SOCKsv5 proxy server is a protocol to request any connection via a remote host.</strong>
+                <strong v-show="isSocksv5()">Dynamic port forwarding turns Elevue into a SOCKSsv5 proxy server. SOCKsv5 proxy server is a protocol to request any connection via a remote host.</strong>
               </v-col>
             </v-row>
           </v-container>

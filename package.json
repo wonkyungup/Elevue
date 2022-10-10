@@ -1,8 +1,8 @@
 {
-  "name": "Evue",
+  "name": "Elevue",
   "version": "0.0.1",
   "private": true,
-  "description": "ssh2 port forwarding tools",
+  "description": "Tools for managing servers",
   "author": "Won Kyung Up <wonko93@naver.com>",
   "main": "./dist/electron/main.js",
   "scripts": {
@@ -23,7 +23,7 @@
     "postinstall": "npm run lint:fix"
   },
   "build": {
-    "productName": "Evue",
+    "productName": "Elevue",
     "appId": "com.example.example",
     "copyright": "",
     "directories": {

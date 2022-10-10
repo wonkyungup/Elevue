@@ -6,7 +6,7 @@
 
 <script>
   export default {
-    name: 'Evue',
+    name: 'Elevue',
     mounted() {
       window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => {
         this.$vuetify.theme.dark = window.matchMedia('(prefers-color-scheme: dark)').matches

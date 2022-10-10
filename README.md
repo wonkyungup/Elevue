@@ -5,9 +5,9 @@
 #
 
 
-![header](https://capsule-render.vercel.app/api?text=Evue!)
+![header](https://capsule-render.vercel.app/api?text=Elevue!)
 
-# Evue
+# Elevue
 > Electron + Vue
 > Tools for managing servers
 
