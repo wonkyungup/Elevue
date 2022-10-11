@@ -4,10 +4,7 @@ const Defs = Constants.state
 
 const state = {
     isWelcomePage: true,
-    isDirectionPage: true,
-    isSourcePage: false,
-    isServerPage: false,
-    isDestinationPage: false,
+    curDrawer: 0,
     session: {
       id: null,
       direction: Defs.STR_LOCAL,
@@ -37,6 +34,27 @@ const getters = {
     },
     isSocksv5: state => () => {
       return state.session.direction === Defs.STR_SOCKSV5
+    },
+    getDrawerPage: state => () => {
+      /*
+        0: Direction Page
+        1: Source Page
+        2: Server Page
+        3: Destination Page
+      */
+
+      switch (state.curDrawer) {
+        case 0:
+          return 0
+        case 1:
+          return 1
+        case 2:
+          return 2
+        case 3:
+          return 3
+        default:
+          break        
+      }
     }
 }
 
@@ -45,10 +63,7 @@ const mutations ={
       state.isWelcomePage = payload
     },
     CLEAR_SESSION_VALUE (state) {
-      state.isDirectionPage = true
-      state.isSourcePage =  false
-      state.isServerPage = false
-      state.isDestinationPage = false
+      state.curDrawer = 0
       state.session = {
           id: null,
           direction: Defs.STR_LOCAL,
@@ -62,86 +77,57 @@ const mutations ={
           serverPassword: ''
       }
     },
-    BACK_SOURCE_PAGE (state) {
-      state.isDirectionPage = true
-      state.isSourcePage = false
-      state.isServerPage = false
-      state.isDestinationPage = false
-    },
-    BACK_SERVER_PAGE (state) {
-      state.isDirectionPage = false
-      state.isSourcePage = true
-      state.isServerPage = false
-      state.isDestinationPage = false
-    },
-    BACK_DESTINATION_PAGE (state) {
-      state.isDirectionPage = false
-      state.isSourcePage = false
-      state.isServerPage = true
-      state.isDestinationPage = false
-    },
-    SET_SESSION_DIRECTION (state, payload) {
-      state.session.direction = payload
-    },
-    SET_SESSION_SOURCE_PAGE (state, payload) {
-      switch (state.session.direction) {
-          case Defs.STR_LOCAL:
-              state.session.localHost = payload.hostname
-              state.session.localPort = payload.port
-              break
-          case Defs.STR_REMOTE:
-              state.session.remoteHost = payload.hostname
-              state.session.remotePort = payload.port
-              break
-          case Defs.STR_SOCKSV5:
-              state.session.localHost = payload.hostname
-              state.session.localPort = payload.port
-              state.session.remoteHost = state.session.localHost
-              state.session.remotePort = state.session.localPort
-          default:
-              break
-      }
-    },
-    SET_SESSION_SERVER_PAGE (state, payload) {
-      state.session.serverHost = payload.hostname
-      state.session.serverPort = payload.port
-      state.session.serverUsername = payload.username
-      state.session.serverPassword = payload.password
-    },
-    SET_SESSION_DESTINATION_PAGE (state, payload) {
-      if (getters.isLocal()) {
-        state.session.remoteHost = payload.hostname
-        state.session.remotePort = payload.port
-      }
+    SET_SESSION_VALUE (state, payload) {
+      switch (state.curDrawer) {
+        case 0:
+          state.session.direction = payload
+          break
+        case 1:
+          if (getters.isLocal()) {
+            state.session.localHost = payload.hostname
+            state.session.localPort = payload.port            
+          }
 
-      if (getters.isRemote()) {
-        state.session.localHost = payload.hostname
-        state.session.localPort = payload.port
+          if (getters.isRemote()) {
+            state.session.remoteHost = payload.hostname
+            state.session.remotePort = payload.port            
+          }
+
+          if (getters.isSocksv5()) {
+            state.session.localHost = payload.hostname
+            state.session.localPort = payload.port
+            state.session.remoteHost = state.session.localHost
+            state.session.remotePort = state.session.localPort            
+          }
+          break
+        case 2:
+          state.session.serverHost = payload.hostname
+          state.session.serverPort = payload.port
+          state.session.serverUsername = payload.username
+          state.session.serverPassword = payload.password
+          break
+        case 3:
+          if (getters.isLocal()) {
+            state.session.remoteHost = payload.hostname
+            state.session.remotePort = payload.port
+          }
+    
+          if (getters.isRemote()) {
+            state.session.localHost = payload.hostname
+            state.session.localPort = payload.port
+          }
+          break
+        default:
+          break      
       }
     },
-    SET_CONTINUE_DIRECTION (state) {
-      state.isDirectionPage = false
-      state.isSourcePage = true
-      state.isServerPage = false
-      state.isDestinationPage = false
+    MOVE_BACK_BUTTON (state) {
+      if (state.curDrawer !== 0) {
+        state.curDrawer--
+      }
     },
-    SET_CONTINUE_SOURCE_PAGE (state) {
-      state.isDirectionPage = false
-      state.isSourcePage = false
-      state.isServerPage = true
-      state.isDestinationPage = false
-    },
-    SET_CONTINUE_SERVER_PAGE (state) {
-      state.isDirectionPage = false
-      state.isSourcePage = false
-      state.isServerPage = false
-      state.isDestinationPage = true
-    },
-    SET_CONTINUE_DESTINATION_PAGE (state) {
-      state.isDirectionPage = false
-      state.isSourcePage = false
-      state.isServerPage = false
-      state.isDestinationPage = false
+    MOVE_NEXT_BUTTON (state) {
+      state.curDrawer++
     }
 }
 
@@ -152,38 +138,14 @@ const actions = {
     clearSessionValue ({ commit }) {
       commit('CLEAR_SESSION_VALUE')
     },
-    backSourcePage ({ commit }) {
-      commit('BACK_SOURCE_PAGE')
+    setSessionValue ({ commit }, payload) {
+      commit('SET_SESSION_VALUE', payload)
     },
-    backServerPage ({ commit }) {
-      commit('BACK_SERVER_PAGE')
+    moveBackButton ({ commit }) {
+      commit('MOVE_BACK_BUTTON')
     },
-    backDestinationPage ({ commit }) {
-      commit('BACK_DESTINATION_PAGE')
-    },
-    setSessionDirection ({ commit }, payload) {
-      commit('SET_SESSION_DIRECTION', payload)
-    },
-    setSessionSourcePage ({ commit }, payload) {
-      commit('SET_SESSION_SOURCE_PAGE', payload)
-    },
-    setSessionServerPage ({ commit }, payload) {
-      commit('SET_SESSION_SERVER_PAGE', payload)
-    },
-    setSessionDestinationPage ({ commit }, payload) {
-        commit('SET_SESSION_DESTINATION_PAGE', payload)
-    },
-    setContinueDirection ({ commit }) {
-      commit('SET_CONTINUE_DIRECTION')
-    },
-    setContinueSourcePage ({ commit }) {
-      commit('SET_CONTINUE_SOURCE_PAGE')
-    },
-    setContinueServerPage ({ commit }) {
-      commit('SET_CONTINUE_SERVER_PAGE')
-    },
-    setContinueDestinationPage ({ commit }) {
-      commit('SET_CONTINUE_DESTINATION_PAGE')
+    moveNextButton ({ commit }) {
+      commit('MOVE_NEXT_BUTTON')
     }
 }
 

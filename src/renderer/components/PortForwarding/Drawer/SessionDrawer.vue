@@ -7,30 +7,38 @@
     temporary
   >
 
+  <!--
+     0: Direction Page
+     1: Source Page
+     2: Server Page
+     3: Destination Page
+  -->
+
   <directionPage
-    v-show="state.isDirectionPage"
+    v-show="getDrawerPage() === 0"
     v-on:msgClose="close"
   ></directionPage>
 
   <sourcePage
-    v-show="state.isSourcePage"
+    v-show="getDrawerPage() === 1"
     v-on:msgClose="close"
   ></sourcePage>
 
   <serverPage
-    v-show="state.isServerPage"
+    v-show="getDrawerPage() === 2"
     v-on:msgClose="close"
   ></serverPage>
 
   <destinationPage
-      v-show="state.isDestinationPage"
-      v-on:msgClose="close"
+    v-show="getDrawerPage() === 3"
+    v-on:msgClose="close"
   ></destinationPage>
+
   </v-navigation-drawer>
 </template>
 
 <script>
-import { mapState, mapActions } from 'vuex'
+import { mapState, mapActions, mapGetters } from 'vuex'
 import {
   directionPage,
   sourcePage,
@@ -52,7 +60,8 @@ export default {
     }
   },
   computed: {
-    ...mapState({ state: 'PortForwarding' })
+    ...mapState({ state: 'PortForwarding' }),
+    ...mapGetters('PortForwarding', ['getDrawerPage'])
   },
   watch: {
     state: {
@@ -66,8 +75,8 @@ export default {
   methods: {
     ...mapActions('PortForwarding', ['clearSessionValue']),
     open () {
-      this.drawer = true
       this.clearSessionValue()
+      this.drawer = true
     },
     close () {
       this.drawer = false

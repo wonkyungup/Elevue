@@ -124,15 +124,15 @@ export default {
     ...mapGetters('PortForwarding', ['isLocal', 'isRemote', 'isSocksv5'])
   },
   methods: {
-    ...mapActions('PortForwarding', ['setSessionDirection', 'setContinueDirection']),
+    ...mapActions('PortForwarding', ['setSessionValue', 'moveNextButton']),
     close () {
       this.$emit('msgClose')
     },
     onClickDirection (target) {
-      this.setSessionDirection(target)
+      this.setSessionValue(target)
     },
     onClickContinue () {
-      this.setContinueDirection()
+      this.moveNextButton()
     }
   }
 }
