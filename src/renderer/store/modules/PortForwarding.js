@@ -4,7 +4,7 @@ const Defs = Constants.state
 
 const state = {
     isWelcomePage: true,
-    curDrawer: 0,
+    curDrawer: Defs.DRAWER_DIRECTION_PAGE || 0,
     session: {
       id: null,
       direction: Defs.STR_LOCAL,
@@ -34,27 +34,6 @@ const getters = {
     },
     isSocksv5: state => () => {
       return state.session.direction === Defs.STR_SOCKSV5
-    },
-    getDrawerPage: state => () => {
-      /*
-        0: Direction Page
-        1: Source Page
-        2: Server Page
-        3: Destination Page
-      */
-
-      switch (state.curDrawer) {
-        case 0:
-          return 0
-        case 1:
-          return 1
-        case 2:
-          return 2
-        case 3:
-          return 3
-        default:
-          break        
-      }
     }
 }
 
@@ -63,7 +42,7 @@ const mutations ={
       state.isWelcomePage = payload
     },
     CLEAR_SESSION_VALUE (state) {
-      state.curDrawer = 0
+      state.curDrawer = Defs.DRAWER_DIRECTION_PAGE || 0
       state.session = {
           id: null,
           direction: Defs.STR_LOCAL,
@@ -79,10 +58,10 @@ const mutations ={
     },
     SET_SESSION_VALUE (state, payload) {
       switch (state.curDrawer) {
-        case 0:
+        case Defs.DRAWER_DIRECTION_PAGE:
           state.session.direction = payload
           break
-        case 1:
+        case Defs.DRAWER_SOURCE_PAGE:
           if (getters.isLocal()) {
             state.session.localHost = payload.hostname
             state.session.localPort = payload.port            
@@ -100,13 +79,13 @@ const mutations ={
             state.session.remotePort = state.session.localPort            
           }
           break
-        case 2:
+        case Defs.DRAWER_SERVER_PAGE:
           state.session.serverHost = payload.hostname
           state.session.serverPort = payload.port
           state.session.serverUsername = payload.username
           state.session.serverPassword = payload.password
           break
-        case 3:
+        case Defs.DRAWER_DESTINATION_PAGE:
           if (getters.isLocal()) {
             state.session.remoteHost = payload.hostname
             state.session.remotePort = payload.port
