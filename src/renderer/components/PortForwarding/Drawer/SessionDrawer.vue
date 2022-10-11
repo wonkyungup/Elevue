@@ -7,30 +7,23 @@
     temporary
   >
 
-  <!--
-     0: Direction Page
-     1: Source Page
-     2: Server Page
-     3: Destination Page
-  -->
-
   <directionPage
-    v-show="getDrawerPage() === 0"
+    v-show="state.curDrawer === Defs.DRAWER_DIRECTION_PAGE"
     v-on:msgClose="close"
   ></directionPage>
 
   <sourcePage
-    v-show="getDrawerPage() === 1"
+    v-show="state.curDrawer === Defs.DRAWER_SOURCE_PAGE"
     v-on:msgClose="close"
   ></sourcePage>
 
   <serverPage
-    v-show="getDrawerPage() === 2"
+    v-show="state.curDrawer === Defs.DRAWER_SERVER_PAGE"
     v-on:msgClose="close"
   ></serverPage>
 
   <destinationPage
-    v-show="getDrawerPage() === 3"
+    v-show="state.curDrawer === Defs.DRAWER_DESTINATION_PAGE"
     v-on:msgClose="close"
   ></destinationPage>
 
@@ -38,7 +31,7 @@
 </template>
 
 <script>
-import { mapState, mapActions, mapGetters } from 'vuex'
+import { mapState, mapActions } from 'vuex'
 import {
   directionPage,
   sourcePage,
@@ -60,8 +53,7 @@ export default {
     }
   },
   computed: {
-    ...mapState({ state: 'PortForwarding' }),
-    ...mapGetters('PortForwarding', ['getDrawerPage'])
+    ...mapState({ Defs: 'Constants', state: 'PortForwarding' })
   },
   watch: {
     state: {
