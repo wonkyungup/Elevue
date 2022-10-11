@@ -176,12 +176,12 @@ export default {
     ...mapGetters('PortForwarding', ['getDirectionTitle', 'isLocal', 'isRemote', 'isSocksv5'])
   },
   methods: {
-    ...mapActions('PortForwarding', ['backDestinationPage', 'setContinueDestinationPage', 'setSessionDestinationPage']),
+    ...mapActions('PortForwarding', ['moveBackButton', 'setSessionValue', 'moveNextButton']),
     close () {
       this.$emit('msgClose')
     },
     onClickBack () {
-      this.backDestinationPage()
+      this.moveBackButton()
     },
     onClickContinue () {
       if (this.isLocal() || this.isRemote()) {
@@ -189,11 +189,11 @@ export default {
         const port = this.port
 
         if (hostname && port) {
-          this.setSessionDestinationPage({ hostname, port })
+          this.setSessionValue({ hostname, port })
         }
       }
 
-      this.setContinueDestinationPage()
+      this.moveNextButton()
     }
   }
 }

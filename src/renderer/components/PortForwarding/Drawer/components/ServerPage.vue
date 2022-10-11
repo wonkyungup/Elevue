@@ -183,12 +183,12 @@ export default {
     ...mapGetters('PortForwarding', ['getDirectionTitle', 'isLocal', 'isRemote', 'isSocksv5'])
   },
   methods: {
-    ...mapActions('PortForwarding', ['backServerPage', 'setContinueServerPage', 'setSessionServerPage']),
+    ...mapActions('PortForwarding', ['moveBackButton', 'setSessionValue', 'moveNextButton']),
     close () {
       this.$emit('msgClose')
     },
     onClickBack () {
-      this.backServerPage()
+      this.moveBackButton()
     },
     onClickContinue () {
       const hostname = this.hostname
@@ -197,8 +197,8 @@ export default {
       const password = this.password
 
       if (hostname && port && username && password) {
-        this.setSessionServerPage({ hostname, port, username, password }) // password security need
-        this.setContinueServerPage()
+        this.setSessionValue({ hostname, port, username, password }) // password security need
+        this.moveNextButton()
       }
     }
   }
