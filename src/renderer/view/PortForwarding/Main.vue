@@ -23,7 +23,7 @@
 </template>
 
 <script>
-import { mapState, mapGetters } from 'vuex'
+import { mapGetters } from 'vuex'
 import { Card } from '@/components/Layout'
 import {
   Title,
@@ -42,7 +42,6 @@ export default {
     SessionDrawer
   },
   computed: {
-    ...mapState({ state: 'PortForwarding' }),
     ...mapGetters('PortForwarding', ['isWelcomePage'])
   },
   methods: {

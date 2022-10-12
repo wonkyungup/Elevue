@@ -8,9 +8,9 @@
            max-height="400"
         ></v-img>
         <br/>
-        <strong>Redirect communication requests with port forwarding rules.</strong>
+        <strong class="text-h5 font-weight-bold">Redirect communication requests with port forwarding rules.</strong>
         <br/>
-        <strong>포트 전달 규칙으로 통신 요청 리디렉션.</strong>
+        <strong class="text-h5 font-weight-bold">포트 전달 규칙으로 통신 요청 리디렉션.</strong>
       </v-col>
     </v-row>
   </v-container>
