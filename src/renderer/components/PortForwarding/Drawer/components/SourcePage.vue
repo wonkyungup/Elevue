@@ -43,12 +43,12 @@
                 ></v-progress-linear>
               </v-col>
               <v-col cols="2" align="center">
-                <v-icon x-large :disabled="state.isSourcePage">{{ Defs.ICON_SERVER }}</v-icon>
+                <v-icon x-large disabled>{{ Defs.ICON_SERVER }}</v-icon>
               </v-col>
               <v-col cols="2" align="center">
                 <v-progress-linear
                   color="primary"
-                  :indeterminate="!state.isSourcePage"
+                  value="0"
                   rounded
                   height="6"
                 ></v-progress-linear>
@@ -57,19 +57,19 @@
                 <v-icon
                   x-large
                   v-show="isLocal()"
-                  :disabled="state.isSourcePage"
+                  disabled
                 >{{ Defs.ICON_SERVER }}</v-icon>
 
                 <v-icon
                   x-large
                   v-show="isRemote()"
-                  :disabled="state.isSourcePage"
+                  disabled
                 >{{ Defs.ICON_ACCOUNT }}</v-icon>
 
                 <v-icon
                   x-large
                   v-show="isSocksv5()"
-                  :disabled="state.isSourcePage"
+                  disabled
                 >{{ Defs.ICON_CLOUD }}</v-icon>
               </v-col>
             </v-row>
@@ -136,15 +136,17 @@ export default {
   },
   data: () => {
     return {
-      hostname: '',
+      hostname: 'localhost',
       port: null
     }
   },
   watch: {
-    'state.isDirectionPage': {
+    'state.curDrawer': {
       handler () {
-        this.hostname = ''
-        this.port = ''
+        if (this.isDrawerDirection()) {
+          this.hostname = 'localhost'
+          this.port = null
+        }
       },
       immediate: false,
       deep: true
@@ -152,7 +154,13 @@ export default {
   },
   computed: {
     ...mapState({ Defs: 'Constants', state: 'PortForwarding' }),
-    ...mapGetters('PortForwarding', ['getDirectionTitle', 'isLocal', 'isRemote', 'isSocksv5'])
+    ...mapGetters('PortForwarding', [
+      'getDirectionTitle',
+      'isLocal',
+      'isRemote',
+      'isSocksv5',
+      'isDrawerDirection'
+    ])
   },
   methods: {
     ...mapActions('PortForwarding', ['moveBackButton', 'setSessionValue', 'moveNextButton']),

@@ -9,15 +9,36 @@
           align="center"
           cols="12"
       >
-        <h1>Session Body</h1>
+        <h1>{{ list }}</h1>
       </v-col>
     </v-row>
   </v-container>
 </template>
   
 <script>
+import { mapState } from 'vuex'
+
 export default {
-    name: "SessionBody",
+  name: "SessionBody",
+  data: () => {
+    return {
+      list: []
+    }
+  },
+  computed: {
+    ...mapState({ Defs: 'Constants', state: 'PortForwarding' })
+  },
+  watch: {
+    state: {
+      handler () {
+        if (this.state.arrTunneling.length > 0) {
+          this.list = this.state.arrTunneling
+        }
+      },
+      immediate: true,
+      deep: true
+    }
+  }
 }
 </script>
 

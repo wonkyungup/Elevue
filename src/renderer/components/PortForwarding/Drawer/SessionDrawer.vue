@@ -8,22 +8,22 @@
   >
 
   <directionPage
-    v-show="state.curDrawer === Defs.DRAWER_DIRECTION_PAGE"
+    v-show="isDrawerDirection()"
     v-on:msgClose="close"
   ></directionPage>
 
   <sourcePage
-    v-show="state.curDrawer === Defs.DRAWER_SOURCE_PAGE"
+    v-show="isDrawerSource()"
     v-on:msgClose="close"
   ></sourcePage>
 
   <serverPage
-    v-show="state.curDrawer === Defs.DRAWER_SERVER_PAGE"
+    v-show="isDrawerServer()"
     v-on:msgClose="close"
   ></serverPage>
 
   <destinationPage
-    v-show="state.curDrawer === Defs.DRAWER_DESTINATION_PAGE"
+    v-show="isDrawerDestination()"
     v-on:msgClose="close"
   ></destinationPage>
 
@@ -31,7 +31,7 @@
 </template>
 
 <script>
-import { mapState, mapActions } from 'vuex'
+import { mapState, mapActions, mapGetters } from 'vuex'
 import {
   directionPage,
   sourcePage,
@@ -53,14 +53,29 @@ export default {
     }
   },
   computed: {
-    ...mapState({ Defs: 'Constants', state: 'PortForwarding' })
+    ...mapState({ Defs: 'Constants', state: 'PortForwarding' }),
+    ...mapGetters('PortForwarding', [
+      'isDrawerDirection',
+      'isDrawerSource',
+      'isDrawerServer',
+      'isDrawerDestination'
+    ])
   },
   watch: {
-    state: {
+    'state.curDrawer': {
       handler () {
-        console.log(this.state)
+        const arrBoolean = [
+          this.isDrawerDirection(),
+          this.isDrawerSource(),
+          this.isDrawerServer(),
+          this.isDrawerDestination()
+        ]
+
+        if (!arrBoolean.includes(true)) {
+          this.close()
+        }
       },
-      immediate: false,
+      immediate: true,
       deep: true
     }
   },

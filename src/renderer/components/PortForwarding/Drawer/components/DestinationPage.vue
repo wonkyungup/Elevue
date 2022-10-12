@@ -34,29 +34,29 @@
                 <v-icon
                     x-large
                     v-show="isLocal() || isSocksv5()"
-                    :disabled="state.isDestinationPage"
+                    disabled
                 >{{ Defs.ICON_ACCOUNT }}</v-icon>
                 <v-icon
                     x-large
                     v-show="isRemote()"
-                    :disabled="state.isDestinationPage"
+                    disabled
                 >{{ Defs.ICON_SERVER }}</v-icon>
               </v-col>
               <v-col cols="2" align="center">
                 <v-progress-linear
                     color="primary"
-                    :indeterminate="!state.isDestinationPage"
+                    value="0"
                     rounded
                     height="6"
                 ></v-progress-linear>
               </v-col>
               <v-col cols="2" align="center">
-                <v-icon x-large :disabled="state.isDestinationPage">{{ Defs.ICON_SERVER }}</v-icon>
+                <v-icon x-large disabled>{{ Defs.ICON_SERVER }}</v-icon>
               </v-col>
               <v-col cols="2" align="center">
                 <v-progress-linear
                     color="primary"
-                    :indeterminate="!state.isDestinationPage"
+                    value="0"
                     rounded
                     height="6"
                 ></v-progress-linear>
@@ -105,7 +105,7 @@
                 ></v-text-field>
                 <v-text-field
                     v-show="isSocksv5()"
-                    :value="state.session.remoteHost"
+                    :value="state.session.localHost"
                     disabled
                     outlined
                     dense
@@ -122,7 +122,7 @@
                 ></v-text-field>
                 <v-text-field
                     v-show="isSocksv5()"
-                    :value="state.session.remotePort"
+                    :value="state.session.localPort"
                     disabled
                     outlined
                     dense
@@ -157,15 +157,17 @@ export default {
   },
   data: () => {
     return {
-      hostname: '',
+      hostname: 'localhost',
       port: null
     }
   },
   watch: {
-    'state.isServerPage': {
+    'state.curDrawer': {
       handler () {
-        this.hostname = ''
-        this.port = null
+        if (this.isDrawerServer()) {
+          this.hostname = 'localhost'
+          this.port = null
+        }
       },
       immediate: false,
       deep: true
@@ -173,7 +175,13 @@ export default {
   },
   computed: {
     ...mapState({ Defs: 'Constants', state: 'PortForwarding' }),
-    ...mapGetters('PortForwarding', ['getDirectionTitle', 'isLocal', 'isRemote', 'isSocksv5'])
+    ...mapGetters('PortForwarding', [
+      'getDirectionTitle',
+      'isLocal',
+      'isRemote',
+      'isSocksv5',
+      'isDrawerServer'
+    ])
   },
   methods: {
     ...mapActions('PortForwarding', ['moveBackButton', 'setSessionValue', 'moveNextButton']),
@@ -184,15 +192,22 @@ export default {
       this.moveBackButton()
     },
     onClickContinue () {
-      if (this.isLocal() || this.isRemote()) {
-        const hostname = this.hostname
-        const port = this.port
+      let hostname = ''
+      let port = null
 
-        if (hostname && port) {
-          this.setSessionValue({ hostname, port })
-        }
+      if (this.isLocal() || this.isRemote()) {
+        hostname = this.hostname
+        port = this.port
       }
 
+      if (this.isSocksv5()) {
+        const session = this.state.session
+
+        hostname = session.localHost
+        port = session.localPort
+      }
+
+      this.setSessionValue({ hostname, port })
       this.moveNextButton()
     }
   }

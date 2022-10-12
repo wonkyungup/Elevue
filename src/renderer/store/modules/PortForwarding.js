@@ -3,7 +3,7 @@ import Constants from './Constants'
 const Defs = Constants.state 
 
 const state = {
-    isWelcomePage: true,
+    arrTunneling: [],
     curDrawer: Defs.DRAWER_DIRECTION_PAGE || 0,
     session: {
       id: null,
@@ -21,7 +21,11 @@ const state = {
 
 const getters = {
     isWelcomePage: state => () => {
-      return state.isWelcomePage
+      if (state.arrTunneling.length > 0) {
+        return false
+      }
+
+      return true
     },
     getDirectionTitle: state => () => {
       return state.session.direction.replace(/\b[a-z]/, value => value.toUpperCase())
@@ -34,13 +38,22 @@ const getters = {
     },
     isSocksv5: state => () => {
       return state.session.direction === Defs.STR_SOCKSV5
+    },
+    isDrawerDirection: state => () => {
+      return state.curDrawer === Defs.DRAWER_DIRECTION_PAGE
+    },
+    isDrawerSource: state => () => {
+      return state.curDrawer === Defs.DRAWER_SOURCE_PAGE
+    },
+    isDrawerServer: state => () => {
+      return state.curDrawer === Defs.DRAWER_SERVER_PAGE
+    },
+    isDrawerDestination: state => () => {
+      return state.curDrawer === Defs.DRAWER_DESTINATION_PAGE
     }
 }
 
 const mutations ={
-    SET_WELCOME_PAGE (state, payload) {
-      state.isWelcomePage = payload
-    },
     CLEAR_SESSION_VALUE (state) {
       state.curDrawer = Defs.DRAWER_DIRECTION_PAGE || 0
       state.session = {
@@ -57,44 +70,41 @@ const mutations ={
       }
     },
     SET_SESSION_VALUE (state, payload) {
+      const session = state.session
+
       switch (state.curDrawer) {
         case Defs.DRAWER_DIRECTION_PAGE:
-          state.session.direction = payload
+          session.direction = payload
           break
         case Defs.DRAWER_SOURCE_PAGE:
-          if (getters.isLocal()) {
-            state.session.localHost = payload.hostname
-            state.session.localPort = payload.port            
+          if (session.direction === Defs.STR_LOCAL || session.direction === Defs.STR_SOCKSV5) {
+            session.localHost = payload.hostname
+            session.localPort = payload.port            
           }
 
-          if (getters.isRemote()) {
-            state.session.remoteHost = payload.hostname
-            state.session.remotePort = payload.port            
-          }
-
-          if (getters.isSocksv5()) {
-            state.session.localHost = payload.hostname
-            state.session.localPort = payload.port
-            state.session.remoteHost = state.session.localHost
-            state.session.remotePort = state.session.localPort            
+          if (session.direction === Defs.STR_REMOTE) {
+            session.remoteHost = payload.hostname
+            session.remotePort = payload.port
           }
           break
         case Defs.DRAWER_SERVER_PAGE:
-          state.session.serverHost = payload.hostname
-          state.session.serverPort = payload.port
-          state.session.serverUsername = payload.username
-          state.session.serverPassword = payload.password
+          session.serverHost = payload.hostname
+          session.serverPort = payload.port
+          session.serverUsername = payload.username
+          session.serverPassword = payload.password
           break
         case Defs.DRAWER_DESTINATION_PAGE:
-          if (getters.isLocal()) {
-            state.session.remoteHost = payload.hostname
-            state.session.remotePort = payload.port
+          if (session.direction === Defs.STR_LOCAL || session.direction === Defs.STR_SOCKSV5) {
+            session.remoteHost = payload.hostname
+            session.remotePort = payload.port
           }
     
-          if (getters.isRemote()) {
-            state.session.localHost = payload.hostname
-            state.session.localPort = payload.port
+          if (session.direction === Defs.STR_REMOTE) {
+            session.localHost = payload.hostname
+            session.localPort = payload.port
           }
+
+          state.arrTunneling.push(session)
           break
         default:
           break      
@@ -111,9 +121,6 @@ const mutations ={
 }
 
 const actions = {
-    setWelcomePage ({ commit }, payload) {
-      commit('SET_WELCOME_PAGE', payload)
-    },
     clearSessionValue ({ commit }) {
       commit('CLEAR_SESSION_VALUE')
     },
