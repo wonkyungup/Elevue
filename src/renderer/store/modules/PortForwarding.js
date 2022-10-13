@@ -1,6 +1,7 @@
 import Constants from './Constants'
+import Security from '@/assets/js/security'
 
-const Defs = Constants.state 
+const Defs = Constants.state
 
 const state = {
     arrTunneling: [],
@@ -79,7 +80,7 @@ const mutations ={
         case Defs.DRAWER_SOURCE_PAGE:
           if (session.direction === Defs.STR_LOCAL || session.direction === Defs.STR_SOCKSV5) {
             session.localHost = payload.hostname
-            session.localPort = payload.port            
+            session.localPort = payload.port
           }
 
           if (session.direction === Defs.STR_REMOTE) {
@@ -91,14 +92,14 @@ const mutations ={
           session.serverHost = payload.hostname
           session.serverPort = payload.port
           session.serverUsername = payload.username
-          session.serverPassword = payload.password
+          session.serverPassword = Security.encryption(payload.password)
           break
         case Defs.DRAWER_DESTINATION_PAGE:
           if (session.direction === Defs.STR_LOCAL || session.direction === Defs.STR_SOCKSV5) {
             session.remoteHost = payload.hostname
             session.remotePort = payload.port
           }
-    
+
           if (session.direction === Defs.STR_REMOTE) {
             session.localHost = payload.hostname
             session.localPort = payload.port
@@ -107,7 +108,7 @@ const mutations ={
           state.arrTunneling.push(session)
           break
         default:
-          break      
+          break
       }
     },
     MOVE_BACK_BUTTON (state) {

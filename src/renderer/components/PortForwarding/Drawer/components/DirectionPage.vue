@@ -63,7 +63,7 @@
                 ></v-progress-linear>
               </v-col>
               <v-col cols="2" align="center">
-                <v-icon x-large>{{ Defs.ICON_SERVER }}</v-icon>
+                <v-icon x-large>{{ Defs.ICON_SERVER_SECURITY }}</v-icon>
               </v-col>
               <v-col cols="2" align="center">
                 <v-progress-linear

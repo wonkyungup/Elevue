@@ -51,7 +51,7 @@
                 ></v-progress-linear>
               </v-col>
               <v-col cols="2" align="center">
-                <v-icon x-large>{{ Defs.ICON_SERVER }}</v-icon>
+                <v-icon x-large>{{ Defs.ICON_SERVER_SECURITY }}</v-icon>
               </v-col>
               <v-col cols="2" align="center">
                 <v-progress-linear
@@ -86,9 +86,10 @@
           <v-container>
             <v-row align="center" dense>
               <v-col cols="12" align="left">
-                <strong v-show="isLocal()">This port will be open on the local (current) machine to forward traffic to the remote host.</strong>
-                <strong v-show="isRemote()">Select a host where the port will be open. The traffic from this port will be forwarded to the destination host.</strong>
-                <strong v-show="isSocksv5()">This port will be open on the local (current) machine to forward traffic to the remote host.</strong>
+                <strong></strong>
+                <strong v-show="isLocal()">The device is used as an intermediate host to access the remote host.</strong>
+                <strong v-show="isRemote()">The traffic from this port will be forwarded to the destination host.</strong>
+                <strong v-show="isSocksv5()">The intermediate host will receive the traffic that will be forwarded to the local (current) host.</strong>
               </v-col>
             </v-row>
           </v-container>
@@ -129,6 +130,7 @@
                   placeholder="Password"
                   outlined
                   dense
+                  type="password"
                 ></v-text-field>
               </v-col>
             </v-row>
@@ -205,7 +207,7 @@ export default {
       const password = this.password
 
       if (hostname && port && username && password) {
-        this.setSessionValue({ hostname, port, username, password }) // password security need
+        this.setSessionValue({ hostname, port, username, password })
         this.moveNextButton()
       }
     }

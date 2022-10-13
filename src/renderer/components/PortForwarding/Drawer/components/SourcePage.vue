@@ -43,7 +43,7 @@
                 ></v-progress-linear>
               </v-col>
               <v-col cols="2" align="center">
-                <v-icon x-large disabled>{{ Defs.ICON_SERVER }}</v-icon>
+                <v-icon x-large disabled>{{ Defs.ICON_SERVER_SECURITY }}</v-icon>
               </v-col>
               <v-col cols="2" align="center">
                 <v-progress-linear
@@ -79,7 +79,7 @@
             <v-row align="center" dense>
               <v-col cols="12" align="left">
                 <strong v-show="isLocal()">This port will be open on the local (current) machine to forward traffic to the remote host.</strong>
-                <strong v-show="isRemote()">Select a host where the port will be open. The traffic from this port will be forwarded to the destination host.</strong>
+                <strong v-show="isRemote()">We will forward traffic from specified port and interface address of the host.</strong>
                 <strong v-show="isSocksv5()">This port will be open on the local (current) device. And it will receive the traffic.</strong>
               </v-col>
             </v-row>

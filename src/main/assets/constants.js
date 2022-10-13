@@ -27,10 +27,13 @@ export default class Constants {
     static ICON_ARROW_COLLAPSE_RIGHT = 'mdi-arrow-collapse-right'
     static ICON_ARROW_LEFT = 'mdi-arrow-left'
     static ICON_SERVER = 'mdi-server'
+    static ICON_SERVER_SECURITY = 'mdi-server-security'
     static ICON_CLOUD = 'mdi-cloud'
 
     static DRAWER_DIRECTION_PAGE = 0
     static DRAWER_SOURCE_PAGE = 1
     static DRAWER_SERVER_PAGE = 2
     static DRAWER_DESTINATION_PAGE = 3
+
+    static DB_NAME = 'database.db'
 }

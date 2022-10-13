@@ -14,19 +14,21 @@ if (!process.env.IS_WEB) Vue.use(VueElectron)
 
 Vue.use(Vuetify)
 
-new DB()
+const db = new DB(DB.getDBPath())
 
-/* eslint-disable no-new */
-new Vue({
-  vuetify: new Vuetify({
-    icons: { iconfont: 'mdi' },
-    theme: {
-      dark: window.matchMedia('(prefers-color-scheme: dark)').matches,
-      options: { cspNonce: 'dQw4w9WgXcQ' }
-    }
-  }),
-  components: { App },
-  router,
-  store,
-  template: '<App/>'
-}).$mount('#app')
+db.createDatabase().then(() => {
+  /* eslint-disable no-new */
+  new Vue({
+    vuetify: new Vuetify({
+      icons: { iconfont: 'mdi' },
+      theme: {
+        dark: window.matchMedia('(prefers-color-scheme: dark)').matches,
+        options: { cspNonce: 'dQw4w9WgXcQ' }
+      }
+    }),
+    components: { App },
+    router,
+    store,
+    template: '<App/>'
+  }).$mount('#app')
+})

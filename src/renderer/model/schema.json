@@ -1,32 +1,32 @@
 [
   {
-    "table": "sessions",
+    "table": "SESSIONS",
     "columns": [
-      { "name": "id", "type": "integer", "primary": true, "autoIncrement": true },
-      { "name": "host", "type": "text" },
-      { "name": "port", "type": "integer" },
-      { "name": "username", "type": "text" },
-      { "name": "authentication_method", "type": "integer", "unsigned": true },
-      { "name": "private_key_id", "type": "integer" },
-      { "name": "passphrase", "type": "text" },
-      { "name": "password", "type": "text" },
-      { "name": "x11", "type": "text" },
-      { "name": "use_agent_forwarding", "type": "integer", "default": 0 },
-      { "name": "tcp_keep_alive", "type": "tinyint(1)", "default": 1 },
-      { "name": "keep_alive_interval", "type": "smallint", "default": 60 },
-      { "name": "keep_alive_countmax", "type": "smallint", "default": 3 }
+      { "name": "ID", "type": "INTEGER", "primary": true, "autoIncrement": true },
+      { "name": "HOST", "type": "TEXT" },
+      { "name": "PORT", "type": "INTEGER" },
+      { "name": "USERNAME", "type": "TEXT" },
+      { "name": "AUTHENTICATION_METHOD", "type": "INTEGER", "unsigned": true },
+      { "name": "PRIVATE_KEY_ID", "type": "INTEGER" },
+      { "name": "PASSPHRASE", "type": "TEXT" },
+      { "name": "PASSWORD", "type": "TEXT" },
+      { "name": "X11", "type": "TEXT" },
+      { "name": "USE_AGNET_FORWARDING", "type": "INTEGER", "default": 0 },
+      { "name": "TCP_KEEP_ALIVE", "type": "INTEGER", "default": 1 },
+      { "name": "KEEP_ALIVE_INTERVAL", "type": "INTEGER", "default": 60 },
+      { "name": "KEEP_ALIVE_COUNTMAX", "type": "INTEGER", "default": 3 }
     ]
   },
   {
-    "table": "portForwarding",
+    "table": "PORT_FORWARDING",
     "columns": [
-      { "name": "id", "type": "integer", "primary": true, "autoIncrement": true },
-      { "name": "name", "type": "text" },
-      { "name": "session_id", "type": "integer" },
-      { "name": "source_host", "type": "text" },
-      { "name": "source_port", "type": "integer" },
-      { "name": "destination_host", "type": "text" },
-      { "name": "destination_port", "type": "integer" }
+      { "name": "ID", "type": "INTEGER", "primary": true, "autoIncrement": true },
+      { "name": "NAME", "type": "TEXT" },
+      { "name": "SESSION_ID", "type": "INTEGER" },
+      { "name": "SOURCE_HOST", "type": "TEXT" },
+      { "name": "SOURCE_PORT", "type": "INTEGER" },
+      { "name": "DESTINATION_HOST", "type": "TEXT" },
+      { "name": "DESTINATION_PORT", "type": "INTEGER" }
     ]
   }
 ]
