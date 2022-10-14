@@ -12,7 +12,7 @@ import Utils from './assets/utils'
 require('@electron/remote/main').initialize()
 
 let tray = null
-let portForwading = null
+let portForwarding = null
 let winURL = ''
 
 if (Defs.APP_IS_PRODUCTION) {
@@ -24,17 +24,17 @@ if (Defs.APP_IS_PRODUCTION) {
 
 global.Constants = Defs
 
-function createPortForwading () {
-  if (portForwading === null) {
-    portForwading = Utils.getPortForwardingBrowserWindow()
+function createPortForwarding () {
+  if (portForwarding === null) {
+    portForwarding = Utils.getPortForwardingBrowserWindow()
   }
-  portForwading.loadURL(`${winURL}#/port-forwarding`)
+  portForwarding.loadURL(`${winURL}#/port-forwarding`)
 
-  portForwading.on('page-title-updated', event => {
+  portForwarding.on('page-title-updated', event => {
     event.preventDefault()
   })
 
-  portForwading.on('close', event => {
+  portForwarding.on('close', event => {
     event.sender.hide()
     event.preventDefault()
   })
@@ -49,7 +49,7 @@ function createTray () {
     {
       label: Defs.MENU_PORT_FORWARDING,
        click: () => {
-        portForwading.show()
+        portForwarding.show()
       }
     },
     {
@@ -57,8 +57,8 @@ function createTray () {
     },
     { label: Defs.MENU_QUIT,
       click: () => {
-        if (portForwading) {
-          portForwading = null
+        if (portForwarding) {
+          portForwarding = null
         }
 
         app.exit()
@@ -81,7 +81,7 @@ if (Utils.getOsFromMain() === Defs.STR_MAC) {
 
 app.on('ready', () => {
   createTray()
-  createPortForwading()
+  createPortForwarding()
 })
 
 /**
