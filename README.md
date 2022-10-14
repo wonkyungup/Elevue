@@ -1,4 +1,4 @@
-![reversal](https://capsule-render.vercel.app/api?type=rect&text=EleVue&fontAlign=30&fontSize=100&desc=Use%20theme&descAlign=60&descAlignY=50&theme=radical)
+![reversal](https://capsule-render.vercel.app/api?type=rect&text=EleVue&fontAlign=30&fontSize=50&desc=Easy%20Server%20Management%20Tool&descAlignY=50&theme=radical)
 
 ### Commonly run before developers and packages
 ```
