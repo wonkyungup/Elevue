@@ -10,9 +10,11 @@ import './assets/css/style.css'
 import DB from '@/model'
 
 Vue.config.productionTip = false
-if (!process.env.IS_WEB) Vue.use(VueElectron)
-
 Vue.use(Vuetify)
+
+if (!process.env.IS_WEB) {
+  Vue.use(VueElectron)
+}
 
 const db = new DB(DB.getDBPath())
 
