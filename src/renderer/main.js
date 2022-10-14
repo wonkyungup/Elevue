@@ -16,7 +16,7 @@ Vue.use(Vuetify)
 
 const db = new DB(DB.getDBPath())
 
-db.createDatabase().then(() => {
+db.createTable().then(() => {
   /* eslint-disable no-new */
   new Vue({
     vuetify: new Vuetify({

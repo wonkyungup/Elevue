@@ -38,7 +38,7 @@ export default class DB {
         }
     }
 
-    createDatabase () {
+    createTable () {
         return new Promise(resolve => {
             const conn = this.conn
 
