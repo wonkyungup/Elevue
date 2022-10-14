@@ -5,7 +5,7 @@
 #
 
 
-![header](https://capsule-render.vercel.app/api?type=cylinder&color=random&height=350&text=Elevue&animation=blink&desc=Tools%20for%20managing%20servers)
+![header](https://capsule-render.vercel.app/api?   type=cylinder&color=random&height=350&text=Elevue&animation=twinkling&desc=Tools%20for%20managing%20servers&fontSize=40)
 ![header](https://capsule-render.vercel.app/api?text=Elevue!)
 
 # Elevue
