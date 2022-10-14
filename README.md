@@ -1,15 +1,4 @@
-# Getting ready...
-
-#
-#
-#
-
-
-![header](https://capsule-render.vercel.app/api?type=cylinder&color=random&height=350&text=Elevue&animation=twinkling&desc=Tools%20for%20managing%20servers&fontSize=150)
-![header](https://capsule-render.vercel.app/api?text=Elevue!)
-
-# Elevue
-> Tools for managing servers
+![header](https://capsule-render.vercel.app/api?type=rect&color=random&height=350&text=Elevue&animation=twinkling&desc=Tools%20for%20managing%20servers)
 
 ### Commonly run before developers and packages
 ```
