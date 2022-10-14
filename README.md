@@ -5,7 +5,7 @@
 #
 
 
-![header](https://capsule-render.vercel.app/api?type=cylinder&color=random)
+![header](https://capsule-render.vercel.app/api?type=cylinder&color=random&text=Elevue)
 ![header](https://capsule-render.vercel.app/api?text=Elevue!)
 
 # Elevue
