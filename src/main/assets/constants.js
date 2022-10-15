@@ -1,3 +1,5 @@
+import { path, app } from './lib'
+
 export default class Constants {
     static APP_IS_PRODUCTION = process.env.NODE_ENV !== 'development'
 
@@ -29,6 +31,7 @@ export default class Constants {
     static ICON_SERVER = 'mdi-server'
     static ICON_SERVER_SECURITY = 'mdi-server-security'
     static ICON_CLOUD = 'mdi-cloud'
+    static ICON_ARROW_RIGHT_CIRCLE = 'mdi-arrow-right-circle'
 
     static DRAWER_DIRECTION_PAGE = 0
     static DRAWER_SOURCE_PAGE = 1
@@ -36,4 +39,7 @@ export default class Constants {
     static DRAWER_DESTINATION_PAGE = 3
 
     static DB_NAME = 'database.db'
+    static DB_PATH = path.join(app.getPath('userData'), path.sep, Constants.DB_NAME.split('.')[0])
+
+    static SETUP_NAME = 'setup.ini'
 }

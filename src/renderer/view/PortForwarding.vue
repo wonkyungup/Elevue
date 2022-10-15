@@ -1,6 +1,5 @@
 <template>
   <Card
-      class="main-port-forwarding"
       :titleClass="'pa-0'"
       :textClass="'pa-0'"
       :isSubTitle="false"

@@ -4,7 +4,8 @@ import {
   app,
   Tray,
   Menu,
-  path
+  path,
+  ipcMain
  } from './assets/lib'
 import Defs from './assets/constants'
 import Utils from './assets/utils'
@@ -12,6 +13,7 @@ import Utils from './assets/utils'
 require('@electron/remote/main').initialize()
 
 let tray = null
+let masterPassword = null
 let portForwarding = null
 let winURL = ''
 
@@ -23,6 +25,23 @@ if (Defs.APP_IS_PRODUCTION) {
 }
 
 global.Constants = Defs
+global.MSG_MASTER_PASSWORD = 'MSG_MASTER_PASSWORD'
+
+function createMasterPassword () {
+  if (masterPassword === null) {
+    masterPassword = Utils.getMasterPasswordWindow()
+  }
+
+  masterPassword.setMenu(null)
+  masterPassword.loadURL(`${winURL}#/master-password`)
+
+  masterPassword.once('ready-to-show', () => {
+    masterPassword.show()
+  })
+  masterPassword.on('show', () => {
+    masterPassword.focus()
+  })
+}
 
 function createPortForwarding () {
   if (portForwarding === null) {
@@ -41,6 +60,10 @@ function createPortForwarding () {
 }
 
 function createTray () {
+  if (Utils.getOsFromMain() === Defs.STR_MAC) {
+    app.dock.hide()
+  }
+
   if (tray === null) {
     tray = new Tray(path.join(__static, path.sep, Defs.ICON_APP))
   }
@@ -75,11 +98,13 @@ if (!app.requestSingleInstanceLock()) {
   app.exit()
 }
 
-if (Utils.getOsFromMain() === Defs.STR_MAC) {
-  app.dock.hide()
-}
-
 app.on('ready', () => {
+  createMasterPassword()
+})
+
+ipcMain.on(global.MSG_MASTER_PASSWORD, (event) => {
+  masterPassword.hide()
+
   createTray()
   createPortForwarding()
 })
