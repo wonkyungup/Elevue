@@ -3,14 +3,25 @@
     <template v-slot:content>
       <v-col cols="12" />
       <v-col cols="12">
-        <h2>Please remember your password</h2>
-        <br>
-        <h2>Recovery is not possible</h2>
-        * Be sure to remember
+        <div v-show="!isExistFiles">
+          <h2><strong>🔓 </strong> Please remember your password</h2>
+          <br>
+          <p>
+            This page is the password setting screen
+            <br />
+            <strong>*</strong>Please remember that it cannot be restored or changed
+          </p>
+        </div>
+
+        <div v-show="isExistFiles">
+          <h2><strong>🔐</strong> Please enter your password</h2>
+          <br />
+          <p>You have already set a password</p>
+        </div>
       </v-col>
       <v-col cols="12">
         <v-row dense justify="center">
-          <v-col cols="6">
+          <v-col cols="7">
             <v-text-field
                 @keydown.enter="onKeydownEnter"
                 @keydown.esc="onKeydownESC"
@@ -63,6 +74,10 @@ export default {
         return false
       }
       return true
+    },
+    isExistFiles () {
+      const files = new Files()
+      return files.isExistFiles()
     }
   },
   watch: {
@@ -97,11 +112,10 @@ export default {
       const isMaster = await files.createINIFile(Security.encryption(this.password))
 
       if (!isMaster) {
-        const pathDB = await files.createDBFile()
-        if (pathDB) {
-          const db = new DB(pathDB)
-          await db.createTable(4, this.password)
-        }
+        await files.createDBFile()
+
+        const db = new DB(files.getDBFilePath())
+        await db.createTable(4, this.password)
 
         this.$emit('msgMasterPassword')
       }
@@ -110,6 +124,9 @@ export default {
         this.isError = !Security.isComparison(this.password, master)
 
         if (!this.isError) {
+          const db = new DB(files.getDBFilePath())
+          await db.openDatabase(4, this.password)
+
           this.$emit('msgMasterPassword')
         }
       }

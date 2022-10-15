@@ -13,14 +13,24 @@ export default class DB {
         }
     }
 
-    createTable (version, key) {
+    openDatabase (version, key) {
         return new Promise(resolve => {
             const db = this.db
 
             db.serialize(() => {
                 db.run(`PRAGMA cipher_compatibility = ${version}`)
                 db.run(`PRAGMA key = '${key}'`)
+                resolve()
+            })
+        })
+    }
 
+    createTable (version, key) {
+        return new Promise(async resolve => {
+            const db = this.db
+
+            await this.openDatabase(version, key)
+            db.serialize(() => {
                 for (const idx in schema) {
                     const item = schema[idx]
 
