@@ -2,6 +2,21 @@ import Defs from './constants'
 import { os, BrowserWindow } from './lib'
 
 export default class Utils {
+    static getMasterPasswordWindow () {
+        return new BrowserWindow({
+            frame: false,
+            width: 450,
+            height: 350,
+            resizable: false,
+            useContentSize: false,
+            alwaysOnTop: true,
+            webPreferences: {
+                ...Utils.getCommonWebPreferences(),
+                devTools: false
+            }
+        })
+    }
+
     static getPortForwardingBrowserWindow () {
         return new BrowserWindow({
             frame: true,
@@ -16,7 +31,7 @@ export default class Utils {
             webPreferences: {
               ...Utils.getCommonWebPreferences()
             }
-          })
+        })
     }
 
     static getCommonWebPreferences () {

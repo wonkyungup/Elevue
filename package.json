@@ -80,11 +80,10 @@
   },
   "dependencies": {
     "@electron/remote": "2.0.8",
+    "@journeyapps/sqlcipher": "5.3.1",
     "bcrypt": "5.1.0",
-    "id-auto-increment": "1.0.1",
     "net": "1.0.2",
     "socksv5": "0.0.6",
-    "sqlite3": "5.1.2",
     "ssh2": "1.11.0",
     "vue": "2.6.14",
     "vue-electron": "1.0.6",

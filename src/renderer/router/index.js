@@ -7,6 +7,11 @@ Vue.use(Router)
 export default new Router({
   routes: [
     {
+      path: '/master-password',
+      name: 'master-password',
+      component: view.masterPassword
+    },
+    {
       path: '/port-forwarding',
       name: 'port-forwarding',
       component: view.portForwarding
