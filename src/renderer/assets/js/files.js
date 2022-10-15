@@ -11,6 +11,10 @@ export default class Files {
         }
     }
 
+    isExistFiles () {
+        return fs.existsSync(path.join(Defs.DB_PATH, path.sep, Defs.DB_NAME)) && fs.existsSync(path.join(Defs.DB_PATH, path.sep, Defs.SETUP_NAME))
+    }
+
     readINIFile () {
         return new Promise(resolve => {
             const masterFilePath = path.join(Defs.DB_PATH, path.sep, Defs.SETUP_NAME)
@@ -43,12 +47,14 @@ export default class Files {
         })
     }
 
+    getDBFilePath () {
+        return path.join(Defs.DB_PATH, path.sep, Defs.DB_NAME)
+    }
+
     createDBFile () {
         return new Promise(resolve => {
-            const dbFilePath = path.join(Defs.DB_PATH, path.sep, Defs.DB_NAME)
-
-            if (!fs.existsSync(dbFilePath)) {
-                fs.writeFileSync(dbFilePath, '', (err) => {
+            if (!fs.existsSync(this.getDBFilePath())) {
+                fs.writeFileSync(this.getDBFilePath(), '', (err) => {
                     if (err) {
                         console.log(err.message)
                         resolve(false)
@@ -56,7 +62,7 @@ export default class Files {
                 })
             }
 
-            resolve(dbFilePath)
+            resolve()
         })
     }
 }
