@@ -36,7 +36,7 @@
           <v-col cols="1">
             <v-btn
               icon
-              color="primary"
+              :color="isError ? 'red' : 'primary'"
               :disabled="isDisabled"
               @click="onClickNext"
             ><v-icon>{{ Defs.ICON_ARROW_RIGHT_CIRCLE }}</v-icon>
@@ -83,7 +83,7 @@ export default {
   watch: {
     password: {
       handler () {
-        if (this.password.length > 0) {
+        if (this.password.length > 0 || this.password.length === 0) {
           this.isError = false
         }
       },
