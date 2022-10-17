@@ -92,7 +92,7 @@ export default {
     }
   },
   methods: {
-   ...mapActions('MasterPassword', ['setDBKey']),
+   ...mapActions('MasterPassword', ['setMasterKey']),
    async onKeydownEnter () {
      if (this.password.length > 0) {
        await this.onClickNext()
@@ -108,30 +108,25 @@ export default {
       }
     },
     async onClickNext () {
-      const files = new Files()
-      const isMaster = await files.createINIFile(Security.encryption(this.password))
+     const files = new Files()
+     const password = this.password
 
-      if (!isMaster) {
-        await files.createDBFile()
+     this.setMasterKey(password)
 
-        const db = new DB(files.getDBFilePath())
-        await db.createTable(4, this.password)
+     if (!files.isExistFiles()) {
+       await files.createDBFile()
+       await files.createINIFile(Security.encryption(password))
+     }
 
+     const { master } = await files.readINIFile()
+     this.isError = !Security.isComparison(password, master)
+
+      if (!this.isError) {
+        await new DB().openDatabase()
         this.$emit('msgMasterPassword')
       }
-      else {
-        const { master } = await files.readINIFile()
-        this.isError = !Security.isComparison(this.password, master)
-
-        if (!this.isError) {
-          const db = new DB(files.getDBFilePath())
-          await db.openDatabase(4, this.password)
-
-          this.$emit('msgMasterPassword')
-        }
-      }
-    }
-  }
+   }
+ }
 }
 </script>
 

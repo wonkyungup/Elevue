@@ -40,6 +40,9 @@ export default class Constants {
 
     static DB_NAME = 'database.db'
     static DB_PATH = path.join(app.getPath('userData'), path.sep, Constants.DB_NAME.split('.')[0])
+    static DB_FULL_PATH = path.join(Constants.DB_PATH, path.sep, Constants.DB_NAME)
+    static DB_VERSION = 4
+    static DB_MASTER_KEY = ''
 
     static SETUP_NAME = 'setup.ini'
 }

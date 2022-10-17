@@ -22,7 +22,7 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapGetters, mapState } from 'vuex'
 import { Card } from '@/components/Layout'
 import {
   Title,
@@ -30,6 +30,7 @@ import {
   SessionBody,
   SessionDrawer
 } from '@/components/PortForwarding'
+import DB from '../model'
 
 export default {
   name: "Main",
@@ -41,7 +42,11 @@ export default {
     SessionDrawer
   },
   computed: {
+    ...mapState({ Defs: 'Constants', state: 'MasterPassword' }),
     ...mapGetters('PortForwarding', ['isWelcomePage'])
+  },
+  async mounted() {
+    await new DB().getSessionsTableItems()
   },
   methods: {
     onClickNewButton () {
