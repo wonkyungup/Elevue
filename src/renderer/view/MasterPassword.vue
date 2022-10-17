@@ -20,6 +20,7 @@
 <script>
 import { Card } from '@/components/Layout'
 import { Title, Content } from '@/components/MasterPassword'
+import { mapState } from 'vuex'
 import { ipcRenderer } from 'electron'
 import * as remote from '@electron/remote'
 
@@ -30,9 +31,12 @@ export default {
     Title,
     Content
   },
+  computed: {
+    ...mapState({ state: 'MasterPassword' })
+  },
   methods: {
     onMasterPassword () {
-      ipcRenderer.send(remote.getGlobal('MSG_MASTER_PASSWORD'))
+      ipcRenderer.send(remote.getGlobal('MSG_MASTER_KEY'), this.state)
     }
   }
 }

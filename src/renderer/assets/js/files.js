@@ -47,14 +47,10 @@ export default class Files {
         })
     }
 
-    getDBFilePath () {
-        return path.join(Defs.DB_PATH, path.sep, Defs.DB_NAME)
-    }
-
     createDBFile () {
         return new Promise(resolve => {
-            if (!fs.existsSync(this.getDBFilePath())) {
-                fs.writeFileSync(this.getDBFilePath(), '', (err) => {
+            if (!fs.existsSync(Defs.DB_FULL_PATH)) {
+                fs.writeFileSync(Defs.DB_FULL_PATH, '', (err) => {
                     if (err) {
                         console.log(err.message)
                         resolve(false)
@@ -66,22 +62,3 @@ export default class Files {
         })
     }
 }
-
-
-// const pathUserData = remote.app.getPath('userData')
-// const dbFolderPath = path.join(pathUserData, path.sep, Defs.DB_NAME.split('.')[0])
-//
-// if (!fs.existsSync(dbFolderPath)) {
-//     fs.mkdirSync(dbFolderPath, { recursive: true })
-// }
-//
-// const pathDB = path.join(dbFolderPath, path.sep, Defs.DB_NAME)
-// if (!fs.existsSync(pathDB)) {
-//     fs.writeFileSync(pathDB, '', (err) => {
-//         if (err) {
-//             this.handleDBErrorIfExists('createDataBaseFile', err)
-//         }
-//     })
-// }
-//
-// return pathDB

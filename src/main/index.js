@@ -25,7 +25,7 @@ if (Defs.APP_IS_PRODUCTION) {
 }
 
 global.Constants = Defs
-global.MSG_MASTER_PASSWORD = 'MSG_MASTER_PASSWORD'
+global.MSG_MASTER_KEY = 'MSG_MASTER_KEY'
 
 function createMasterPassword () {
   if (masterPassword === null) {
@@ -102,8 +102,12 @@ app.on('ready', () => {
   createMasterPassword()
 })
 
-ipcMain.on(global.MSG_MASTER_PASSWORD, (event) => {
-  masterPassword.hide()
+ipcMain.on(global.MSG_MASTER_KEY, (event, args) => {
+  global.Constants.DB_MASTER_KEY = args.DB_MASTER_KEY
+
+  if (global.Constants.DB_MASTER_KEY.length > 0) {
+    masterPassword.close()
+  }
 
   createTray()
   createPortForwarding()

@@ -1,10 +1,12 @@
 import schema from './schema.json'
+import store from '../store'
 
 const sqlite = require('@journeyapps/sqlcipher').verbose()
+const dbFullPath = store.state.Constants.DB_FULL_PATH
 
 export default class DB {
-    constructor (path) {
-        this.db = new sqlite.Database(path)
+    constructor () {
+        this.db = new sqlite.Database(dbFullPath)
     }
 
     handleDBErrorIfExists (action, err) {
@@ -13,24 +15,15 @@ export default class DB {
         }
     }
 
-    openDatabase (version, key) {
+    openDatabase () {
         return new Promise(resolve => {
             const db = this.db
+            const master = store.state.MasterPassword
 
             db.serialize(() => {
-                db.run(`PRAGMA cipher_compatibility = ${version}`)
-                db.run(`PRAGMA key = '${key}'`)
-                resolve()
-            })
-        })
-    }
+                db.run(`PRAGMA cipher_compatibility = ${master.DB_VERSION}`)
+                db.run(`PRAGMA key = '${master.DB_MASTER_KEY}'`)
 
-    createTable (version, key) {
-        return new Promise(async resolve => {
-            const db = this.db
-
-            await this.openDatabase(version, key)
-            db.serialize(() => {
                 for (const idx in schema) {
                     const item = schema[idx]
 
@@ -52,9 +45,25 @@ export default class DB {
                         })
                     }
                 }
-            })
 
-            resolve()
+                resolve()
+            })
+        })
+    }
+
+    async getSessionsTableItems () {
+        await this.openDatabase()
+        const db = this.db
+
+        db.serialize(() => {
+            db.all(`SELECT * FROM SESSIONS`, (err, row) => {
+                if (err) {
+                    this.handleDBErrorIfExists('getSessionsTableItems', err)
+                }
+
+                console.log(row)
+                return row
+            })
         })
     }
 }
