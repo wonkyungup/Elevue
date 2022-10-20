@@ -1,6 +1,6 @@
 [
   {
-    "table": "SESSIONS",
+    "table": "PORT_FORWARDING",
     "columns": [
       { "name": "ID", "type": "INTEGER", "primary": true, "autoIncrement": true },
       { "name": "HOST", "type": "TEXT" },
@@ -10,19 +10,6 @@
       { "name": "PRIVATE_KEY_ID", "type": "INTEGER" },
       { "name": "PASSPHRASE", "type": "TEXT" },
       { "name": "PASSWORD", "type": "TEXT" },
-      { "name": "X11", "type": "TEXT" },
-      { "name": "USE_AGNET_FORWARDING", "type": "INTEGER", "default": 0 },
-      { "name": "TCP_KEEP_ALIVE", "type": "INTEGER", "default": 1 },
-      { "name": "KEEP_ALIVE_INTERVAL", "type": "INTEGER", "default": 60 },
-      { "name": "KEEP_ALIVE_COUNTMAX", "type": "INTEGER", "default": 3 }
-    ]
-  },
-  {
-    "table": "PORT_FORWARDING",
-    "columns": [
-      { "name": "ID", "type": "INTEGER", "primary": true, "autoIncrement": true },
-      { "name": "NAME", "type": "TEXT" },
-      { "name": "SESSION_ID", "type": "INTEGER" },
       { "name": "SOURCE_HOST", "type": "TEXT" },
       { "name": "SOURCE_PORT", "type": "INTEGER" },
       { "name": "DESTINATION_HOST", "type": "TEXT" },
