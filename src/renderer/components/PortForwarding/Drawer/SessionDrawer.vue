@@ -38,6 +38,7 @@ import {
   serverPage,
   destinationPage
 } from './components'
+import DB from '@/model'
 
 export default {
   name: "SessionDrawer",
@@ -72,7 +73,15 @@ export default {
         ]
 
         if (!arrBoolean.includes(true)) {
-          this.close()
+          const db = new DB()
+          const session = this.state.session
+
+          db.insertPortForwardingItem(session).then(id => {
+            if (id > 0) {
+              this.setDBSessionID(id)
+              this.close()
+            }
+          })
         }
       },
       immediate: true,
@@ -80,7 +89,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions('PortForwarding', ['clearSessionValue']),
+    ...mapActions('PortForwarding', ['clearSessionValue', 'setDBSessionID']),
     open () {
       this.clearSessionValue()
       this.drawer = true

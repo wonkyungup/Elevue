@@ -51,18 +51,53 @@ export default class DB {
         })
     }
 
-    async getSessionsTableItems () {
-        await this.openDatabase()
-        const db = this.db
+    getPortForwardingTableItems () {
+        return new Promise(async resolve => {
+            await this.openDatabase()
+            const db = this.db
 
-        db.serialize(() => {
-            db.all(`SELECT * FROM SESSIONS`, (err, row) => {
-                if (err) {
-                    this.handleDBErrorIfExists('getSessionsTableItems', err)
-                }
+            db.serialize(() => {
+                db.all(`SELECT * FROM PORT_FORWARDING`, (err, row) => {
+                    if (err) {
+                        this.handleDBErrorIfExists('getPortForwardingTableItems', err)
+                        resolve()
+                    }
 
-                console.log(row)
-                return row
+                    resolve(row)
+                })
+            })
+        })
+    }
+
+    insertPortForwardingItem (item) {
+        return new Promise(async resolve => {
+            await this.openDatabase()
+            const db = this.db
+            const {
+                serverHost, serverPort, serverUsername, serverPassword,
+                direction,
+                localHost, localPort,
+                remoteHost, remotePort
+            } = item
+
+            db.serialize(() => {
+                db.run('INSERT INTO PORT_FORWARDING (HOST, PORT, USERNAME, PASSWORD, DIRECTION, SOURCE_HOST, SOURCE_PORT, DESTINATION_HOST, DESTINATION_PORT) VALUES (?, ?, ?, ?, ?, ?, ?, ? ,?)', [
+                    serverHost, serverPort, serverUsername, serverPassword, direction, localHost, localPort, remoteHost, remotePort
+                ], (err) => {
+                    if (err) {
+                        this.handleDBErrorIfExists('insertPortForwardingItem', err)
+                        resolve()
+                    }
+
+                    db.each('SELECT * FROM PORT_FORWARDING ORDER BY ID DESC LIMIT 1', (err, rows) => {
+                        if (err) {
+                            this.handleDBErrorIfExists('getLastCreated', err)
+                            resolve()
+                        }
+
+                        resolve(rows.ID)
+                    })
+                })
             })
         })
     }

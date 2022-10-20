@@ -40,7 +40,7 @@
                     x-large
                     v-show="isRemote()"
                     disabled
-                >{{ Defs.ICON_SERVER_SECURITY }}</v-icon>
+                >{{ Defs.ICON_SERVER }}</v-icon>
               </v-col>
               <v-col cols="2" align="center">
                 <v-progress-linear
