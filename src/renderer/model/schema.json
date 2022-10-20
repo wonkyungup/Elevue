@@ -10,6 +10,7 @@
       { "name": "PRIVATE_KEY_ID", "type": "INTEGER" },
       { "name": "PASSPHRASE", "type": "TEXT" },
       { "name": "PASSWORD", "type": "TEXT" },
+      { "name": "DIRECTION", "type": "TEXT" },
       { "name": "SOURCE_HOST", "type": "TEXT" },
       { "name": "SOURCE_PORT", "type": "INTEGER" },
       { "name": "DESTINATION_HOST", "type": "TEXT" },

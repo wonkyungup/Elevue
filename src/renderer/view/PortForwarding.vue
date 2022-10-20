@@ -22,7 +22,7 @@
 </template>
 
 <script>
-import { mapGetters, mapState } from 'vuex'
+import {mapActions, mapGetters, mapState} from 'vuex'
 import { Card } from '@/components/Layout'
 import {
   Title,
@@ -45,10 +45,16 @@ export default {
     ...mapState({ Defs: 'Constants', state: 'MasterPassword' }),
     ...mapGetters('PortForwarding', ['isWelcomePage'])
   },
-  async mounted() {
-    await new DB().getSessionsTableItems()
+  mounted() {
+    const db = new DB()
+    db.getPortForwardingTableItems().then(rows => {
+      if (rows.length > 0) {
+        this.setDBArrTunneling(rows)
+      }
+    })
   },
   methods: {
+    ...mapActions('PortForwarding', ['setDBArrTunneling']),
     onClickNewButton () {
       this.$refs.SessionDrawer.open()
     }

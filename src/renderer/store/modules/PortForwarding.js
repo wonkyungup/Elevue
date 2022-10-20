@@ -104,8 +104,6 @@ const mutations ={
             session.localHost = payload.hostname
             session.localPort = payload.port
           }
-
-          state.arrTunneling.push(session)
           break
         default:
           break
@@ -118,6 +116,25 @@ const mutations ={
     },
     MOVE_NEXT_BUTTON (state) {
       state.curDrawer++
+    },
+    SET_DB_SESSION_ID (state, id) {
+        const session = state.session
+        const arrTunneling = state.arrTunneling
+
+        if (id > 0) {
+            session.id = id
+            arrTunneling.push(session)
+        }
+    },
+    SET_DB_ARR_TUNNELING (state, list) {
+        const arrLowerCaseKey = list.map(value => Object.keys(value).reduce((acc, cur) => {
+            acc[cur.toLowerCase()] = value[cur]
+            return acc
+        }, {}))
+
+        if (arrLowerCaseKey.length > 0) {
+            state.arrTunneling = arrLowerCaseKey
+        }
     }
 }
 
@@ -133,6 +150,12 @@ const actions = {
     },
     moveNextButton ({ commit }) {
       commit('MOVE_NEXT_BUTTON')
+    },
+    setDBSessionID ({ commit }, id) {
+      commit('SET_DB_SESSION_ID', id)
+    },
+    setDBArrTunneling ({ commit }, list) {
+      commit('SET_DB_ARR_TUNNELING', list)
     }
 }
 

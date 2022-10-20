@@ -14,7 +14,7 @@
         </div>
 
         <div v-show="isExistFiles">
-          <h2><strong>🔐</strong> Please enter your password</h2>
+          <h2><strong>🔐 </strong> Please enter your password</h2>
           <br />
           <p>You have already set a password</p>
         </div>
@@ -70,7 +70,7 @@ export default {
   computed: {
     ...mapState({ Defs: 'Constants', state: 'MasterPassword' }),
     isDisabled () {
-      if (this.password.length > 3) {
+      if (this.password.length > 0) {
         return false
       }
       return true
@@ -94,7 +94,7 @@ export default {
   methods: {
    ...mapActions('MasterPassword', ['setMasterKey']),
    async onKeydownEnter () {
-     if (this.password.length > 3) {
+     if (this.password.length > 0) {
        await this.onClickNext()
      }
     },

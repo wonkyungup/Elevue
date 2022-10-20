@@ -14,7 +14,7 @@
     </v-row>
   </v-container>
 </template>
-  
+
 <script>
 import { mapState } from 'vuex'
 
@@ -32,7 +32,8 @@ export default {
     state: {
       handler () {
         if (this.state.arrTunneling.length > 0) {
-          this.list = this.state.arrTunneling
+          this.list = this.state.arrTunneling.map(value => value.id)
+          console.log(this.state.arrTunneling)
         }
       },
       immediate: true,
@@ -45,4 +46,3 @@ export default {
 <style scoped>
 
 </style>
-  
