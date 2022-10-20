@@ -70,7 +70,7 @@ export default {
   computed: {
     ...mapState({ Defs: 'Constants', state: 'MasterPassword' }),
     isDisabled () {
-      if (this.password.length > 0) {
+      if (this.password.length > 3) {
         return false
       }
       return true
@@ -94,7 +94,7 @@ export default {
   methods: {
    ...mapActions('MasterPassword', ['setMasterKey']),
    async onKeydownEnter () {
-     if (this.password.length > 0) {
+     if (this.password.length > 3) {
        await this.onClickNext()
      }
     },
