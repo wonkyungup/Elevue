@@ -1,39 +1,90 @@
 <template>
-    <v-container fluid>
-    <v-row
-        align="center"
-        justify="center"
-        dense
-    >
+  <v-container
+      fluid
+      class="session-body"
+  >
+    <v-row dense>
       <v-col
-          align="center"
-          cols="12"
-      >
-        <h1>{{ list }}</h1>
+          v-for="session in list"
+          :cols="getDisplayCol"
+      ><Card
+          rounded="15"
+          elevation="24"
+          :color="isDarkMode($vuetify) ? '#424242' : '#E0E0E0'"
+        >
+          <template v-slot:title>
+            <v-icon v-show="session.direction === Defs.STR_LOCAL">{{ Defs.ICON_ALPHA_L_BOX }}</v-icon>
+            <v-icon v-show="session.direction === Defs.STR_REMOTE">{{ Defs.ICON_ALPHA_R_BOX }}</v-icon>
+            <v-icon v-show="session.direction === Defs.STR_SOCKSV5">{{ Defs.ICON_ALPHA_S_BOX }}</v-icon>
+            <h4>{{ session.host }}</h4>
+            <v-spacer />
+            <v-btn icon>
+              <v-icon>mdi-database-edit</v-icon>
+            </v-btn>
+            <v-btn icon>
+              <v-icon>mdi-database-remove</v-icon>
+            </v-btn>
+          </template>
+
+          <template v-slot:subTitle>
+            SubTitle
+          </template>
+
+          <template v-slot:text>
+            Text
+          </template>
+        </Card>
       </v-col>
     </v-row>
   </v-container>
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { mapGetters, mapState } from 'vuex'
+import { Card } from '@/components/Layout'
 
 export default {
   name: "SessionBody",
+  components: {
+    Card
+  },
   data: () => {
     return {
-      list: []
+      list: [],
+      lorem: '',
+      toggle_none: null
     }
   },
   computed: {
-    ...mapState({ Defs: 'Constants', state: 'PortForwarding' })
+    ...mapState({ Defs: 'Constants', state: 'PortForwarding' }),
+    ...mapGetters('Vuetify', ['isDarkMode', 'getCurDisplay']),
+    getDisplayCol () {
+      const display = this.getCurDisplay(this.$vuetify)
+
+      if (display !== null && display.length > 0) {
+        switch (display) {
+          case 'xs':
+            return 12
+          case 'sm':
+            return 6
+          case 'md':
+            return 4
+          case 'lg':
+            return 3
+          case 'xl':
+            return 2
+          default:
+            break
+        }
+      }
+    }
   },
   watch: {
     state: {
       handler () {
         if (this.state.arrTunneling.length > 0) {
-          this.list = this.state.arrTunneling.map(value => value.id)
-          console.log(this.state.arrTunneling)
+          this.list = this.state.arrTunneling
+          console.log(this.list)
         }
       },
       immediate: true,
@@ -44,5 +95,12 @@ export default {
 </script>
 
 <style scoped>
+.session-body {
+  height: calc(100vh - 100px);
+  overflow-y: auto;
+}
 
+.session-body::-webkit-scrollbar {
+  display:none
+}
 </style>

@@ -1,10 +1,10 @@
 <template>
   <v-card
-      rounded="0"
-      height="100%"
-      class="overflow-hidden"
-      color="transparent"
-      elevation="0"
+      :rounded="rounded"
+      :height="height"
+      :class="classCard"
+      :color="color"
+      :elevation="elevation"
   >
     <v-card-title v-show="isTitle" :class="titleClass">
       <slot name="title"></slot>
@@ -29,14 +29,58 @@
 export default {
   name: "Card",
   props: {
-    isTitle: { type: Boolean, default: true },
-    titleClass: { type: String, default: '' },
-    isSubTitle: { type: Boolean, default: true },
-    subTitleClass: { type: String, default: '' },
-    isText: { type: Boolean, default: true },
-    textClass: { type: String, default: 'pb-0' },
-    isActions: { type: Boolean, default: true },
-    actionsClass: { type: String, default: '' }
+    rounded: {
+      type: String,
+      default: '0'
+    },
+    height: {
+      type: String,
+      default: '100%'
+    },
+    classCard: {
+      type: String,
+      default: 'overflow-hidden'
+    },
+    color: {
+      type: String,
+      default: 'transparent'
+    },
+    elevation: {
+      type: String,
+      default: '0'
+    },
+    isTitle: {
+      type: Boolean,
+      default: true
+    },
+    titleClass: {
+      type: String,
+      default: ''
+    },
+    isSubTitle: {
+      type: Boolean,
+      default: true
+    },
+    subTitleClass: {
+      type: String,
+      default: ''
+    },
+    isText: {
+      type: Boolean,
+      default: true
+    },
+    textClass: {
+      type: String,
+      default: 'pb-0'
+    },
+    isActions: {
+      type: Boolean,
+      default: true
+    },
+    actionsClass: {
+      type: String,
+      default: ''
+    }
   }
 }
 </script>
