@@ -13,9 +13,7 @@
           :color="isDarkMode($vuetify) ? '#424242' : '#E0E0E0'"
         >
           <template v-slot:title>
-            <v-icon v-show="session.direction === Defs.STR_LOCAL">{{ Defs.ICON_ALPHA_L_BOX }}</v-icon>
-            <v-icon v-show="session.direction === Defs.STR_REMOTE">{{ Defs.ICON_ALPHA_R_BOX }}</v-icon>
-            <v-icon v-show="session.direction === Defs.STR_SOCKSV5">{{ Defs.ICON_ALPHA_S_BOX }}</v-icon>
+            <v-icon large>{{ getTunnelingBodyTitleIcon(session) }}</v-icon>
             <h4>{{ session.host }}</h4>
             <v-spacer />
             <v-btn icon>
@@ -26,12 +24,10 @@
             </v-btn>
           </template>
 
-          <template v-slot:subTitle>
-            SubTitle
-          </template>
-
           <template v-slot:text>
-            Text
+            <h4>
+              {{ getTunnelingBodyText(session) }}
+            </h4>
           </template>
         </Card>
       </v-col>
@@ -58,6 +54,7 @@ export default {
   computed: {
     ...mapState({ Defs: 'Constants', state: 'PortForwarding' }),
     ...mapGetters('Vuetify', ['isDarkMode', 'getCurDisplay']),
+    ...mapGetters('PortForwarding', ['getTunnelingBodyTitleIcon', 'getTunnelingBodyText']),
     getDisplayCol () {
       const display = this.getCurDisplay(this.$vuetify)
 

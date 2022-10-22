@@ -7,16 +7,16 @@ const state = {
     arrTunneling: [],
     curDrawer: Defs.DRAWER_DIRECTION_PAGE || 0,
     session: {
-      id: null,
-      direction: Defs.STR_LOCAL,
-      localHost: '',
-      localPort: null,
-      remoteHost: '',
-      remotePort: null,
-      serverHost: '',
-      serverPort: null,
-      serverUsername: '',
-      serverPassword: ''
+        id: null,
+        host: '',
+        port: null,
+        username: '',
+        password: '',
+        direction: Defs.STR_LOCAL,
+        source_host: '',
+        source_port: null,
+        destination_host: '',
+        destination_port: null
     }
 }
 
@@ -51,6 +51,38 @@ const getters = {
     },
     isDrawerDestination: state => () => {
       return state.curDrawer === Defs.DRAWER_DESTINATION_PAGE
+    },
+    getTunnelingBodyTitleIcon: () => (session) => {
+      const direction = session.direction
+
+      if (direction !== null & direction.length > 0) {
+          switch (direction) {
+              case Defs.STR_LOCAL:
+                  return Defs.ICON_ALPHA_L_BOX
+              case Defs.STR_REMOTE:
+                  return Defs.ICON_ALPHA_R_BOX
+              case Defs.STR_SOCKSV5:
+                  return Defs.ICON_ALPHA_S_BOX
+              default:
+                  break
+          }
+      }
+    },
+    getTunnelingBodyText: () => (session) => {
+        const direction = session.direction
+
+        if (direction !== null & direction.length > 0) {
+            switch (direction) {
+                case Defs.STR_LOCAL:
+                    return `From ${session.host}:${session.source_port} to ${session.destination_host}:${session.destination_port}`
+                case Defs.STR_REMOTE:
+                    return `From ${session.host}:${session.destination_port} to ${session.source_host}:${session.source_port}`
+                case Defs.STR_SOCKSV5:
+                    return `From ${session.host}:${session.source_port}`
+                default:
+                    break
+            }
+        }
     }
 }
 
@@ -60,14 +92,14 @@ const mutations ={
       state.session = {
           id: null,
           direction: Defs.STR_LOCAL,
-          localHost: '',
-          localPort: null,
-          remoteHost: '',
-          remotePort: null,
-          serverHost: '',
-          serverPort: null,
-          serverUsername: '',
-          serverPassword: ''
+          source_host: '',
+          source_port: null,
+          destination_host: '',
+          destination_port: null,
+          host: '',
+          port: null,
+          username: '',
+          password: ''
       }
     },
     SET_SESSION_VALUE (state, payload) {
@@ -79,30 +111,30 @@ const mutations ={
           break
         case Defs.DRAWER_SOURCE_PAGE:
           if (session.direction === Defs.STR_LOCAL || session.direction === Defs.STR_SOCKSV5) {
-            session.localHost = payload.hostname
-            session.localPort = payload.port
+            session.source_host = payload.hostname
+            session.source_port = payload.port
           }
 
           if (session.direction === Defs.STR_REMOTE) {
-            session.remoteHost = payload.hostname
-            session.remotePort = payload.port
+            session.destination_host = payload.hostname
+            session.destination_port = payload.port
           }
           break
         case Defs.DRAWER_SERVER_PAGE:
-          session.serverHost = payload.hostname
-          session.serverPort = payload.port
-          session.serverUsername = payload.username
-          session.serverPassword = Security.encryption(payload.password)
+          session.host = payload.hostname
+          session.port = payload.port
+          session.username = payload.username
+          session.password = Security.encryption(payload.password)
           break
         case Defs.DRAWER_DESTINATION_PAGE:
           if (session.direction === Defs.STR_LOCAL || session.direction === Defs.STR_SOCKSV5) {
-            session.remoteHost = payload.hostname
-            session.remotePort = payload.port
+            session.destination_host = payload.hostname
+            session.destination_port = payload.port
           }
 
           if (session.direction === Defs.STR_REMOTE) {
-            session.localHost = payload.hostname
-            session.localPort = payload.port
+            session.source_host = payload.hostname
+            session.source_port = payload.port
           }
           break
         default:
@@ -123,6 +155,7 @@ const mutations ={
 
         if (id > 0) {
             session.id = id
+            console.log(session)
             arrTunneling.push(session)
         }
     },

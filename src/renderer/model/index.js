@@ -74,15 +74,15 @@ export default class DB {
             await this.openDatabase()
             const db = this.db
             const {
-                serverHost, serverPort, serverUsername, serverPassword,
+                host, port, username, password,
                 direction,
-                localHost, localPort,
-                remoteHost, remotePort
+                source_host, source_port,
+                destination_host, destination_port
             } = item
 
             db.serialize(() => {
                 db.run('INSERT INTO PORT_FORWARDING (HOST, PORT, USERNAME, PASSWORD, DIRECTION, SOURCE_HOST, SOURCE_PORT, DESTINATION_HOST, DESTINATION_PORT) VALUES (?, ?, ?, ?, ?, ?, ?, ? ,?)', [
-                    serverHost, serverPort, serverUsername, serverPassword, direction, localHost, localPort, remoteHost, remotePort
+                    host, port, username, password, direction, source_host, source_port, destination_host, destination_port
                 ], (err) => {
                     if (err) {
                         this.handleDBErrorIfExists('insertPortForwardingItem', err)

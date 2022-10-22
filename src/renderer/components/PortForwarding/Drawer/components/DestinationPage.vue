@@ -105,7 +105,7 @@
                 ></v-text-field>
                 <v-text-field
                     v-show="isSocksv5()"
-                    :value="state.session.localHost"
+                    :value="state.session.source_host"
                     disabled
                     outlined
                     dense
@@ -122,7 +122,7 @@
                 ></v-text-field>
                 <v-text-field
                     v-show="isSocksv5()"
-                    :value="state.session.localPort"
+                    :value="state.session.source_port"
                     disabled
                     outlined
                     dense
@@ -203,8 +203,8 @@ export default {
       if (this.isSocksv5()) {
         const session = this.state.session
 
-        hostname = session.localHost
-        port = session.localPort
+        hostname = session.source_host
+        port = session.source_port
       }
 
       if (hostname && port) {
