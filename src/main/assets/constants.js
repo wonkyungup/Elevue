@@ -32,6 +32,9 @@ export default class Constants {
     static ICON_SERVER_SECURITY = 'mdi-server-security'
     static ICON_CLOUD = 'mdi-cloud'
     static ICON_ARROW_RIGHT_CIRCLE = 'mdi-arrow-right-circle'
+    static ICON_ALPHA_L_BOX = 'mdi-alpha-l-box'
+    static ICON_ALPHA_R_BOX = 'mdi-alpha-r-box'
+    static ICON_ALPHA_S_BOX = 'mdi-alpha-s-box'
 
     static DRAWER_DIRECTION_PAGE = 0
     static DRAWER_SOURCE_PAGE = 1
