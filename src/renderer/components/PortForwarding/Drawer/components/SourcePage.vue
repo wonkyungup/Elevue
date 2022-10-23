@@ -91,7 +91,7 @@
             <v-row align="center" dense>
               <v-col cols="10">
                 <v-text-field
-                  autofocus
+                  ref="hostname"
                   v-model="hostname"
                   placeholder="Binding Address"
                   outlined
@@ -100,6 +100,7 @@
               </v-col>
               <v-col cols="10">
                 <v-text-field
+                  ref="port"
                   v-model="port"
                   placeholder="Port"
                   outlined
@@ -115,6 +116,7 @@
                   block
                   color="primary"
                   @click="onClickContinue"
+                  :disabled="(!hostname || !port)"
                 >Continue</v-btn>
               </v-col>
             </v-row>
@@ -146,6 +148,17 @@ export default {
         if (this.isDrawerDirection()) {
           this.hostname = 'localhost'
           this.port = null
+        }
+
+        const hostname = this.hostname
+        const port = this.port
+
+        if ((!hostname || !hostname.length) && !port) {
+          this.$refs['hostname'].focus()
+        }
+
+        if ((hostname || hostname.length > 0)) {
+          this.$refs['port'].focus()
         }
       },
       immediate: false,
