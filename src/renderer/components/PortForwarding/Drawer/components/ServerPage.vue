@@ -141,6 +141,7 @@
                   block
                   color="primary"
                   @click="onClickContinue"
+                  :disabled="isDisabled"
                 >Continue</v-btn>
               </v-col>
             </v-row>
@@ -190,7 +191,10 @@ export default {
       'isRemote',
       'isSocksv5',
       'isDrawerSource'
-    ])
+    ]),
+    isDisabled () {
+      return (!this.hostname || !this.port || !this.username || !this.password)
+    }
   },
   methods: {
     ...mapActions('PortForwarding', ['moveBackButton', 'setSessionValue', 'moveNextButton']),

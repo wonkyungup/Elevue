@@ -97,7 +97,7 @@
               <v-col cols="10">
                 <v-text-field
                     v-show="!isSocksv5()"
-                    autofocus
+                    ref="hostname"
                     v-model="hostname"
                     placeholder="Binding Address"
                     outlined
@@ -114,6 +114,7 @@
               <v-col cols="10">
                 <v-text-field
                     v-show="!isSocksv5()"
+                    ref="port"
                     v-model="port"
                     placeholder="Port"
                     outlined
@@ -136,6 +137,7 @@
                     block
                     color="primary"
                     @click="onClickContinue"
+                    :disabled="isDisabled"
                 >Continue</v-btn>
               </v-col>
             </v-row>
@@ -168,6 +170,17 @@ export default {
           this.hostname = 'localhost'
           this.port = null
         }
+
+        const hostname = this.hostname
+        const port = this.port
+
+        if ((!hostname || !hostname.length) && !port) {
+          this.$refs['hostname'].focus()
+        }
+
+        if ((hostname || hostname.length > 0)) {
+          this.$refs['port'].focus()
+        }
       },
       immediate: false,
       deep: true
@@ -181,7 +194,18 @@ export default {
       'isRemote',
       'isSocksv5',
       'isDrawerServer'
-    ])
+    ]),
+    isDisabled () {
+      let isValue = false
+
+      if (this.isLocal() || this.isRemote()) {
+        if ((!this.hostname || !this.hostname.length) || !this.port) {
+          isValue = true
+        }
+      }
+
+      return isValue
+    }
   },
   methods: {
     ...mapActions('PortForwarding', ['moveBackButton', 'setSessionValue', 'moveNextButton']),
