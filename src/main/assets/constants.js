@@ -35,6 +35,10 @@ export default class Constants {
     static ICON_ALPHA_L_BOX = 'mdi-alpha-l-box'
     static ICON_ALPHA_R_BOX = 'mdi-alpha-r-box'
     static ICON_ALPHA_S_BOX = 'mdi-alpha-s-box'
+    static ICON_CONNECTION = 'mdi-connection'
+    static ICON_CARD_TEXT = 'mdi-card-text'
+    static ICON_CARD_REMOVE = 'mdi-card-remove'
+    static ICON_CANCEL = 'mdi-cancel'
 
     static DRAWER_DIRECTION_PAGE = 0
     static DRAWER_SOURCE_PAGE = 1

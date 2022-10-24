@@ -7,29 +7,38 @@
       <v-col
           v-for="session in list"
           :cols="getDisplayCol"
-      ><Card
+      >
+        <div
+            @mouseenter.prevent="isShowMenu(true)"
+            @mouseleave.prevent="isShowMenu(false)"
+        ><Card
           rounded="15"
           elevation="24"
           :color="isDarkMode($vuetify) ? '#424242' : '#E0E0E0'"
         >
-          <template v-slot:title>
-            <v-icon large>{{ getTunnelingBodyTitleIcon(session) }}</v-icon>
-            <h4>{{ session.host }}</h4>
-            <v-spacer />
+        <template v-slot:title>
+          <v-icon large>{{ getTunnelingBodyTitleIcon(session) }}</v-icon>
+          <h4>{{ session.host }}</h4>
+          <v-spacer />
+          <!-- v-show="isMenu" -->
+          <div>
             <v-btn icon>
-              <v-icon>mdi-database-edit</v-icon>
+              <v-icon>{{ Defs.ICON_CONNECTION }}</v-icon>
             </v-btn>
             <v-btn icon>
-              <v-icon>mdi-database-remove</v-icon>
+              <v-icon>{{ Defs.ICON_CARD_TEXT }}</v-icon>
             </v-btn>
-          </template>
+            <v-btn icon>
+              <v-icon>{{ Defs.ICON_CARD_REMOVE }}</v-icon>
+            </v-btn>
+          </div>
+        </template>
 
-          <template v-slot:text>
-            <h4>
-              {{ getTunnelingBodyText(session) }}
-            </h4>
-          </template>
+        <template v-slot:text>
+          <h4>{{ getTunnelingBodyText(session) }}</h4>
+        </template>
         </Card>
+        </div>
       </v-col>
     </v-row>
   </v-container>
@@ -47,8 +56,7 @@ export default {
   data: () => {
     return {
       list: [],
-      lorem: '',
-      toggle_none: null
+      isMenu: false
     }
   },
   computed: {
@@ -63,13 +71,13 @@ export default {
           case 'xs':
             return 12
           case 'sm':
-            return 6
+            return 12
           case 'md':
-            return 4
+            return 6
           case 'lg':
-            return 3
+            return 4
           case 'xl':
-            return 2
+            return 4
           default:
             break
         }
@@ -81,11 +89,15 @@ export default {
       handler () {
         if (this.state.arrTunneling.length > 0) {
           this.list = this.state.arrTunneling
-          console.log(this.list)
         }
       },
       immediate: true,
       deep: true
+    }
+  },
+  methods: {
+    isShowMenu (boolean) {
+      this.isMenu = boolean
     }
   }
 }
@@ -98,6 +110,6 @@ export default {
 }
 
 .session-body::-webkit-scrollbar {
-  display:none
+  display:none;
 }
 </style>
