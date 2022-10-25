@@ -22,6 +22,11 @@ export default class Constants {
     static STR_LOCAL = 'local'
     static STR_REMOTE = 'remote'
     static STR_SOCKSV5 = 'socksv5'
+    static STR_TABLE_STYLE_AUTO = 'Auto'
+    static STR_TABLE_STYLE_COL12 = 'Col-12'
+    static STR_TABLE_STYLE_COL6 = 'Col-6'
+    static STR_TABLE_STYLE_COL4 = 'Col-4'
+    static STR_TABLE_STYLE_COL2 = 'Col-2'
 
     static ICON_APP = '16x16.png'
     static ICON_PLUS = 'mdi-plus'
