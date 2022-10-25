@@ -17,7 +17,9 @@ const state = {
         source_port: null,
         destination_host: '',
         destination_port: null
-    }
+    },
+    curTableStyle: Defs.STR_TABLE_STYLE_AUTO,
+    arrTableStyle: [Defs.STR_TABLE_STYLE_AUTO, Defs.STR_TABLE_STYLE_COL12, Defs.STR_TABLE_STYLE_COL6, Defs.STR_TABLE_STYLE_COL4, Defs.STR_TABLE_STYLE_COL2]
 }
 
 const getters = {
@@ -67,6 +69,36 @@ const getters = {
                   break
           }
       }
+    },
+    getDisplayCol: (state) => (vuetify) => {
+        const curTableStyle = state.curTableStyle
+
+        switch (curTableStyle) {
+            case Defs.STR_TABLE_STYLE_AUTO:
+                const display = vuetify.breakpoint.name
+
+                if (display !== null && display.length > 0) {
+                    switch (display) {
+                        case Defs.STR_DISPLAY_XS:
+                        case Defs.STR_DISPLAY_SM:
+                            return 12
+                        case Defs.STR_DISPLAY_MD:
+                            return 6
+                        case Defs.STR_DISPLAY_LG:
+                        case Defs.STR_DISPLAY_XL:
+                            return 4
+                        default:
+                            break
+                    }
+                }
+                break
+            case Defs.STR_TABLE_STYLE_COL12: return 12
+            case Defs.STR_TABLE_STYLE_COL6: return 6
+            case Defs.STR_TABLE_STYLE_COL4: return 4
+            case Defs.STR_TABLE_STYLE_COL2: return 2
+            default:
+                break
+        }
     },
     getTunnelingBodyText: () => (session) => {
         const direction = session.direction
@@ -168,6 +200,9 @@ const mutations ={
         if (arrLowerCaseKey.length > 0) {
             state.arrTunneling = arrLowerCaseKey
         }
+    },
+    SET_CUR_TABLE_STYLE (state, value) {
+        state.curTableStyle = value
     }
 }
 
@@ -189,6 +224,9 @@ const actions = {
     },
     setDBArrTunneling ({ commit }, list) {
       commit('SET_DB_ARR_TUNNELING', list)
+    },
+    setCurTableStyle ({ commit }, value) {
+      commit('SET_CUR_TABLE_STYLE', value)
     }
 }
 
