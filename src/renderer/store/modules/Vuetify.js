@@ -4,9 +4,6 @@ const state = {
 const getters = {
     isDarkMode: () => (vuetify) => {
         return vuetify.theme['isDark']
-    },
-    getCurDisplay: () => (vuetify) => {
-        return vuetify.breakpoint.name
     }
 }
 

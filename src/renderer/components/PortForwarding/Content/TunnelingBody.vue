@@ -11,7 +11,7 @@
         >
           <v-hover v-slot="{ hover }">
             <Card
-                rounded="15"
+                rounded="lg"
                 elevation="24"
                 :color="isDarkMode($vuetify) ? '#424242' : '#E0E0E0'"
             >
@@ -19,7 +19,10 @@
                 <v-icon large>{{ getTunnelingBodyTitleIcon(item) }}</v-icon>
                 <h4>{{ item.host }}</h4>
                 <v-spacer />
-                <div v-show="hover">
+                <div
+                  v-show="hover"
+                  style="opacity: 0.6;"
+                >
                   <v-btn icon small>
                     <v-icon>{{ Defs.ICON_CONNECTION }}</v-icon>
                   </v-btn>
@@ -60,7 +63,7 @@ export default {
   },
   computed: {
     ...mapState({ Defs: 'Constants', state: 'PortForwarding' }),
-    ...mapGetters('Vuetify', ['isDarkMode', 'getCurDisplay']),
+    ...mapGetters('Vuetify', ['isDarkMode']),
     ...mapGetters('PortForwarding', ['getTunnelingBodyTitleIcon', 'getTunnelingBodyText', 'getDisplayCol'])
   },
   watch: {

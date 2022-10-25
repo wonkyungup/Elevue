@@ -79,11 +79,14 @@ const getters = {
 
                 if (display !== null && display.length > 0) {
                     switch (display) {
-                        case 'xs': return 12
-                        case 'sm': return 12
-                        case 'md': return 6
-                        case 'lg': return 4
-                        case 'xl': return 4
+                        case Defs.STR_DISPLAY_XS:
+                        case Defs.STR_DISPLAY_SM:
+                            return 12
+                        case Defs.STR_DISPLAY_MD:
+                            return 6
+                        case Defs.STR_DISPLAY_LG:
+                        case Defs.STR_DISPLAY_XL:
+                            return 4
                         default:
                             break
                     }

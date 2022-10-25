@@ -22,7 +22,7 @@
           <v-select
               :items="arrTableStyle"
               v-model="curTableStyle"
-              label="Table style"
+              label="Grid style"
               dense
               class="pt-5"
               style="width: 190px;"
