@@ -1,4 +1,4 @@
-import { app, Tray, Menu, BrowserWindow, ipcMain } from 'electron'
+import { app, Tray, Menu, BrowserWindow, ipcMain, Notification } from 'electron'
 import path from 'path'
 import os from 'os'
 
@@ -9,5 +9,6 @@ export {
     BrowserWindow,
     path,
     os,
-    ipcMain
+    ipcMain,
+    Notification
 }

@@ -3,6 +3,7 @@ import * as remote from '@electron/remote'
 const Defs = remote.getGlobal('Constants')
 
 const state = {
+    APP_TITLE: Defs.APP_TITLE,
     ICON_PLUS: Defs.ICON_PLUS,
     ICON_ACCOUNT: Defs.ICON_ACCOUNT,
     ICON_ARROW_COLLAPSE_RIGHT: Defs.ICON_ARROW_COLLAPSE_RIGHT,
