@@ -109,8 +109,10 @@ ipcMain.on(global.MSG_MASTER_KEY, (event, args) => {
     masterPassword.close()
   }
 
-  createTray()
-  createPortForwarding()
+  Utils.executionNotification().then(() => {
+    createTray()
+    createPortForwarding()
+  })
 })
 
 /**

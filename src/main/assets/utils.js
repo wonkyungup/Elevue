@@ -1,7 +1,18 @@
 import Defs from './constants'
-import { os, BrowserWindow } from './lib'
+import {
+  os,
+  BrowserWindow,
+  Notification
+} from './lib'
 
 export default class Utils {
+    static executionNotification () {
+        return new Promise(resolve => {
+            new Notification({ title: Defs.NOTIFICATION_TITLE, body: Defs.NOTIFICATION_BODY }).show()
+            resolve()
+        })
+    }
+
     static getMasterPasswordWindow () {
         return new BrowserWindow({
             frame: false,

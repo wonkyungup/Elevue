@@ -1,12 +1,17 @@
+import packageInfo from '../../../package.json'
 import { path, app } from './lib'
 
 export default class Constants {
+    static APP_TITLE = packageInfo.name
     static APP_IS_PRODUCTION = process.env.NODE_ENV !== 'development'
 
     static TYPE_SEPARATOR = 'separator'
 
     static MENU_PORT_FORWARDING = 'Port Forwarding'
     static MENU_QUIT = 'Quit'
+
+    static NOTIFICATION_TITLE = Constants.APP_TITLE
+    static NOTIFICATION_BODY = 'Please check the tray menu'
     static STR_LINUX = 'linux'
     static STR_AIX = 'aix'
     static STR_SUNOS = 'sunos'
