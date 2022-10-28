@@ -1,18 +1,7 @@
 import Defs from './constants'
-import {
-  os,
-  BrowserWindow,
-  Notification
-} from './lib'
+import { os, BrowserWindow } from './lib'
 
 export default class Utils {
-    static executionNotification () {
-        return new Promise(resolve => {
-            new Notification({ title: Defs.NOTIFICATION_TITLE, body: Defs.NOTIFICATION_BODY }).show()
-            resolve()
-        })
-    }
-
     static getMasterPasswordWindow () {
         return new BrowserWindow({
             frame: false,
@@ -55,7 +44,7 @@ export default class Utils {
         }
     }
 
-    static getOsFromMain () {
+    static getOs () {
         switch(os.platform()) {
             case Defs.STR_LINUX:
             case Defs.STR_AIX:
