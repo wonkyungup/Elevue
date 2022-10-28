@@ -11,7 +11,7 @@ export default class Constants {
     static MENU_QUIT = 'Quit'
 
     static NOTIFICATION_TITLE = Constants.APP_TITLE
-    static NOTIFICATION_BODY = 'Please check the tray menu'
+    static NOTIFICATION_BODY = 'Please check the tray'
     static STR_LINUX = 'linux'
     static STR_AIX = 'aix'
     static STR_SUNOS = 'sunos'

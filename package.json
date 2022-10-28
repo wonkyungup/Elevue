@@ -1,5 +1,5 @@
 {
-  "name": "Elevue",
+  "name": "Vee",
   "version": "0.0.1",
   "private": true,
   "description": "Tools for managing servers",
@@ -23,7 +23,7 @@
     "postinstall": "npm run lint:fix"
   },
   "build": {
-    "productName": "Elevue",
+    "productName": "Vee",
     "appId": "com.example.example",
     "copyright": "",
     "directories": {

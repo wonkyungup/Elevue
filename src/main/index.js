@@ -1,16 +1,8 @@
 'use strict'
 
-import {
-  app,
-  Tray,
-  Menu,
-  path,
-  ipcMain
- } from './assets/lib'
+import { app, Tray, Menu, path, ipcMain, Notification } from './assets/lib'
 import Defs from './assets/constants'
 import Utils from './assets/utils'
-
-require('@electron/remote/main').initialize()
 
 let tray = null
 let masterPassword = null
@@ -24,10 +16,18 @@ if (Defs.APP_IS_PRODUCTION) {
   winURL = `http://localhost:9082/index.html`
 }
 
+if (!app.requestSingleInstanceLock()) {
+  app.exit()
+}
+
 global.Constants = Defs
 global.MSG_MASTER_KEY = 'MSG_MASTER_KEY'
 
-function createMasterPassword () {
+const executionNotification = () => {
+  return new Notification({ title: Defs.NOTIFICATION_TITLE, body: Defs.NOTIFICATION_BODY }).show()
+}
+
+const createMasterPassword = () => {
   if (masterPassword === null) {
     masterPassword = Utils.getMasterPasswordWindow()
   }
@@ -41,26 +41,33 @@ function createMasterPassword () {
   masterPassword.on('show', () => {
     masterPassword.focus()
   })
+  masterPassword.on('closed', (event) => {
+    event.preventDefault()
+    executionNotification()
+    createTray()
+    createPortForwarding()
+  })
 }
 
-function createPortForwarding () {
+const createPortForwarding = () => {
   if (portForwarding === null) {
     portForwarding = Utils.getPortForwardingBrowserWindow()
   }
+
+  portForwarding.setMenu(null)
   portForwarding.loadURL(`${winURL}#/port-forwarding`)
 
   portForwarding.on('page-title-updated', event => {
     event.preventDefault()
   })
-
   portForwarding.on('close', event => {
     event.sender.hide()
     event.preventDefault()
   })
 }
 
-function createTray () {
-  if (Utils.getOsFromMain() === Defs.STR_MAC) {
+const createTray = () => {
+  if (Utils.getOs === Defs.STR_MAC) {
     app.dock.hide()
   }
 
@@ -71,7 +78,7 @@ function createTray () {
   const config = [
     {
       label: Defs.MENU_PORT_FORWARDING,
-       click: () => {
+      click: () => {
         portForwarding.show()
       }
     },
@@ -94,10 +101,6 @@ function createTray () {
   }
 }
 
-if (!app.requestSingleInstanceLock()) {
-  app.exit()
-}
-
 app.on('ready', () => {
   createMasterPassword()
 })
@@ -108,11 +111,6 @@ ipcMain.on(global.MSG_MASTER_KEY, (event, args) => {
   if (global.Constants.DB_MASTER_KEY.length > 0) {
     masterPassword.close()
   }
-
-  Utils.executionNotification().then(() => {
-    createTray()
-    createPortForwarding()
-  })
 })
 
 /**
