@@ -2,5 +2,5 @@
 
 ### Purpose made
 ```
-> for my convenience
+for my convenience
 ```
