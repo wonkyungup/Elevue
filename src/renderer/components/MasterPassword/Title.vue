@@ -1,33 +1,21 @@
 <template>
   <BrowserTitle
+      :height="120"
       :align="'center'"
+      :color="isDarkMode($vuetify) ? '#212121' : '#E0E0E0'"
   >
     <template v-slot:title>
-      <v-row dense>
-        <v-col cols="4">
-          <v-img
-              src="static/App_logo.png"
-              width="128"
-              height="64"
-          />
-        </v-col>
-        <v-col cols="4">
-          <h1 class="mt-5">{{ Defs.APP_TITLE }}</h1>
-        </v-col>
-        <v-col cols="4">
-          <v-img
-              src="static/App_logo.png"
-              width="128"
-              height="64"
-          />
-        </v-col>
-      </v-row>
+      <v-img
+          :src="isDarkMode($vuetify) ? 'static/Title-dark.png' : 'static/Title-light.png'"
+          width="220"
+          height="80"
+      />
     </template>
   </BrowserTitle>
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { mapState, mapGetters } from 'vuex'
 import { BrowserTitle } from '../Layout'
 
 export default {
@@ -37,6 +25,7 @@ export default {
   },
   computed: {
     ...mapState({ Defs: 'Constants' }),
+    ...mapGetters('Vuetify', ['isDarkMode'])
   }
 }
 </script>
