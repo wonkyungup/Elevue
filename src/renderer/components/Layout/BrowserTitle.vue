@@ -1,11 +1,13 @@
 <template>
-  <v-toolbar height="100">
+  <v-toolbar
+      :height="height"
+      :color="color"
+  >
     <v-container fluid>
       <v-row
           align="center"
           justify="center"
           dense
-          class="pt-5"
       >
         <v-col :align="align" cols="12">
           <slot name="title"></slot>
@@ -19,6 +21,14 @@
 export default {
   name: "Title",
   props: {
+    color: {
+      type: String,
+      default: ''
+    },
+    height: {
+      type: Number,
+      default: 100
+    },
     align: {
       type: String,
       default: 'left'
