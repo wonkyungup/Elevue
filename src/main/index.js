@@ -7,13 +7,9 @@ import Utils from './assets/utils'
 let tray = null
 let masterPassword = null
 let portForwarding = null
-let winURL = ''
 
 if (Defs.APP_IS_PRODUCTION) {
   global.__static = path.join(__dirname, '/static').replace(/\\/g, '\\\\')
-  winURL = `file://${__dirname}/index.html`
-} else {
-  winURL = `http://localhost:9082/index.html`
 }
 
 if (!app.requestSingleInstanceLock()) {
@@ -24,16 +20,26 @@ global.Constants = Defs
 global.MSG_MASTER_KEY = 'MSG_MASTER_KEY'
 
 const executionNotification = () => {
-  return new Notification({ title: Defs.NOTIFICATION_TITLE, body: Defs.NOTIFICATION_BODY }).show()
+  const config = {
+    title: Defs.NOTIFICATION_TITLE,
+    body: Defs.NOTIFICATION_BODY
+  }
+
+  if (config) {
+    return new Notification(config).show()
+  }
 }
 
 const createMasterPassword = () => {
-  if (masterPassword === null) {
-    masterPassword = Utils.getMasterPasswordWindow()
+  if (global.Constants.DB_CERTIFIED) {
+    global.Constants.DB_CERTIFIED = false
   }
 
-  masterPassword.setMenu(null)
-  masterPassword.loadURL(`${winURL}#/master-password`)
+  if (masterPassword === null) {
+    masterPassword = Utils.getMasterPasswordBrowserWindow()
+  }
+
+  masterPassword.loadURL(Utils.setWinUrl('master-password'))
 
   masterPassword.once('ready-to-show', () => {
     masterPassword.show()
@@ -43,10 +49,21 @@ const createMasterPassword = () => {
   })
   masterPassword.on('closed', (event) => {
     event.preventDefault()
-    executionNotification()
-    createTray()
-    createPortForwarding()
+
+    if (global.Constants.DB_CERTIFIED) {
+      if (Defs.isMac) {
+        app.dock.hide()
+      }
+
+      executionNotification()
+      createTray()
+      createPortForwarding()
+    }
   })
+
+  if (Defs.isMac) {
+    app.dock.hide()
+  }
 }
 
 const createPortForwarding = () => {
@@ -55,7 +72,7 @@ const createPortForwarding = () => {
   }
 
   portForwarding.setMenu(null)
-  portForwarding.loadURL(`${winURL}#/port-forwarding`)
+  portForwarding.loadURL(Utils.setWinUrl('port-forwarding'))
 
   portForwarding.on('page-title-updated', event => {
     event.preventDefault()
@@ -67,12 +84,8 @@ const createPortForwarding = () => {
 }
 
 const createTray = () => {
-  if (Utils.getOs === Defs.STR_MAC) {
-    app.dock.hide()
-  }
-
   if (tray === null) {
-    tray = new Tray(path.join(__static, path.sep, Defs.ICON_APP))
+    tray = new Tray(Defs.STATIC_IMG_TRAY)
   }
 
   const config = [
@@ -106,9 +119,9 @@ app.on('ready', () => {
 })
 
 ipcMain.on(global.MSG_MASTER_KEY, (event, args) => {
-  global.Constants.DB_MASTER_KEY = args.DB_MASTER_KEY
-
-  if (global.Constants.DB_MASTER_KEY.length > 0) {
+  if (args.DB_CERTIFIED) {
+    global.Constants.DB_CERTIFIED = args.DB_CERTIFIED
+    global.Constants.DB_MASTER_KEY = args.DB_MASTER_KEY
     masterPassword.close()
   }
 })

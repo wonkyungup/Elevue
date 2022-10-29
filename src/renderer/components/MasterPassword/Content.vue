@@ -70,10 +70,7 @@ export default {
   computed: {
     ...mapState({ Defs: 'Constants', state: 'MasterPassword' }),
     isDisabled () {
-      if (this.password.length > 0) {
-        return false
-      }
-      return true
+      return this.password.length <= 0
     },
     isExistFiles () {
       const files = new Files()
@@ -92,7 +89,7 @@ export default {
     }
   },
   methods: {
-   ...mapActions('MasterPassword', ['setMasterKey']),
+   ...mapActions('MasterPassword', ['setMasterKey', 'authMasterCertified']),
    async onKeydownEnter () {
      if (this.password.length > 0) {
        await this.onClickNext()
@@ -123,6 +120,7 @@ export default {
 
       if (!this.isError) {
         await new DB().openDatabase()
+        this.authMasterCertified()
         this.$emit('msgMasterPassword')
       }
    }

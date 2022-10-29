@@ -1,4 +1,5 @@
 import packageInfo from '../../../package.json'
+import Utils from './utils'
 import { path, app } from './lib'
 
 export default class Constants {
@@ -38,7 +39,12 @@ export default class Constants {
     static STR_DISPLAY_LG = 'lg'
     static STR_DISPLAY_XL = 'XL'
 
-    static ICON_APP = '16x16.png'
+    static isMac = (Utils.getOs() === Constants.STR_MAC)
+
+    static STATIC_IMG_TRAY = path.join(__static, path.sep, 'Tray-logo.png')
+    static STATIC_IMG_APP = path.join(__static, path.sep, 'App_logo.png')
+    static STATIC_IMG_APP_DOCK = path.join(__static, path.sep, 'App_logo_dock.png')
+
     static ICON_PLUS = 'mdi-plus'
     static ICON_ACCOUNT = 'mdi-account'
     static ICON_ARROW_COLLAPSE_RIGHT = 'mdi-arrow-collapse-right'
@@ -65,6 +71,7 @@ export default class Constants {
     static DB_FULL_PATH = path.join(Constants.DB_PATH, path.sep, Constants.DB_NAME)
     static DB_VERSION = 4
     static DB_MASTER_KEY = ''
+    static DB_CERTIFIED = false
 
     static SETUP_NAME = 'setup.ini'
 }

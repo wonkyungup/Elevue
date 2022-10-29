@@ -72,7 +72,7 @@
     },
     "linux": {
       "executableName": "example",
-      "icon": "build/icons",
+      "icon": "build/icons/icon.png",
       "target": [
         "snap"
       ]
