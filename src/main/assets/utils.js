@@ -2,7 +2,7 @@ import Defs from './constants'
 import { os, BrowserWindow } from './lib'
 
 export default class Utils {
-    static getMasterPasswordWindow () {
+    static getMasterPasswordBrowserWindow () {
         return new BrowserWindow({
             frame: false,
             width: 450,
@@ -61,5 +61,13 @@ export default class Utils {
             default:
                 return Defs.STR_WINDOWS
             }
+    }
+
+    static setWinUrl (str) {
+        if (Defs.APP_IS_PRODUCTION) {
+            return `file://${__dirname}/index.html#/${str}`
+        }
+
+        return `http://localhost:9082/index.html#/${str}`
     }
 }
