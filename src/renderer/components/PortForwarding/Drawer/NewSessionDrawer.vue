@@ -6,43 +6,31 @@
     absolute
     temporary
   >
+  <titlePage v-on:msgClose="close" />
 
-  <directionPage
-    v-show="isDrawerDirection()"
-    v-on:msgClose="close"
-  ></directionPage>
-
-  <sourcePage
-    v-show="isDrawerSource()"
-    v-on:msgClose="close"
-  ></sourcePage>
-
-  <serverPage
-    v-show="isDrawerServer()"
-    v-on:msgClose="close"
-  ></serverPage>
-
-  <destinationPage
-    v-show="isDrawerDestination()"
-    v-on:msgClose="close"
-  ></destinationPage>
-
+  <v-card height="64" elevation="0" color="transparent" rounded="0" class="pa-0" />
+  <directionPage v-if="isDrawerDirection()" />
+  <sourcePage v-else-if="isDrawerSource()" />
+  <serverPage v-else-if="isDrawerServer()" />
+  <destinationPage v-else-if="isDrawerDestination()" />
   </v-navigation-drawer>
 </template>
 
 <script>
 import { mapState, mapActions, mapGetters } from 'vuex'
 import {
+  titlePage,
   directionPage,
   sourcePage,
   serverPage,
   destinationPage
-} from './components'
+} from './Template'
 import DB from '@/model'
 
 export default {
   name: "SessionDrawer",
   components: {
+    titlePage,
     directionPage,
     sourcePage,
     serverPage,
