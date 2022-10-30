@@ -31,17 +31,19 @@ const executionNotification = () => {
 }
 
 const createMasterPassword = () => {
-  if (Defs.isMac) {
-    app.dock.setIcon(Defs.STATIC_IMG_APP_DOCK)
-    app.dock.bounce()
-  }
-
   if (global.Constants.DB_CERTIFIED) {
     global.Constants.DB_CERTIFIED = false
   }
 
   if (masterPassword === null) {
     masterPassword = Utils.getMasterPasswordBrowserWindow()
+  }
+
+  if (Defs.isMac) {
+    app.dock.setIcon(Defs.STATIC_IMG_APP_DOCK)
+    app.dock.bounce()
+  } else {
+    masterPassword.setIcon(Defs.STATIC_IMG_APP_DOCK)
   }
 
   masterPassword.loadURL(Utils.setWinUrl('master-password'))
