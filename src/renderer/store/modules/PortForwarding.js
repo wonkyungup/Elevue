@@ -6,6 +6,7 @@ const Defs = Constants.state
 const state = {
     arrTunneling: [],
     curDrawer: Defs.DRAWER_DIRECTION_PAGE || 0,
+    selectID: 0,
     session: {
         id: null,
         host: '',
@@ -203,6 +204,12 @@ const mutations ={
     },
     SET_CUR_TABLE_STYLE (state, value) {
         state.curTableStyle = value
+    },
+    SET_SELECT_ID (state, id) {
+        state.selectID = id
+    },
+    DELETED_ARR_TUNNELING (state) {
+        state.arrTunneling = state.arrTunneling.filter(value => value.id !== state.selectID)
     }
 }
 
@@ -227,6 +234,12 @@ const actions = {
     },
     setCurTableStyle ({ commit }, value) {
       commit('SET_CUR_TABLE_STYLE', value)
+    },
+    setSelectID ({ commit }, id) {
+      commit('SET_SELECT_ID', id)
+    },
+    deletedArrTunneling ({ commit }) {
+      commit('DELETED_ARR_TUNNELING')
     }
 }
 
