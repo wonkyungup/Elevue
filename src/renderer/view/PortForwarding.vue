@@ -1,28 +1,37 @@
 <template>
-  <Card
-      :titleClass="'pa-0'"
-      :textClass="'pa-0'"
-      :isSubTitle="false"
-  >
-    <template v-slot:title>
-      <Title
-          v-on:msgClickNewButton="onClickNewButton"
-      ></Title>
-    </template>
+  <div>
+    <Card
+        :titleClass="'pa-0'"
+        :textClass="'pa-0'"
+        :isSubTitle="false"
+    >
+      <template v-slot:title>
+        <Title
+            v-on:msgClickNewButton="onClickNewButton"
+        ></Title>
+      </template>
 
-    <template v-slot:text>
-      <WelcomeBody v-if="isWelcomePage()" />
-      <SessionBody v-else />
-    </template>
+      <template v-slot:text>
+        <WelcomeBody v-if="isWelcomePage()" />
+        <SessionBody
+            v-else
+            v-on:msgClickDeleteButton="onClickDeleteButton"
+        />
+      </template>
 
-    <template v-slot:actions>
-      <SessionDrawer ref="SessionDrawer"></SessionDrawer>
-    </template>
-  </Card>
+      <template v-slot:actions>
+        <SessionDrawer ref="SessionDrawer"></SessionDrawer>
+      </template>
+    </Card>
+  <div>
+
+  </div>
+    <ModalDeleteCard ref="ModalDeleteCard" />
+  </div>
 </template>
 
 <script>
-import {mapActions, mapGetters, mapState} from 'vuex'
+import { mapState, mapActions, mapGetters } from 'vuex'
 import { Card } from '@/components/Layout'
 import {
   Title,
@@ -31,6 +40,7 @@ import {
   SessionDrawer
 } from '@/components/PortForwarding'
 import DB from '../model'
+import { ModalDeleteCard } from '@/components/Modal'
 
 export default {
   name: "Main",
@@ -39,10 +49,11 @@ export default {
     Title,
     WelcomeBody,
     SessionBody,
-    SessionDrawer
+    SessionDrawer,
+    ModalDeleteCard
   },
   computed: {
-    ...mapState({ Defs: 'Constants', state: 'MasterPassword' }),
+    ...mapState({ Defs: 'Constants' }),
     ...mapGetters('PortForwarding', ['isWelcomePage'])
   },
   mounted() {
@@ -56,7 +67,10 @@ export default {
   methods: {
     ...mapActions('PortForwarding', ['setDBArrTunneling']),
     onClickNewButton () {
-      this.$refs.SessionDrawer.open()
+      this.$refs['SessionDrawer'].open()
+    },
+    onClickDeleteButton () {
+      this.$refs['ModalDeleteCard'].open()
     }
   }
 }

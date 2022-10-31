@@ -19,18 +19,18 @@
                 <v-icon large>{{ getTunnelingBodyTitleIcon(item) }}</v-icon>
                 <h4>{{ item.host }}</h4>
                 <v-spacer />
-                <div
-                  v-show="hover"
-                  style="opacity: 0.6;"
-                >
+                <div v-show="hover" >
                   <v-btn icon small>
                     <v-icon>{{ Defs.ICON_CONNECTION }}</v-icon>
                   </v-btn>
                   <v-btn icon small>
                     <v-icon>{{ Defs.ICON_CARD_TEXT }}</v-icon>
                   </v-btn>
-                  <v-btn icon small>
-                    <v-icon>{{ Defs.ICON_CARD_REMOVE }}</v-icon>
+                  <v-btn
+                      icon
+                      small
+                      @click="onClickDelete(item)"
+                  ><v-icon>{{ Defs.ICON_CARD_REMOVE }}</v-icon>
                   </v-btn>
                 </div>
               </template>
@@ -47,7 +47,7 @@
 </template>
 
 <script>
-import { mapGetters, mapState } from 'vuex'
+import { mapState, mapGetters, mapActions} from 'vuex'
 import { Card } from '@/components/Layout'
 
 export default {
@@ -75,6 +75,17 @@ export default {
       },
       immediate: true,
       deep: true
+    }
+  },
+  methods: {
+    ...mapActions('PortForwarding', ['setSelectID']),
+    onClickDelete (session) {
+      const id = session.id
+
+      if (id > 0) {
+        this.setSelectID(id)
+        this.$emit('msgClickDeleteButton')
+      }
     }
   }
 }

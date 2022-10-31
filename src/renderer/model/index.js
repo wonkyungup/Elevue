@@ -9,7 +9,7 @@ export default class DB {
         this.db = new sqlite.Database(dbFullPath)
     }
 
-    handleDBErrorIfExists (action, err) {
+    handleDBError (action, err) {
         if (err && err.message) {
             console.log(`[DB_ERR] ${action}: ${err.message}`)
         }
@@ -38,28 +38,31 @@ export default class DB {
                             columns += `${col.name} ${col.type}${col.unsigned ? ' UNSIGNED' : ''}${col.unique ? ' UNIQUE' : ''}${col.notNull ? ' NOT NULL' : ''}${col.primary ? ' PRIMARY KEY' : ''}${col.autoIncrement ? ' AUTOINCREMENT' : ''}${col.default ? ` DEFAULT ${col.default}` : ''}`
                         }
 
-                        db.each(`CREATE TABLE IF NOT EXISTS ${item.table} (${columns})`, (err) => {
+                        db.each(`CREATE TABLE IF NOT EXISTS ${item.table}
+                                     (
+                                         ${columns}
+                                     )`, (err) => {
                             if (err) {
-                                this.handleDBErrorIfExists('dbCreateTable', err)
+                                this.handleDBError('dbCreateTable', err)
+                                resolve()
                             }
                         })
                     }
                 }
 
-                resolve()
+                resolve(db)
             })
         })
     }
 
     getPortForwardingTableItems () {
         return new Promise(async resolve => {
-            await this.openDatabase()
-            const db = this.db
+            const db = await this.openDatabase()
 
             db.serialize(() => {
                 db.all(`SELECT * FROM PORT_FORWARDING`, (err, row) => {
                     if (err) {
-                        this.handleDBErrorIfExists('getPortForwardingTableItems', err)
+                        this.handleDBError('getPortForwardingTableItems', err)
                         resolve()
                     }
 
@@ -71,8 +74,7 @@ export default class DB {
 
     insertPortForwardingItem (item) {
         return new Promise(async resolve => {
-            await this.openDatabase()
-            const db = this.db
+            const db = await this.openDatabase()
             const {
                 host, port, username, password,
                 direction,
@@ -85,18 +87,35 @@ export default class DB {
                     host, port, username, password, direction, source_host, source_port, destination_host, destination_port
                 ], (err) => {
                     if (err) {
-                        this.handleDBErrorIfExists('insertPortForwardingItem', err)
+                        this.handleDBError('insertPortForwardingItem', err)
                         resolve()
                     }
 
                     db.each('SELECT * FROM PORT_FORWARDING ORDER BY ID DESC LIMIT 1', (err, rows) => {
                         if (err) {
-                            this.handleDBErrorIfExists('getLastCreated', err)
+                            this.handleDBError('getLastCreated', err)
                             resolve()
                         }
 
                         resolve(rows.ID)
                     })
+                })
+            })
+        })
+    }
+
+    deletePortForwardingItem (id) {
+        return new Promise(async resolve => {
+            const db = await this.openDatabase()
+
+            db.serialize(() => {
+                db.run(`DELETE FROM PORT_FORWARDING WHERE ID = ${id}`, (err) => {
+                    if (err) {
+                        this.handleDBError('deletePortForwardingItem', err)
+                        resolve()
+                    }
+
+                    resolve(true)
                 })
             })
         })
