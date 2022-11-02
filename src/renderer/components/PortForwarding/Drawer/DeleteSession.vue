@@ -114,7 +114,7 @@
               </v-col>
               <v-col cols="12">
                 <v-text-field
-                    v-model="session.password"
+                    v-model="decodePasswd"
                     disabled
                     outlined
                     dense
@@ -183,6 +183,7 @@
 import { mapState, mapActions } from 'vuex'
 import { Card } from '@/components/Layout'
 import DB from '@/model'
+import Security from '@/assets/js/security'
 
 export default {
   name: "DeleteSession",
@@ -194,7 +195,8 @@ export default {
       drawer: false,
       session: {},
       str: 'delete session',
-      input: ''
+      input: '',
+      decodePasswd: ''
     }
   },
   computed: {
@@ -216,6 +218,9 @@ export default {
     'state.selectID': {
       handler () {
         this.session = this.state.arrTunneling.filter(session => session.id === this.state.selectID)[0]
+
+        // Error: [vuex] Do not mutate vuex store state outside mutation handlers.?
+        this.decodePasswd = Security.decodeData(this.session.password)
       },
       immediate: false,
       deep: false

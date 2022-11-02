@@ -25,11 +25,7 @@ const state = {
 
 const getters = {
     isWelcomePage: state => () => {
-      if (state.arrTunneling.length > 0) {
-        return false
-      }
-
-      return true
+      return state.arrTunneling.length <= 0
     },
     getDirectionTitle: state => () => {
       return state.session.direction.replace(/\b[a-z]/, value => value.toUpperCase())
@@ -58,7 +54,7 @@ const getters = {
     getTunnelingBodyTitleIcon: () => (session) => {
       const direction = session.direction
 
-      if (direction !== null & direction.length > 0) {
+      if (direction !== null && direction.length > 0) {
           switch (direction) {
               case Defs.STR_LOCAL:
                   return Defs.ICON_ALPHA_L_BOX
@@ -104,7 +100,7 @@ const getters = {
     getTunnelingBodyText: () => (session) => {
         const direction = session.direction
 
-        if (direction !== null & direction.length > 0) {
+        if (direction !== null && direction.length > 0) {
             switch (direction) {
                 case Defs.STR_LOCAL:
                     return `From ${session.host}:${session.source_port} to ${session.destination_host}:${session.destination_port}`
@@ -157,7 +153,7 @@ const mutations ={
           session.host = payload.hostname
           session.port = payload.port
           session.username = payload.username
-          session.password = Security.encryption(payload.password)
+          session.password = Security.encodeData(payload.password)
           break
         case Defs.DRAWER_DESTINATION_PAGE:
           if (session.direction === Defs.STR_LOCAL || session.direction === Defs.STR_SOCKSV5) {
