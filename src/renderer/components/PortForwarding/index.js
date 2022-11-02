@@ -1,11 +1,13 @@
 import Title from './Title'
 import WelcomeBody from './Content/WelcomeBody'
 import SessionBody from './Content/TunnelingBody'
-import SessionDrawer from './Drawer/NewSessionDrawer'
+import NewSession from './Drawer/NewSession'
+import DeleteSession from './Drawer/DeleteSession'
 
 export {
     Title,
     WelcomeBody,
     SessionBody,
-    SessionDrawer
+    NewSession,
+    DeleteSession
 }

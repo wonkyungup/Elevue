@@ -24,11 +24,11 @@ import {
   sourcePage,
   serverPage,
   destinationPage
-} from './Template'
+} from './template'
 import DB from '@/model'
 
 export default {
-  name: "SessionDrawer",
+  name: "NewSession",
   components: {
     titlePage,
     directionPage,
