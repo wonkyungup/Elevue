@@ -6,6 +6,8 @@ const Defs = Constants.state
 const state = {
     arrTunneling: [],
     curDrawer: Defs.DRAWER_DIRECTION_PAGE || 0,
+    curTableStyle: Defs.STR_TABLE_STYLE_AUTO,
+    arrTableStyle: [Defs.STR_TABLE_STYLE_AUTO, Defs.STR_TABLE_STYLE_COL12, Defs.STR_TABLE_STYLE_COL6, Defs.STR_TABLE_STYLE_COL4, Defs.STR_TABLE_STYLE_COL2],
     selectID: 0,
     session: {
         id: null,
@@ -19,8 +21,7 @@ const state = {
         destination_host: '',
         destination_port: null
     },
-    curTableStyle: Defs.STR_TABLE_STYLE_AUTO,
-    arrTableStyle: [Defs.STR_TABLE_STYLE_AUTO, Defs.STR_TABLE_STYLE_COL12, Defs.STR_TABLE_STYLE_COL6, Defs.STR_TABLE_STYLE_COL4, Defs.STR_TABLE_STYLE_COL2]
+    curSession: {}
 }
 
 const getters = {
@@ -203,6 +204,8 @@ const mutations ={
     },
     SET_SELECT_ID (state, id) {
         state.selectID = id
+        state.curSession = state.arrTunneling.filter(session => id === session.id)[0]
+        state.curSession['password'] = Security.decodeData(state.curSession['password'])
     },
     DELETED_ARR_TUNNELING (state) {
         state.arrTunneling = state.arrTunneling.filter(value => value.id !== state.selectID)

@@ -14,12 +14,14 @@
       <WelcomeBody v-if="isWelcomePage()" />
       <SessionBody
           v-else
+          v-on:msgClickEditButton="onClickEditButton"
           v-on:msgClickDeleteButton="onClickDeleteButton"
       />
     </template>
 
     <template v-slot:actions>
       <NewSession ref="NewSession" />
+      <EditSession ref="EditSession" />
       <DeleteSession ref="DeleteSession" />
     </template>
   </Card>
@@ -33,6 +35,7 @@ import {
   WelcomeBody,
   SessionBody,
   NewSession,
+  EditSession,
   DeleteSession
 } from '@/components/PortForwarding'
 import DB from '../model'
@@ -45,6 +48,7 @@ export default {
     WelcomeBody,
     SessionBody,
     NewSession,
+    EditSession,
     DeleteSession
   },
   computed: {
@@ -63,6 +67,9 @@ export default {
     ...mapActions('PortForwarding', ['setDBArrTunneling']),
     onClickNewButton () {
       this.$refs['NewSession'].open()
+    },
+    onClickEditButton () {
+      this.$refs['EditSession'].open()
     },
     onClickDeleteButton () {
       this.$refs['DeleteSession'].open()

@@ -11,7 +11,7 @@
       <v-list-item class="pa-0">
         <v-list-item-content class="pa-0">
           <v-list-item-title class="text-h6 font-weight-bold">
-            Delete Port Forwarding Session
+            Edit Port Forwarding Session
           </v-list-item-title>
         </v-list-item-content>
 
@@ -34,32 +34,32 @@
           <v-container>
             <v-row align="center" dense>
               <v-col cols="2" align="center">
-                <v-icon x-large v-show="isValidToLocal || isValidToSocksv5" disabled>{{ Defs.ICON_ACCOUNT }}</v-icon>
-                <v-icon x-large v-show="isValidToRemote" disabled>{{ Defs.ICON_SERVER }}</v-icon>
+                <v-icon x-large v-show="isValidToLocal || isValidToSocksv5">{{ Defs.ICON_ACCOUNT }}</v-icon>
+                <v-icon x-large v-show="isValidToRemote">{{ Defs.ICON_SERVER }}</v-icon>
               </v-col>
               <v-col cols="2" align="center">
                 <v-progress-linear
                     color="primary"
-                    value="0"
+                    indeterminate
                     rounded
                     height="6"
                 ></v-progress-linear>
               </v-col>
               <v-col cols="2" align="center">
-                <v-icon x-large disabled>{{ Defs.ICON_SERVER_SECURITY }}</v-icon>
+                <v-icon x-large>{{ Defs.ICON_SERVER_SECURITY }}</v-icon>
               </v-col>
               <v-col cols="2" align="center">
                 <v-progress-linear
                     color="primary"
-                    value="0"
+                    indeterminate
                     rounded
                     height="6"
                 ></v-progress-linear>
               </v-col>
               <v-col cols="2" align="center">
-                <v-icon x-large v-show="isValidToLocal" disabled>{{ Defs.ICON_SERVER }}</v-icon>
-                <v-icon x-large v-show="isValidToRemote" disabled>{{ Defs.ICON_ACCOUNT }}</v-icon>
-                <v-icon x-large v-show="isValidToSocksv5" disabled>{{ Defs.ICON_CLOUD }}</v-icon>
+                <v-icon x-large v-show="isValidToLocal">{{ Defs.ICON_SERVER }}</v-icon>
+                <v-icon x-large v-show="isValidToRemote">{{ Defs.ICON_ACCOUNT }}</v-icon>
+                <v-icon x-large v-show="isValidToSocksv5">{{ Defs.ICON_CLOUD }}</v-icon>
               </v-col>
             </v-row>
           </v-container>
@@ -70,16 +70,14 @@
             <v-row align="center" dense>
               <v-col cols="8">
                 <v-text-field
-                    v-model="isValidToRemote ? state.curSession['destination_host'] : state.curSession['source_host']"
-                    disabled
+                    v-model="isValidToRemote ? session['destination_host'] : session['source_host']"
                     outlined
                     dense
                 ></v-text-field>
               </v-col>
               <v-col cols="4">
                 <v-text-field
-                    v-model="isValidToRemote ? state.curSession['destination_port'] : state.curSession['source_port']"
-                    disabled
+                    v-model="isValidToRemote ? session['destination_port'] : session['source_port']"
                     outlined
                     dense
                     type="number"
@@ -90,32 +88,28 @@
             <v-row align="center" dense>
               <v-col cols="8">
                 <v-text-field
-                    v-model="state.curSession['host']"
+                    v-model="session['host']"
                     outlined
                     dense
-                    disabled
                 ></v-text-field>
               </v-col>
               <v-col cols="4">
                 <v-text-field
-                    v-model="state.curSession['port']"
+                    v-model="session['port']"
                     outlined
                     dense
-                    disabled
                 ></v-text-field>
               </v-col>
               <v-col cols="12">
                 <v-text-field
-                    v-model="state.curSession['username']"
+                    v-model="session['username']"
                     outlined
                     dense
-                    disabled
                 ></v-text-field>
               </v-col>
               <v-col cols="12">
                 <v-text-field
-                    v-model="state.curSession['password']"
-                    disabled
+                    v-model="session['password']"
                     outlined
                     dense
                     type="password"
@@ -126,16 +120,14 @@
             <v-row align="center" dense>
               <v-col cols="8">
                 <v-text-field
-                    v-model="isValidToRemote ? state.curSession['source_host'] : state.curSession['destination_host']"
-                    disabled
+                    v-model="isValidToRemote ? session['source_host'] : session['destination_host']"
                     outlined
                     dense
                 ></v-text-field>
               </v-col>
               <v-col cols="4">
                 <v-text-field
-                    v-model="isValidToRemote ? state.curSession['source_port'] : state.curSession['destination_port']"
-                    disabled
+                    v-model="isValidToRemote ? session['source_port'] : session['destination_port']"
                     outlined
                     dense
                     type="number"
@@ -156,17 +148,15 @@
                       v-model="input"
                       dense
                       outlined
-                      placeholder="delete session"
-                      color="error"
-                      :error="isDeleteInputError"
+                      placeholder="edit session"
                   />
                 </v-col>
                 <v-col cols="2">
                   <v-btn
                       icon
-                      color='red'
-                      :disabled="isValidToDelete"
-                      @click="onDeleteSession"
+                      color='primary'
+                      :disabled="isValidToEdit"
+                      @click="onClickEditButton"
                   >
                     <v-icon>{{ Defs.ICON_ARROW_RIGHT_CIRCLE }}</v-icon>
                   </v-btn>
@@ -181,45 +171,59 @@
 </template>
 
 <script>
-import { mapState, mapActions } from 'vuex'
+import { mapState, mapActions, mapGetters } from 'vuex'
 import { Card } from '@/components/Layout'
-import DB from '@/model'
 
 export default {
-  name: "DeleteSession",
+  name: "EditSession",
   components: {
     Card
   },
   data: () => {
     return {
       drawer: false,
-      str: 'delete session',
+      str: 'edit session',
       input: '',
-      isDeleteInputError: false
+      session: {}
     }
   },
   computed: {
     ...mapState({ Defs: 'Constants', state: 'PortForwarding' }),
     isValidToLocal () {
-      return this.state.curSession['direction'] === this.Defs.STR_LOCAL
+      return this.session['direction'] === this.Defs.STR_LOCAL
     },
     isValidToRemote () {
-      return this.state.curSession['direction'] === this.Defs.STR_REMOTE
+      return this.session['direction'] === this.Defs.STR_REMOTE
     },
     isValidToSocksv5 () {
-      return this.state.curSession['direction'] === this.Defs.STR_SOCKSV5
+      return this.session['direction'] === this.Defs.STR_SOCKSV5
     },
-    isValidToDelete () {
+    isValidToEdit () {
       return this.input !== this.str
     }
   },
   watch: {
-    input: {
+    drawer: {
       handler () {
-        this.isDeleteInputError = false
-      },
-      immediate: false,
-      deep: false
+        this.clearValue()
+        const session = this.session
+        const curSession = this.state.curSession
+
+        session['id'] = curSession['id']
+        session['direction'] = curSession['direction']
+        session['source_host'] = curSession['source_host']
+        session['source_port'] = curSession['source_port']
+        session['host'] = curSession['host']
+        session['port'] = curSession['port']
+        session['username'] = curSession['username']
+        session['password'] = curSession['password']
+        session['destination_host'] = curSession['destination_host']
+        session['destination_port'] = curSession['destination_port']
+        session['authentication_method'] = curSession['authentication_method']
+
+        console.log(this.session)
+        console.log(curSession)
+      }
     }
   },
   mounted () {
@@ -240,8 +244,8 @@ export default {
       }
     },
     clearValue () {
-      this.isDeleteInputError = false
       this.input = ''
+      this.session = {}
     },
     close () {
       this.drawer = false
@@ -250,20 +254,8 @@ export default {
       this.clearValue()
       this.drawer = true
     },
-    async onDeleteSession () {
-      const db = new DB()
-      const id = this.state.selectID
-
-      try {
-        const deleted = db.deletePortForwardingItem(id)
-        if (deleted) {
-          this.deletedArrTunneling()
-          this.close()
-        }
-      } catch (e) {
-        console.log('session delete error!')
-        this.isDeleteInputError = true
-      }
+    onClickEditButton () {
+      console.log(this.session)
     }
   }
 }

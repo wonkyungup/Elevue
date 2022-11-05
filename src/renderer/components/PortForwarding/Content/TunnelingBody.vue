@@ -23,7 +23,11 @@
                   <v-btn icon small>
                     <v-icon>{{ Defs.ICON_CONNECTION }}</v-icon>
                   </v-btn>
-                  <v-btn icon small>
+                  <v-btn
+                      icon
+                      small
+                      @click="onClickEdit(item)"
+                  >
                     <v-icon>{{ Defs.ICON_CARD_TEXT }}</v-icon>
                   </v-btn>
                   <v-btn
@@ -79,6 +83,14 @@ export default {
   },
   methods: {
     ...mapActions('PortForwarding', ['setSelectID']),
+    onClickEdit (session) {
+      const id = session.id
+
+      if (id > 0) {
+        this.setSelectID(id)
+        this.$emit('msgClickEditButton')
+      }
+    },
     onClickDelete (session) {
       const id = session.id
 
