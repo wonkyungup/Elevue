@@ -179,24 +179,22 @@ const mutations ={
     MOVE_NEXT_BUTTON (state) {
       state.curDrawer++
     },
-    SET_DB_SESSION_ID (state, id) {
+    SET_DB_SESSION_ID (state, row) {
         const session = state.session
         const arrTunneling = state.arrTunneling
 
-        if (id > 0) {
-            session.id = id
+        if (row.id > 0) {
+            session.id = row.id
+            session.password = Security.decodeData(row.password)
             console.log(session)
             arrTunneling.push(session)
         }
     },
-    SET_DB_ARR_TUNNELING (state, list) {
-        const arrLowerCaseKey = list.map(value => Object.keys(value).reduce((acc, cur) => {
-            acc[cur.toLowerCase()] = value[cur]
-            return acc
-        }, {}))
+    SET_DB_ARR_TUNNELING (state, rows) {
+        rows.forEach(session => session['password'] = Security.decodeData(session['password']))
 
-        if (arrLowerCaseKey.length > 0) {
-            state.arrTunneling = arrLowerCaseKey
+        if (rows.length > 0) {
+            state.arrTunneling = rows
         }
     },
     SET_CUR_TABLE_STYLE (state, value) {
@@ -204,8 +202,7 @@ const mutations ={
     },
     SET_SELECT_ID (state, id) {
         state.selectID = id
-        state.curSession = state.arrTunneling.filter(session => id === session.id)[0]
-        state.curSession['password'] = Security.decodeData(state.curSession['password'])
+        state.curSession = state.arrTunneling.filter(session => session.id === id)[0]
     },
     DELETED_ARR_TUNNELING (state) {
         state.arrTunneling = state.arrTunneling.filter(value => value.id !== state.selectID)
@@ -225,8 +222,8 @@ const actions = {
     moveNextButton ({ commit }) {
       commit('MOVE_NEXT_BUTTON')
     },
-    setDBSessionID ({ commit }, id) {
-      commit('SET_DB_SESSION_ID', id)
+    setDBSessionID ({ commit }, data) {
+      commit('SET_DB_SESSION_ID', data)
     },
     setDBArrTunneling ({ commit }, list) {
       commit('SET_DB_ARR_TUNNELING', list)

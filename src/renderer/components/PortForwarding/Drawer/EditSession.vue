@@ -171,7 +171,7 @@
 </template>
 
 <script>
-import { mapState, mapActions, mapGetters } from 'vuex'
+import { mapState, mapActions } from 'vuex'
 import { Card } from '@/components/Layout'
 
 export default {
@@ -220,9 +220,8 @@ export default {
         session['destination_host'] = curSession['destination_host']
         session['destination_port'] = curSession['destination_port']
         session['authentication_method'] = curSession['authentication_method']
-
-        console.log(this.session)
-        console.log(curSession)
+        session['passphrase'] = curSession['passphrase']
+        session['private_key_id'] = curSession['private_key_id']
       }
     }
   },

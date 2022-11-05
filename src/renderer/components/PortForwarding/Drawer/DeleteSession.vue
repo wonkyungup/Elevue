@@ -194,8 +194,8 @@ export default {
     return {
       drawer: false,
       str: 'delete session',
-      input: '',
-      isDeleteInputError: false
+      isDeleteInputError: false,
+      input: ''
     }
   },
   computed: {

@@ -64,9 +64,9 @@ export default {
           const db = new DB()
           const session = this.state.session
 
-          db.insertPortForwardingItem(session).then(id => {
-            if (id > 0) {
-              this.setDBSessionID(id)
+          db.insertPortForwardingItem(session).then(row => {
+            if (row.id > 0) {
+              this.setDBSessionID(row)
               this.close()
             }
           })

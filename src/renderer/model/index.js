@@ -60,13 +60,18 @@ export default class DB {
             const db = await this.openDatabase()
 
             db.serialize(() => {
-                db.all(`SELECT * FROM PORT_FORWARDING`, (err, row) => {
+                db.all(`SELECT * FROM PORT_FORWARDING`, (err, rows) => {
                     if (err) {
                         this.handleDBError('getPortForwardingTableItems', err)
                         resolve()
                     }
 
-                    resolve(row)
+                    resolve(
+                        rows.map(value => Object.keys(value).reduce((acc, cur) => {
+                            acc[cur.toLowerCase()] = value[cur]
+                            return acc
+                        }, {}))
+                    )
                 })
             })
         })
@@ -91,14 +96,36 @@ export default class DB {
                         resolve()
                     }
 
-                    db.each('SELECT * FROM PORT_FORWARDING ORDER BY ID DESC LIMIT 1', (err, rows) => {
+                    db.each('SELECT * FROM PORT_FORWARDING ORDER BY ID DESC LIMIT 1', (err, row) => {
                         if (err) {
                             this.handleDBError('getLastCreated', err)
                             resolve()
                         }
 
-                        resolve(rows.ID)
+                        resolve(
+                            Object.keys(row).reduce((acc, cur) => {
+                                acc[cur.toLowerCase()] = row[cur]
+                                return acc
+                            }, {})
+                        )
                     })
+                })
+            })
+        })
+    }
+
+    getPortForwardingItem (id) {
+        return new Promise(async resolve => {
+            const db = await this.openDatabase()
+
+            db.serialize(() => {
+                db.run(`SELECT * FROM PORT_FORWARDING WHERE ID = ${id}`, (err, rows) => {
+                    if (err) {
+                        this.handleDBError('deletePortForwardingItem', err)
+                        resolve()
+                    }
+
+                    resolve(rows)
                 })
             })
         })
