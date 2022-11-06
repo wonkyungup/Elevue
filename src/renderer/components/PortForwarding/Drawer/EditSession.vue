@@ -34,8 +34,8 @@
           <v-container>
             <v-row align="center" dense>
               <v-col cols="2" align="center">
-                <v-icon x-large v-show="isValidToLocal || isValidToSocksv5">{{ Defs.ICON_ACCOUNT }}</v-icon>
-                <v-icon x-large v-show="isValidToRemote">{{ Defs.ICON_SERVER }}</v-icon>
+                <v-icon x-large v-show="isLocal() || isSocksv5()">{{ Defs.ICON_ACCOUNT }}</v-icon>
+                <v-icon x-large v-show="isRemote()">{{ Defs.ICON_SERVER }}</v-icon>
               </v-col>
               <v-col cols="2" align="center">
                 <v-progress-linear
@@ -57,9 +57,9 @@
                 ></v-progress-linear>
               </v-col>
               <v-col cols="2" align="center">
-                <v-icon x-large v-show="isValidToLocal">{{ Defs.ICON_SERVER }}</v-icon>
-                <v-icon x-large v-show="isValidToRemote">{{ Defs.ICON_ACCOUNT }}</v-icon>
-                <v-icon x-large v-show="isValidToSocksv5">{{ Defs.ICON_CLOUD }}</v-icon>
+                <v-icon x-large v-show="isLocal()">{{ Defs.ICON_SERVER }}</v-icon>
+                <v-icon x-large v-show="isRemote()">{{ Defs.ICON_ACCOUNT }}</v-icon>
+                <v-icon x-large v-show="isSocksv5()">{{ Defs.ICON_CLOUD }}</v-icon>
               </v-col>
             </v-row>
           </v-container>
@@ -70,14 +70,14 @@
             <v-row align="center" dense>
               <v-col cols="8">
                 <v-text-field
-                    v-model="isValidToRemote ? session['destination_host'] : session['source_host']"
+                    v-model="isRemote() ? session['destination_host'] : session['source_host']"
                     outlined
                     dense
                 ></v-text-field>
               </v-col>
               <v-col cols="4">
                 <v-text-field
-                    v-model="isValidToRemote ? session['destination_port'] : session['source_port']"
+                    v-model="isRemote() ? session['destination_port'] : session['source_port']"
                     outlined
                     dense
                     type="number"
@@ -120,14 +120,14 @@
             <v-row align="center" dense>
               <v-col cols="8">
                 <v-text-field
-                    v-model="isValidToRemote ? session['source_host'] : session['destination_host']"
+                    v-model="isRemote() ? session['source_host'] : session['destination_host']"
                     outlined
                     dense
                 ></v-text-field>
               </v-col>
               <v-col cols="4">
                 <v-text-field
-                    v-model="isValidToRemote ? session['source_port'] : session['destination_port']"
+                    v-model="isRemote() ? session['source_port'] : session['destination_port']"
                     outlined
                     dense
                     type="number"
@@ -171,7 +171,7 @@
 </template>
 
 <script>
-import { mapState, mapActions } from 'vuex'
+import { mapState, mapActions, mapGetters } from 'vuex'
 import { Card } from '@/components/Layout'
 
 export default {
@@ -189,15 +189,7 @@ export default {
   },
   computed: {
     ...mapState({ Defs: 'Constants', state: 'PortForwarding' }),
-    isValidToLocal () {
-      return this.session['direction'] === this.Defs.STR_LOCAL
-    },
-    isValidToRemote () {
-      return this.session['direction'] === this.Defs.STR_REMOTE
-    },
-    isValidToSocksv5 () {
-      return this.session['direction'] === this.Defs.STR_SOCKSV5
-    },
+    ...mapGetters('PortForwarding', ['isLocal', 'isRemote', 'isSocksv5']),
     isValidToEdit () {
       return this.input !== this.str
     }
@@ -207,7 +199,7 @@ export default {
       handler () {
         this.clearValue()
         const session = this.session
-        const curSession = this.state.curSession
+        const curSession = this.state.session
 
         session['id'] = curSession['id']
         session['direction'] = curSession['direction']

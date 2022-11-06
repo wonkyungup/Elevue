@@ -5,7 +5,6 @@
       left
       absolute
       temporary
-      @keydown.esc.prevent="close"
   >
     <v-app-bar height="64" fixed hide-on-scroll class="pa-0">
       <v-list-item class="pa-0">
@@ -34,8 +33,8 @@
           <v-container>
             <v-row align="center" dense>
               <v-col cols="2" align="center">
-                <v-icon x-large v-show="isValidToLocal || isValidToSocksv5" disabled>{{ Defs.ICON_ACCOUNT }}</v-icon>
-                <v-icon x-large v-show="isValidToRemote" disabled>{{ Defs.ICON_SERVER }}</v-icon>
+                <v-icon x-large v-show="isLocal() || isSocksv5()" disabled>{{ Defs.ICON_ACCOUNT }}</v-icon>
+                <v-icon x-large v-show="isRemote()" disabled>{{ Defs.ICON_SERVER }}</v-icon>
               </v-col>
               <v-col cols="2" align="center">
                 <v-progress-linear
@@ -57,9 +56,9 @@
                 ></v-progress-linear>
               </v-col>
               <v-col cols="2" align="center">
-                <v-icon x-large v-show="isValidToLocal" disabled>{{ Defs.ICON_SERVER }}</v-icon>
-                <v-icon x-large v-show="isValidToRemote" disabled>{{ Defs.ICON_ACCOUNT }}</v-icon>
-                <v-icon x-large v-show="isValidToSocksv5" disabled>{{ Defs.ICON_CLOUD }}</v-icon>
+                <v-icon x-large v-show="isLocal()" disabled>{{ Defs.ICON_SERVER }}</v-icon>
+                <v-icon x-large v-show="isRemote()" disabled>{{ Defs.ICON_ACCOUNT }}</v-icon>
+                <v-icon x-large v-show="isSocksv5()" disabled>{{ Defs.ICON_CLOUD }}</v-icon>
               </v-col>
             </v-row>
           </v-container>
@@ -70,7 +69,7 @@
             <v-row align="center" dense>
               <v-col cols="8">
                 <v-text-field
-                    v-model="isValidToRemote ? state.curSession['destination_host'] : state.curSession['source_host']"
+                    v-model="isRemote() ? state.session['destination_host'] : state.session['source_host']"
                     disabled
                     outlined
                     dense
@@ -78,7 +77,7 @@
               </v-col>
               <v-col cols="4">
                 <v-text-field
-                    v-model="isValidToRemote ? state.curSession['destination_port'] : state.curSession['source_port']"
+                    v-model="isRemote() ? state.session['destination_port'] : state.session['source_port']"
                     disabled
                     outlined
                     dense
@@ -90,7 +89,7 @@
             <v-row align="center" dense>
               <v-col cols="8">
                 <v-text-field
-                    v-model="state.curSession['host']"
+                    v-model="state.session['host']"
                     outlined
                     dense
                     disabled
@@ -98,7 +97,7 @@
               </v-col>
               <v-col cols="4">
                 <v-text-field
-                    v-model="state.curSession['port']"
+                    v-model="state.session['port']"
                     outlined
                     dense
                     disabled
@@ -106,7 +105,7 @@
               </v-col>
               <v-col cols="12">
                 <v-text-field
-                    v-model="state.curSession['username']"
+                    v-model="state.session['username']"
                     outlined
                     dense
                     disabled
@@ -114,7 +113,7 @@
               </v-col>
               <v-col cols="12">
                 <v-text-field
-                    v-model="state.curSession['password']"
+                    v-model="state.session['password']"
                     disabled
                     outlined
                     dense
@@ -126,7 +125,7 @@
             <v-row align="center" dense>
               <v-col cols="8">
                 <v-text-field
-                    v-model="isValidToRemote ? state.curSession['source_host'] : state.curSession['destination_host']"
+                    v-model="isRemote() ? state.session['source_host'] : state.session['destination_host']"
                     disabled
                     outlined
                     dense
@@ -134,7 +133,7 @@
               </v-col>
               <v-col cols="4">
                 <v-text-field
-                    v-model="isValidToRemote ? state.curSession['source_port'] : state.curSession['destination_port']"
+                    v-model="isRemote() ? state.session['source_port'] : state.session['destination_port']"
                     disabled
                     outlined
                     dense
@@ -181,7 +180,7 @@
 </template>
 
 <script>
-import { mapState, mapActions } from 'vuex'
+import { mapState, mapActions, mapGetters } from 'vuex'
 import { Card } from '@/components/Layout'
 import DB from '@/model'
 
@@ -200,15 +199,7 @@ export default {
   },
   computed: {
     ...mapState({ Defs: 'Constants', state: 'PortForwarding' }),
-    isValidToLocal () {
-      return this.state.curSession['direction'] === this.Defs.STR_LOCAL
-    },
-    isValidToRemote () {
-      return this.state.curSession['direction'] === this.Defs.STR_REMOTE
-    },
-    isValidToSocksv5 () {
-      return this.state.curSession['direction'] === this.Defs.STR_SOCKSV5
-    },
+    ...mapGetters('PortForwarding', ['isLocal', 'isRemote', 'isSocksv5']),
     isValidToDelete () {
       return this.input !== this.str
     }
@@ -255,7 +246,7 @@ export default {
       const id = this.state.selectID
 
       try {
-        const deleted = db.deletePortForwardingItem(id)
+        const deleted = await db.deletePortForwardingItem(id)
         if (deleted) {
           this.deletedArrTunneling()
           this.close()

@@ -20,8 +20,7 @@ const state = {
         source_port: null,
         destination_host: '',
         destination_port: null
-    },
-    curSession: {}
+    }
 }
 
 const getters = {
@@ -202,7 +201,7 @@ const mutations ={
     },
     SET_SELECT_ID (state, id) {
         state.selectID = id
-        state.curSession = state.arrTunneling.filter(session => session.id === id)[0]
+        state.session = state.arrTunneling.filter(session => session.id === id)[0]
     },
     DELETED_ARR_TUNNELING (state) {
         state.arrTunneling = state.arrTunneling.filter(value => value.id !== state.selectID)

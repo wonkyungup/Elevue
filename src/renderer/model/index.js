@@ -119,7 +119,7 @@ export default class DB {
             const db = await this.openDatabase()
 
             db.serialize(() => {
-                db.run(`SELECT * FROM PORT_FORWARDING WHERE ID = ${id}`, (err, rows) => {
+                db.run('SELECT * FROM PORT_FORWARDING WHERE ID=?', [id], (err, rows) => {
                     if (err) {
                         this.handleDBError('deletePortForwardingItem', err)
                         resolve()
@@ -134,9 +134,8 @@ export default class DB {
     deletePortForwardingItem (id) {
         return new Promise(async resolve => {
             const db = await this.openDatabase()
-
             db.serialize(() => {
-                db.run(`DELETE FROM PORT_FORWARDING WHERE ID = ${id}`, (err) => {
+                db.run('DELETE FROM PORT_FORWARDING WHERE ID=?', [id], (err) => {
                     if (err) {
                         this.handleDBError('deletePortForwardingItem', err)
                         resolve()
