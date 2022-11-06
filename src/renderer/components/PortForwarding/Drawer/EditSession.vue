@@ -173,6 +173,8 @@
 <script>
 import { mapState, mapActions, mapGetters } from 'vuex'
 import { Card } from '@/components/Layout'
+import Security from '@/assets/js/security'
+import DB from '@/model'
 
 export default {
   name: "EditSession",
@@ -198,22 +200,24 @@ export default {
     drawer: {
       handler () {
         this.clearValue()
-        const session = this.session
-        const curSession = this.state.session
+        if (this.drawer) {
+          const session = this.session
+          const curSession = this.state.session
 
-        session['id'] = curSession['id']
-        session['direction'] = curSession['direction']
-        session['source_host'] = curSession['source_host']
-        session['source_port'] = curSession['source_port']
-        session['host'] = curSession['host']
-        session['port'] = curSession['port']
-        session['username'] = curSession['username']
-        session['password'] = curSession['password']
-        session['destination_host'] = curSession['destination_host']
-        session['destination_port'] = curSession['destination_port']
-        session['authentication_method'] = curSession['authentication_method']
-        session['passphrase'] = curSession['passphrase']
-        session['private_key_id'] = curSession['private_key_id']
+          session['id'] = curSession['id']
+          session['direction'] = curSession['direction']
+          session['source_host'] = curSession['source_host']
+          session['source_port'] = curSession['source_port']
+          session['host'] = curSession['host']
+          session['port'] = curSession['port']
+          session['username'] = curSession['username']
+          session['password'] = curSession['password']
+          session['destination_host'] = curSession['destination_host']
+          session['destination_port'] = curSession['destination_port']
+          session['authentication_method'] = curSession['authentication_method']
+          session['passphrase'] = curSession['passphrase']
+          session['private_key_id'] = curSession['private_key_id']
+        }
       }
     }
   },
@@ -242,11 +246,18 @@ export default {
       this.drawer = false
     },
     open () {
-      this.clearValue()
       this.drawer = true
     },
     onClickEditButton () {
-      console.log(this.session)
+      const db = new DB()
+      const session = this.session
+
+      session['password'] = Security.encodeData(session['password'])
+      db.updatePortForwardingItem(session).then(isUpdated => {
+        if (isUpdated) {
+          // session arrTunneling change
+        }
+      })
     }
   }
 }
