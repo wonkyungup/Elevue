@@ -109,23 +109,6 @@ export default class DB {
         })
     }
 
-    getPortForwardingItem (id) {
-        return new Promise(async resolve => {
-            const db = await this.openDatabase()
-
-            db.serialize(() => {
-                db.run('SELECT * FROM PORT_FORWARDING WHERE ID=?', [id], (err, rows) => {
-                    if (err) {
-                        this.handleDBError('getPortForwardingItem', err)
-                        resolve()
-                    }
-
-                    resolve(getObjectToLowerCase(id))
-                })
-            })
-        })
-    }
-
     updatePortForwardingItem (session) {
         return new Promise(async resolve => {
             const db = await this.openDatabase()

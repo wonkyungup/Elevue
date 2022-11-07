@@ -120,6 +120,7 @@
             <v-row align="center" dense>
               <v-col cols="8">
                 <v-text-field
+                    v-show="!isSocksv5()"
                     v-model="isRemote() ? session['source_host'] : session['destination_host']"
                     outlined
                     dense
@@ -127,6 +128,7 @@
               </v-col>
               <v-col cols="4">
                 <v-text-field
+                    v-show="!isSocksv5()"
                     v-model="isRemote() ? session['source_port'] : session['destination_port']"
                     outlined
                     dense
@@ -149,6 +151,7 @@
                       dense
                       outlined
                       placeholder="edit session"
+                      :error="isEditInputError"
                   />
                 </v-col>
                 <v-col cols="2">
@@ -186,7 +189,8 @@ export default {
       drawer: false,
       str: 'edit session',
       input: '',
-      session: {}
+      session: {},
+      isEditInputError: false
     }
   },
   computed: {
@@ -197,6 +201,13 @@ export default {
     }
   },
   watch: {
+    input: {
+      handler () {
+        this.isEditInputError = false
+      },
+      immediate: false,
+      deep: false
+    },
     drawer: {
       handler () {
         this.clearValue()
@@ -228,7 +239,7 @@ export default {
     window.removeEventListener('keydown', this.keyDownHandler)
   },
   methods: {
-    ...mapActions('PortForwarding', ['deletedArrTunneling']),
+    ...mapActions('PortForwarding', ['updateArrTunneling']),
     keyDownHandler (event) {
       switch (event.keyCode) {
         case 27: // ESC
@@ -241,6 +252,7 @@ export default {
     clearValue () {
       this.input = ''
       this.session = {}
+      this.isEditInputError = false
     },
     close () {
       this.drawer = false
@@ -248,16 +260,27 @@ export default {
     open () {
       this.drawer = true
     },
-    onClickEditButton () {
+    async onClickEditButton () {
       const db = new DB()
       const session = this.session
-
       session['password'] = Security.encodeData(session['password'])
-      db.updatePortForwardingItem(session).then(isUpdated => {
+
+      if (this.isSocksv5()) {
+        session['destination_host'] = session['source_host']
+        session['destination_port'] = session['source_port']
+      }
+
+      try {
+        const isUpdated = await db.updatePortForwardingItem(session)
         if (isUpdated) {
-          // session arrTunneling change
+          this.updateArrTunneling(session)
+          this.close()
         }
-      })
+      } catch (err) {
+        console.log('update session error')
+        console.log(err.message)
+        this.isEditInputError = true
+      }
     }
   }
 }

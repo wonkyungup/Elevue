@@ -251,8 +251,9 @@ export default {
           this.deletedArrTunneling()
           this.close()
         }
-      } catch (e) {
-        console.log('session delete error!')
+      } catch (err) {
+        console.log('delete session error!')
+        console.log(err.message)
         this.isDeleteInputError = true
       }
     }
