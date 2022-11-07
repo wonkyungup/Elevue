@@ -110,7 +110,7 @@ export default class DB {
     }
 
     updatePortForwardingItem (session) {
-        return new Promise(async resolve => {
+        return new Promise(async (resolve, reject) => {
             const db = await this.openDatabase()
             db.serialize(() => {
                 db.run('UPDATE PORT_FORWARDING SET HOST=?, PORT=?, USERNAME=?, PASSWORD=?, SOURCE_HOST=?, SOURCE_PORT=?, DESTINATION_HOST=?, DESTINATION_PORT=? WHERE ID=?', [
@@ -118,7 +118,8 @@ export default class DB {
                 ], (err) => {
                     if (err) {
                         this.handleDBError('updatePortForwardingItem', err)
-                        resolve()
+                        reject()
+                        return
                     }
 
                     resolve(true)
@@ -128,13 +129,14 @@ export default class DB {
     }
 
     deletePortForwardingItem (id) {
-        return new Promise(async resolve => {
+        return new Promise(async (resolve, reject) => {
             const db = await this.openDatabase()
             db.serialize(() => {
                 db.run('DELETE FROM PORT_FORWARDING WHERE ID=?', [id], (err) => {
                     if (err) {
                         this.handleDBError('deletePortForwardingItem', err)
-                        resolve()
+                        reject()
+                        return
                     }
 
                     resolve(true)

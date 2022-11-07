@@ -157,7 +157,7 @@
                       outlined
                       placeholder="delete session"
                       color="error"
-                      :error="isDeleteInputError"
+                      :error-messages="isDeleteInputError ? 'Failed to clear session. Please try again in a few minutes' : ''"
                   />
                 </v-col>
                 <v-col cols="2">
@@ -252,8 +252,6 @@ export default {
           this.close()
         }
       } catch (err) {
-        console.log('delete session error!')
-        console.log(err.message)
         this.isDeleteInputError = true
       }
     }

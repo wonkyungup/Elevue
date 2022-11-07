@@ -152,12 +152,13 @@
                       outlined
                       placeholder="edit session"
                       :error="isEditInputError"
+                      :error-messages="isEditInputError ? 'Session update failed. Please try again in a few minutes' : ''"
                   />
                 </v-col>
                 <v-col cols="2">
                   <v-btn
                       icon
-                      color='primary'
+                      :color="!isEditInputError ? 'primary' : 'error'"
                       :disabled="isValidToEdit"
                       @click="onClickEditButton"
                   >
@@ -277,8 +278,6 @@ export default {
           this.close()
         }
       } catch (err) {
-        console.log('update session error')
-        console.log(err.message)
         this.isEditInputError = true
       }
     }
