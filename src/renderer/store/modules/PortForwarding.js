@@ -6,6 +6,8 @@ const Defs = Constants.state
 const state = {
     arrTunneling: [],
     curDrawer: Defs.DRAWER_DIRECTION_PAGE || 0,
+    curTableStyle: Defs.STR_TABLE_STYLE_AUTO,
+    arrTableStyle: [Defs.STR_TABLE_STYLE_AUTO, Defs.STR_TABLE_STYLE_COL12, Defs.STR_TABLE_STYLE_COL6, Defs.STR_TABLE_STYLE_COL4, Defs.STR_TABLE_STYLE_COL2],
     selectID: 0,
     session: {
         id: null,
@@ -18,9 +20,7 @@ const state = {
         source_port: null,
         destination_host: '',
         destination_port: null
-    },
-    curTableStyle: Defs.STR_TABLE_STYLE_AUTO,
-    arrTableStyle: [Defs.STR_TABLE_STYLE_AUTO, Defs.STR_TABLE_STYLE_COL12, Defs.STR_TABLE_STYLE_COL6, Defs.STR_TABLE_STYLE_COL4, Defs.STR_TABLE_STYLE_COL2]
+    }
 }
 
 const getters = {
@@ -178,24 +178,22 @@ const mutations ={
     MOVE_NEXT_BUTTON (state) {
       state.curDrawer++
     },
-    SET_DB_SESSION_ID (state, id) {
+    SET_DB_SESSION (state, row) {
         const session = state.session
         const arrTunneling = state.arrTunneling
 
-        if (id > 0) {
-            session.id = id
-            console.log(session)
-            arrTunneling.push(session)
+        if (session.id <= 0) {
+            session.id = row.id
         }
+        session.password = Security.decodeData(row.password)
+        console.log(session)
+        arrTunneling.push(session)
     },
-    SET_DB_ARR_TUNNELING (state, list) {
-        const arrLowerCaseKey = list.map(value => Object.keys(value).reduce((acc, cur) => {
-            acc[cur.toLowerCase()] = value[cur]
-            return acc
-        }, {}))
+    SET_DB_ARR_TUNNELING (state, rows) {
+        rows.forEach(session => session['password'] = Security.decodeData(session['password']))
 
-        if (arrLowerCaseKey.length > 0) {
-            state.arrTunneling = arrLowerCaseKey
+        if (rows.length > 0) {
+            state.arrTunneling = rows
         }
     },
     SET_CUR_TABLE_STYLE (state, value) {
@@ -203,6 +201,26 @@ const mutations ={
     },
     SET_SELECT_ID (state, id) {
         state.selectID = id
+        state.session = state.arrTunneling.filter(session => session.id === id)[0]
+    },
+    UPDATE_ARR_TUNNELING (state, session) {
+        const arr = state.arrTunneling
+
+        arr.forEach(item => {
+            if (item['id'] === session['id']) {
+                item['source_host'] = session['source_host']
+                item['source_port'] = session['source_port']
+                item['host'] = session['host']
+                item['port'] = session['port']
+                item['username'] = session['username']
+                item['password'] = Security.decodeData(session['password'])
+                item['destination_host'] = session['destination_host']
+                item['destination_port'] = session['destination_port']
+                item['authentication_method'] = session['authentication_method']
+                item['passphrase'] = session['passphrase']
+                item['private_key_id'] = session['private_key_id']
+            }
+        })
     },
     DELETED_ARR_TUNNELING (state) {
         state.arrTunneling = state.arrTunneling.filter(value => value.id !== state.selectID)
@@ -222,8 +240,8 @@ const actions = {
     moveNextButton ({ commit }) {
       commit('MOVE_NEXT_BUTTON')
     },
-    setDBSessionID ({ commit }, id) {
-      commit('SET_DB_SESSION_ID', id)
+    setDBSession ({ commit }, data) {
+      commit('SET_DB_SESSION', data)
     },
     setDBArrTunneling ({ commit }, list) {
       commit('SET_DB_ARR_TUNNELING', list)
@@ -233,6 +251,9 @@ const actions = {
     },
     setSelectID ({ commit }, id) {
       commit('SET_SELECT_ID', id)
+    },
+    updateArrTunneling ({ commit }, session) {
+      commit('UPDATE_ARR_TUNNELING', session)
     },
     deletedArrTunneling ({ commit }) {
       commit('DELETED_ARR_TUNNELING')

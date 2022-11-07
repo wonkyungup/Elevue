@@ -64,9 +64,9 @@ export default {
           const db = new DB()
           const session = this.state.session
 
-          db.insertPortForwardingItem(session).then(id => {
-            if (id > 0) {
-              this.setDBSessionID(id)
+          db.insertPortForwardingItem(session).then(row => {
+            if (row.id > 0) {
+              this.setDBSession(row)
               this.close()
             }
           })
@@ -76,8 +76,23 @@ export default {
       deep: true
     }
   },
+  mounted () {
+    window.addEventListener('keydown', this.keyDownHandler)
+  },
+  destroyed() {
+    window.removeEventListener('keydown', this.keyDownHandler)
+  },
   methods: {
-    ...mapActions('PortForwarding', ['clearSessionValue', 'setDBSessionID']),
+    ...mapActions('PortForwarding', ['clearSessionValue', 'setDBSession']),
+    keyDownHandler (event) {
+      switch (event.keyCode) {
+        case 27: // ESC
+          this.close()
+          break
+        default:
+          break
+      }
+    },
     open () {
       this.clearSessionValue()
       this.drawer = true

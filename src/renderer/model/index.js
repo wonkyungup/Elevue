@@ -4,6 +4,13 @@ import store from '../store'
 const sqlite = require('@journeyapps/sqlcipher').verbose()
 const dbFullPath = store.state.Constants.DB_FULL_PATH
 
+const getObjectToLowerCase = (list) => {
+    return Object.keys(list).reduce((acc, cur) => {
+        acc[cur.toLowerCase()] = list[cur]
+        return acc
+    }, {})
+}
+
 export default class DB {
     constructor () {
         this.db = new sqlite.Database(dbFullPath)
@@ -39,9 +46,9 @@ export default class DB {
                         }
 
                         db.each(`CREATE TABLE IF NOT EXISTS ${item.table}
-                                     (
-                                         ${columns}
-                                     )`, (err) => {
+                                 (
+                                     ${columns}
+                                 )`, (err) => {
                             if (err) {
                                 this.handleDBError('dbCreateTable', err)
                                 resolve()
@@ -60,59 +67,76 @@ export default class DB {
             const db = await this.openDatabase()
 
             db.serialize(() => {
-                db.all(`SELECT * FROM PORT_FORWARDING`, (err, row) => {
+                db.all(`SELECT * FROM PORT_FORWARDING`, (err, rows) => {
                     if (err) {
                         this.handleDBError('getPortForwardingTableItems', err)
                         resolve()
                     }
 
-                    resolve(row)
+                    resolve(
+                        rows.map(value => Object.keys(value).reduce((acc, cur) => {
+                            acc[cur.toLowerCase()] = value[cur]
+                            return acc
+                        }, {}))
+                    )
                 })
             })
         })
     }
 
-    insertPortForwardingItem (item) {
+    insertPortForwardingItem (session) {
         return new Promise(async resolve => {
             const db = await this.openDatabase()
-            const {
-                host, port, username, password,
-                direction,
-                source_host, source_port,
-                destination_host, destination_port
-            } = item
-
             db.serialize(() => {
                 db.run('INSERT INTO PORT_FORWARDING (HOST, PORT, USERNAME, PASSWORD, DIRECTION, SOURCE_HOST, SOURCE_PORT, DESTINATION_HOST, DESTINATION_PORT) VALUES (?, ?, ?, ?, ?, ?, ?, ? ,?)', [
-                    host, port, username, password, direction, source_host, source_port, destination_host, destination_port
+                    session['host'], session['port'], session['username'], session['password'], session['direction'], session['source_host'], session['source_port'], session['destination_host'], session['destination_port']
                 ], (err) => {
                     if (err) {
                         this.handleDBError('insertPortForwardingItem', err)
                         resolve()
                     }
 
-                    db.each('SELECT * FROM PORT_FORWARDING ORDER BY ID DESC LIMIT 1', (err, rows) => {
+                    db.each('SELECT * FROM PORT_FORWARDING ORDER BY ID DESC LIMIT 1', async (err, row) => {
                         if (err) {
                             this.handleDBError('getLastCreated', err)
                             resolve()
                         }
 
-                        resolve(rows.ID)
+                        resolve(getObjectToLowerCase(row))
                     })
                 })
             })
         })
     }
 
-    deletePortForwardingItem (id) {
-        return new Promise(async resolve => {
+    updatePortForwardingItem (session) {
+        return new Promise(async (resolve, reject) => {
             const db = await this.openDatabase()
-
             db.serialize(() => {
-                db.run(`DELETE FROM PORT_FORWARDING WHERE ID = ${id}`, (err) => {
+                db.run('UPDATE PORT_FORWARDING SET HOST=?, PORT=?, USERNAME=?, PASSWORD=?, SOURCE_HOST=?, SOURCE_PORT=?, DESTINATION_HOST=?, DESTINATION_PORT=? WHERE ID=?', [
+                    session['host'], session['port'], session['username'], session['password'], session['source_host'], session['source_port'], session['destination_host'], session['destination_port'], session['id']
+                ], (err) => {
+                    if (err) {
+                        this.handleDBError('updatePortForwardingItem', err)
+                        reject()
+                        return
+                    }
+
+                    resolve(true)
+                })
+            })
+        })
+    }
+
+    deletePortForwardingItem (id) {
+        return new Promise(async (resolve, reject) => {
+            const db = await this.openDatabase()
+            db.serialize(() => {
+                db.run('DELETE FROM PORT_FORWARDING WHERE ID=?', [id], (err) => {
                     if (err) {
                         this.handleDBError('deletePortForwardingItem', err)
-                        resolve()
+                        reject()
+                        return
                     }
 
                     resolve(true)

@@ -5,12 +5,13 @@
       left
       absolute
       temporary
+      @keydown.esc.prevent="close"
   >
     <v-app-bar height="64" fixed hide-on-scroll class="pa-0">
       <v-list-item class="pa-0">
         <v-list-item-content class="pa-0">
           <v-list-item-title class="text-h6 font-weight-bold">
-            Delete Port Forwarding Session
+            Edit Port Forwarding Session
           </v-list-item-title>
         </v-list-item-content>
 
@@ -45,17 +46,17 @@
                       autofocus
                       dense
                       outlined
-                      placeholder="delete session"
-                      color="error"
-                      :error-messages="isDeleteInputError ? 'Failed to clear session. Please try again in a few minutes' : ''"
+                      placeholder="edit session"
+                      :error="isEditInputError"
+                      :error-messages="isEditInputError ? 'Session update failed. Please try again in a few minutes' : ''"
                   />
                 </v-col>
                 <v-col cols="2">
                   <v-btn
                       icon
-                      color='red'
-                      :disabled="isValidToDelete"
-                      @click="onDeleteSession"
+                      :color="!isEditInputError ? 'primary' : 'error'"
+                      :disabled="isValidToEdit"
+                      @click="onClickEditButton"
                   >
                     <v-icon>{{ Defs.ICON_ARROW_RIGHT_CIRCLE }}</v-icon>
                   </v-btn>
@@ -65,32 +66,32 @@
 
             <v-row align="center" dense>
               <v-col cols="2" align="center">
-                <v-icon x-large v-show="isLocal() || isSocksv5()" disabled>{{ Defs.ICON_ACCOUNT }}</v-icon>
-                <v-icon x-large v-show="isRemote()" disabled>{{ Defs.ICON_SERVER }}</v-icon>
+                <v-icon x-large v-show="isLocal() || isSocksv5()" color="green">{{ Defs.ICON_ACCOUNT }}</v-icon>
+                <v-icon x-large v-show="isRemote()" color="green">{{ Defs.ICON_SERVER }}</v-icon>
               </v-col>
               <v-col cols="2" align="center">
                 <v-progress-linear
                     color="primary"
-                    value="0"
+                    indeterminate
                     rounded
                     height="6"
                 ></v-progress-linear>
               </v-col>
               <v-col cols="2" align="center">
-                <v-icon x-large disabled>{{ Defs.ICON_SERVER_SECURITY }}</v-icon>
+                <v-icon x-large color="cyan">{{ Defs.ICON_SERVER_SECURITY }}</v-icon>
               </v-col>
               <v-col cols="2" align="center">
                 <v-progress-linear
                     color="primary"
-                    value="0"
+                    indeterminate
                     rounded
                     height="6"
                 ></v-progress-linear>
               </v-col>
               <v-col cols="2" align="center">
-                <v-icon x-large v-show="isLocal()" disabled>{{ Defs.ICON_SERVER }}</v-icon>
-                <v-icon x-large v-show="isRemote()" disabled>{{ Defs.ICON_ACCOUNT }}</v-icon>
-                <v-icon x-large v-show="isSocksv5()" disabled>{{ Defs.ICON_CLOUD }}</v-icon>
+                <v-icon x-large v-show="isLocal()" color="orange">{{ Defs.ICON_SERVER }}</v-icon>
+                <v-icon x-large v-show="isRemote()" color="orange">{{ Defs.ICON_ACCOUNT }}</v-icon>
+                <v-icon x-large v-show="isSocksv5()">{{ Defs.ICON_CLOUD }}</v-icon>
               </v-col>
             </v-row>
           </v-container>
@@ -101,19 +102,21 @@
             <v-row align="center" dense>
               <v-col cols="8">
                 <v-text-field
-                    v-model="isRemote() ? state.session['destination_host'] : state.session['source_host']"
-                    disabled
+                    v-model="isRemote() ? session['destination_host'] : session['source_host']"
+                    color="green"
                     outlined
                     dense
+                    :placeholder="isRemote() ? 'destination_host' : 'source_host'"
                 ></v-text-field>
               </v-col>
               <v-col cols="4">
                 <v-text-field
-                    v-model="isRemote() ? state.session['destination_port'] : state.session['source_port']"
-                    disabled
+                    v-model="isRemote() ? session['destination_port'] : session['source_port']"
+                    color="green"
                     outlined
                     dense
                     type="number"
+                    :placeholder="isRemote() ? 'destination_port' : 'source_port'"
                 ></v-text-field>
               </v-col>
             </v-row>
@@ -121,35 +124,39 @@
             <v-row align="center" dense>
               <v-col cols="8">
                 <v-text-field
-                    v-model="state.session['host']"
+                    v-model="session['host']"
+                    color="cyan"
                     outlined
                     dense
-                    disabled
+                    placeholder="server host"
                 ></v-text-field>
               </v-col>
               <v-col cols="4">
                 <v-text-field
-                    v-model="state.session['port']"
+                    v-model="session['port']"
+                    color="cyan"
                     outlined
                     dense
-                    disabled
+                    placeholder="server port"
                 ></v-text-field>
               </v-col>
               <v-col cols="12">
                 <v-text-field
-                    v-model="state.session['username']"
+                    v-model="session['username']"
+                    color="cyan"
                     outlined
                     dense
-                    disabled
+                    placeholder="server username"
                 ></v-text-field>
               </v-col>
               <v-col cols="12">
                 <v-text-field
-                    v-model="state.session['password']"
-                    disabled
+                    v-model="session['password']"
+                    color="cyan"
                     outlined
                     dense
                     type="password"
+                    placeholder="server password"
                 ></v-text-field>
               </v-col>
             </v-row>
@@ -157,19 +164,23 @@
             <v-row align="center" dense>
               <v-col cols="8">
                 <v-text-field
-                    v-model="isRemote() ? state.session['source_host'] : state.session['destination_host']"
-                    disabled
+                    v-show="!isSocksv5()"
+                    v-model="isRemote() ? session['source_host'] : session['destination_host']"
+                    color="orange"
                     outlined
                     dense
+                    :placeholder="isRemote() ? 'source_host' : 'destination_host'"
                 ></v-text-field>
               </v-col>
               <v-col cols="4">
                 <v-text-field
-                    v-model="isRemote() ? state.session['source_port'] : state.session['destination_port']"
-                    disabled
+                    v-show="!isSocksv5()"
+                    v-model="isRemote() ? session['source_port'] : session['destination_port']"
+                    color="orange"
                     outlined
                     dense
                     type="number"
+                    :placeholder="isRemote() ? 'source_port' : 'destination_port'"
                 ></v-text-field>
               </v-col>
             </v-row>
@@ -183,35 +194,60 @@
 <script>
 import { mapState, mapActions, mapGetters } from 'vuex'
 import { Card } from '@/components/Layout'
+import Security from '@/assets/js/security'
 import DB from '@/model'
 
 export default {
-  name: "DeleteSession",
+  name: "EditSession",
   components: {
     Card
   },
   data: () => {
     return {
       drawer: false,
-      str: 'delete session',
-      isDeleteInputError: false,
-      input: ''
+      str: 'edit session',
+      input: '',
+      session: {},
+      isEditInputError: false
     }
   },
   computed: {
     ...mapState({ Defs: 'Constants', state: 'PortForwarding' }),
     ...mapGetters('PortForwarding', ['isLocal', 'isRemote', 'isSocksv5']),
-    isValidToDelete () {
+    isValidToEdit () {
       return this.input !== this.str
     }
   },
   watch: {
     input: {
       handler () {
-        this.isDeleteInputError = false
+        this.isEditInputError = false
       },
       immediate: false,
       deep: false
+    },
+    drawer: {
+      handler () {
+        this.clearValue()
+        if (this.drawer) {
+          const session = this.session
+          const curSession = this.state.session
+
+          session['id'] = curSession['id']
+          session['direction'] = curSession['direction']
+          session['source_host'] = curSession['source_host']
+          session['source_port'] = curSession['source_port']
+          session['host'] = curSession['host']
+          session['port'] = curSession['port']
+          session['username'] = curSession['username']
+          session['password'] = curSession['password']
+          session['destination_host'] = curSession['destination_host']
+          session['destination_port'] = curSession['destination_port']
+          session['authentication_method'] = curSession['authentication_method']
+          session['passphrase'] = curSession['passphrase']
+          session['private_key_id'] = curSession['private_key_id']
+        }
+      }
     }
   },
   mounted () {
@@ -221,7 +257,7 @@ export default {
     window.removeEventListener('keydown', this.keyDownHandler)
   },
   methods: {
-    ...mapActions('PortForwarding', ['deletedArrTunneling']),
+    ...mapActions('PortForwarding', ['updateArrTunneling']),
     keyDownHandler (event) {
       switch (event.keyCode) {
         case 27: // ESC
@@ -232,28 +268,34 @@ export default {
       }
     },
     clearValue () {
-      this.isDeleteInputError = false
       this.input = ''
+      this.session = {}
+      this.isEditInputError = false
     },
     close () {
       this.drawer = false
     },
     open () {
-      this.clearValue()
       this.drawer = true
     },
-    async onDeleteSession () {
+    async onClickEditButton () {
       const db = new DB()
-      const id = this.state.selectID
+      const session = this.session
+      session['password'] = Security.encodeData(session['password'])
+
+      if (this.isSocksv5()) {
+        session['destination_host'] = session['source_host']
+        session['destination_port'] = session['source_port']
+      }
 
       try {
-        const deleted = await db.deletePortForwardingItem(id)
-        if (deleted) {
-          this.deletedArrTunneling()
+        const isUpdated = await db.updatePortForwardingItem(session)
+        if (isUpdated) {
+          this.updateArrTunneling(session)
           this.close()
         }
       } catch (err) {
-        this.isDeleteInputError = true
+        this.isEditInputError = true
       }
     }
   }
