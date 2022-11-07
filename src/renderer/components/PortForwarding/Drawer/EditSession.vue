@@ -33,111 +33,6 @@
         <template v-slot:text>
           <v-container>
             <v-row align="center" dense>
-              <v-col cols="2" align="center">
-                <v-icon x-large v-show="isLocal() || isSocksv5()">{{ Defs.ICON_ACCOUNT }}</v-icon>
-                <v-icon x-large v-show="isRemote()">{{ Defs.ICON_SERVER }}</v-icon>
-              </v-col>
-              <v-col cols="2" align="center">
-                <v-progress-linear
-                    color="primary"
-                    indeterminate
-                    rounded
-                    height="6"
-                ></v-progress-linear>
-              </v-col>
-              <v-col cols="2" align="center">
-                <v-icon x-large>{{ Defs.ICON_SERVER_SECURITY }}</v-icon>
-              </v-col>
-              <v-col cols="2" align="center">
-                <v-progress-linear
-                    color="primary"
-                    indeterminate
-                    rounded
-                    height="6"
-                ></v-progress-linear>
-              </v-col>
-              <v-col cols="2" align="center">
-                <v-icon x-large v-show="isLocal()">{{ Defs.ICON_SERVER }}</v-icon>
-                <v-icon x-large v-show="isRemote()">{{ Defs.ICON_ACCOUNT }}</v-icon>
-                <v-icon x-large v-show="isSocksv5()">{{ Defs.ICON_CLOUD }}</v-icon>
-              </v-col>
-            </v-row>
-          </v-container>
-        </template>
-
-        <template v-slot:actions>
-          <v-container>
-            <v-row align="center" dense>
-              <v-col cols="8">
-                <v-text-field
-                    v-model="isRemote() ? session['destination_host'] : session['source_host']"
-                    outlined
-                    dense
-                ></v-text-field>
-              </v-col>
-              <v-col cols="4">
-                <v-text-field
-                    v-model="isRemote() ? session['destination_port'] : session['source_port']"
-                    outlined
-                    dense
-                    type="number"
-                ></v-text-field>
-              </v-col>
-            </v-row>
-
-            <v-row align="center" dense>
-              <v-col cols="8">
-                <v-text-field
-                    v-model="session['host']"
-                    outlined
-                    dense
-                ></v-text-field>
-              </v-col>
-              <v-col cols="4">
-                <v-text-field
-                    v-model="session['port']"
-                    outlined
-                    dense
-                ></v-text-field>
-              </v-col>
-              <v-col cols="12">
-                <v-text-field
-                    v-model="session['username']"
-                    outlined
-                    dense
-                ></v-text-field>
-              </v-col>
-              <v-col cols="12">
-                <v-text-field
-                    v-model="session['password']"
-                    outlined
-                    dense
-                    type="password"
-                ></v-text-field>
-              </v-col>
-            </v-row>
-
-            <v-row align="center" dense>
-              <v-col cols="8">
-                <v-text-field
-                    v-show="!isSocksv5()"
-                    v-model="isRemote() ? session['source_host'] : session['destination_host']"
-                    outlined
-                    dense
-                ></v-text-field>
-              </v-col>
-              <v-col cols="4">
-                <v-text-field
-                    v-show="!isSocksv5()"
-                    v-model="isRemote() ? session['source_port'] : session['destination_port']"
-                    outlined
-                    dense
-                    type="number"
-                ></v-text-field>
-              </v-col>
-            </v-row>
-
-            <v-row align="center" dense>
               <v-col cols="12" class="pb-0">
                 <p class="text-h6 pa-0 ma-0">Are you sure you want to <strong class="font-italic font-weight-bold">{{ str }}</strong>?</p>
                 <strong class="body-2">
@@ -148,6 +43,7 @@
                 <v-col cols="10">
                   <v-text-field
                       v-model="input"
+                      autofocus
                       dense
                       outlined
                       placeholder="edit session"
@@ -166,6 +62,127 @@
                   </v-btn>
                 </v-col>
               </v-row>
+            </v-row>
+
+            <v-row align="center" dense>
+              <v-col cols="2" align="center">
+                <v-icon x-large v-show="isLocal() || isSocksv5()" color="green">{{ Defs.ICON_ACCOUNT }}</v-icon>
+                <v-icon x-large v-show="isRemote()" color="green">{{ Defs.ICON_SERVER }}</v-icon>
+              </v-col>
+              <v-col cols="2" align="center">
+                <v-progress-linear
+                    color="primary"
+                    indeterminate
+                    rounded
+                    height="6"
+                ></v-progress-linear>
+              </v-col>
+              <v-col cols="2" align="center">
+                <v-icon x-large color="cyan">{{ Defs.ICON_SERVER_SECURITY }}</v-icon>
+              </v-col>
+              <v-col cols="2" align="center">
+                <v-progress-linear
+                    color="primary"
+                    indeterminate
+                    rounded
+                    height="6"
+                ></v-progress-linear>
+              </v-col>
+              <v-col cols="2" align="center">
+                <v-icon x-large v-show="isLocal()" color="orange">{{ Defs.ICON_SERVER }}</v-icon>
+                <v-icon x-large v-show="isRemote()" color="orange">{{ Defs.ICON_ACCOUNT }}</v-icon>
+                <v-icon x-large v-show="isSocksv5()">{{ Defs.ICON_CLOUD }}</v-icon>
+              </v-col>
+            </v-row>
+          </v-container>
+        </template>
+
+        <template v-slot:actions>
+          <v-container>
+            <v-row align="center" dense>
+              <v-col cols="8">
+                <v-text-field
+                    v-model="isRemote() ? session['destination_host'] : session['source_host']"
+                    color="green"
+                    outlined
+                    dense
+                    :placeholder="isRemote() ? 'destination_host' : 'source_host'"
+                ></v-text-field>
+              </v-col>
+              <v-col cols="4">
+                <v-text-field
+                    v-model="isRemote() ? session['destination_port'] : session['source_port']"
+                    color="green"
+                    outlined
+                    dense
+                    type="number"
+                    :placeholder="isRemote() ? 'destination_port' : 'source_port'"
+                ></v-text-field>
+              </v-col>
+            </v-row>
+
+            <v-row align="center" dense>
+              <v-col cols="8">
+                <v-text-field
+                    v-model="session['host']"
+                    color="cyan"
+                    outlined
+                    dense
+                    placeholder="server host"
+                ></v-text-field>
+              </v-col>
+              <v-col cols="4">
+                <v-text-field
+                    v-model="session['port']"
+                    color="cyan"
+                    outlined
+                    dense
+                    placeholder="server port"
+                ></v-text-field>
+              </v-col>
+              <v-col cols="12">
+                <v-text-field
+                    v-model="session['username']"
+                    color="cyan"
+                    outlined
+                    dense
+                    placeholder="server username"
+                ></v-text-field>
+              </v-col>
+              <v-col cols="12">
+                <v-text-field
+                    v-model="session['password']"
+                    color="cyan"
+                    outlined
+                    dense
+                    type="password"
+                    placeholder="server password"
+                ></v-text-field>
+              </v-col>
+            </v-row>
+
+            <v-row align="center" dense>
+              <v-col cols="8">
+                <v-text-field
+                    v-show="!isSocksv5()"
+                    v-model="isRemote() ? session['source_host'] : session['destination_host']"
+                    color="orange"
+                    outlined
+                    dense
+                    :placeholder="isRemote() ? 'source_host' : 'destination_host'"
+                ></v-text-field>
+              </v-col>
+              <v-col cols="4">
+                <v-text-field
+                    v-show="!isSocksv5()"
+                    v-model="isRemote() ? session['source_port'] : session['destination_port']"
+                    color="orange"
+                    outlined
+                    dense
+                    type="number"
+                    :placeholder="isRemote() ? 'source_port' : 'destination_port'"
+                ></v-text-field>
+              </v-col>
             </v-row>
           </v-container>
         </template>

@@ -32,6 +32,38 @@
         <template v-slot:text>
           <v-container>
             <v-row align="center" dense>
+              <v-col cols="12" class="pb-0">
+                <p class="text-h6 pa-0 ma-0">Are you sure you want to <strong class="font-italic font-weight-bold">{{ str }}</strong>?</p>
+                <strong class="body-2">
+                  - wish to {{ str }}, please enter: <strong class="font-italic font-weight-thin">{{ str }}</strong>
+                </strong>
+              </v-col>
+              <v-row dense justify="center" class="pt-2">
+                <v-col cols="10">
+                  <v-text-field
+                      v-model="input"
+                      autofocus
+                      dense
+                      outlined
+                      placeholder="delete session"
+                      color="error"
+                      :error-messages="isDeleteInputError ? 'Failed to clear session. Please try again in a few minutes' : ''"
+                  />
+                </v-col>
+                <v-col cols="2">
+                  <v-btn
+                      icon
+                      color='red'
+                      :disabled="isValidToDelete"
+                      @click="onDeleteSession"
+                  >
+                    <v-icon>{{ Defs.ICON_ARROW_RIGHT_CIRCLE }}</v-icon>
+                  </v-btn>
+                </v-col>
+              </v-row>
+            </v-row>
+
+            <v-row align="center" dense>
               <v-col cols="2" align="center">
                 <v-icon x-large v-show="isLocal() || isSocksv5()" disabled>{{ Defs.ICON_ACCOUNT }}</v-icon>
                 <v-icon x-large v-show="isRemote()" disabled>{{ Defs.ICON_SERVER }}</v-icon>
@@ -140,37 +172,6 @@
                     type="number"
                 ></v-text-field>
               </v-col>
-            </v-row>
-
-            <v-row align="center" dense>
-              <v-col cols="12" class="pb-0">
-                <p class="text-h6 pa-0 ma-0">Are you sure you want to <strong class="font-italic font-weight-bold">{{ str }}</strong>?</p>
-                <strong class="body-2">
-                  - wish to {{ str }}, please enter: <strong class="font-italic font-weight-thin">{{ str }}</strong>
-                </strong>
-              </v-col>
-              <v-row dense justify="center" class="pt-2">
-                <v-col cols="10">
-                  <v-text-field
-                      v-model="input"
-                      dense
-                      outlined
-                      placeholder="delete session"
-                      color="error"
-                      :error-messages="isDeleteInputError ? 'Failed to clear session. Please try again in a few minutes' : ''"
-                  />
-                </v-col>
-                <v-col cols="2">
-                  <v-btn
-                      icon
-                      color='red'
-                      :disabled="isValidToDelete"
-                      @click="onDeleteSession"
-                  >
-                    <v-icon>{{ Defs.ICON_ARROW_RIGHT_CIRCLE }}</v-icon>
-                  </v-btn>
-                </v-col>
-              </v-row>
             </v-row>
           </v-container>
         </template>
