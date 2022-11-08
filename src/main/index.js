@@ -7,6 +7,7 @@ import Utils from './assets/utils'
 let tray = null
 let masterPassword = null
 let portForwarding = null
+let appNotification = null
 
 if (Defs.APP_IS_PRODUCTION) {
   global.__static = path.join(__dirname, '/static').replace(/\\/g, '\\\\')
@@ -25,9 +26,11 @@ const executionNotification = () => {
     body: Defs.NOTIFICATION_BODY
   }
 
-  if (config) {
-    return new Notification(config).show()
+  if (appNotification === null) {
+    appNotification = new Notification(config)
   }
+
+  appNotification.show()
 }
 
 const createMasterPassword = () => {
@@ -114,6 +117,9 @@ const createTray = () => {
 
   if (tray && config) {
     tray.setContextMenu(Menu.buildFromTemplate(config))
+    tray.on('click', () => {
+      appNotification.close()
+    })
   }
 }
 
