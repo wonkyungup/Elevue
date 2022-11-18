@@ -123,6 +123,10 @@ const createTray = () => {
   }
 }
 
+app.on('browser-window-created', (_, window) => {
+  require("@electron/remote/main").enable(window.webContents)
+})
+
 app.on('ready', () => {
   createMasterPassword()
 })

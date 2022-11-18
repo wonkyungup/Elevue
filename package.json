@@ -83,10 +83,11 @@
     "@journeyapps/sqlcipher": "5.3.1",
     "bcrypt": "5.1.0",
     "js-base64": "3.7.2",
+    "ssh2": "1.11.0",
     "vue": "2.6.14",
     "vue-electron": "1.0.6",
     "vue-router": "3.0.1",
-    "vuetify": "2.6.1",
+    "vuetify": "2.6.12",
     "vuex": "3.6.0"
   },
   "devDependencies": {
@@ -101,7 +102,7 @@
     "cross-env": "7.0.3",
     "css-loader": "5.2.6",
     "del": "3.0.0",
-    "electron": "13.6.0",
+    "electron": "21.2.3",
     "electron-builder": "23.0.2",
     "electron-debug": "3.2.0",
     "electron-devtools-installer": "3.2.0",

@@ -16,7 +16,7 @@
                 :color="isDarkMode($vuetify) ? '#424242' : '#E0E0E0'"
             >
               <template v-slot:title>
-                <v-icon large>{{ getTunnelingBodyTitleIcon(item) }}</v-icon>
+                <v-icon large style="letter-spacing: 3px;">{{ getTunnelingBodyTitleIcon(item) }}</v-icon>
                 <h4>{{ item.host }}</h4>
                 <v-spacer />
                 <div v-show="hover" >
