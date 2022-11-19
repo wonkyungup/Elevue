@@ -20,8 +20,11 @@
                 <h4>{{ item.host }}</h4>
                 <v-spacer />
                 <div v-show="hover" >
-                  <v-btn icon small>
-                    <v-icon>{{ Defs.ICON_CONNECTION }}</v-icon>
+                  <v-btn
+                    icon
+                    small
+                    @click="onClickConnect(item)"
+                  ><v-icon>{{ Defs.ICON_CONNECTION }}</v-icon>
                   </v-btn>
                   <v-btn
                       icon
@@ -53,6 +56,8 @@
 <script>
 import { mapState, mapGetters, mapActions } from 'vuex'
 import { Card } from '@/components/Layout'
+import SessionListener from '@/assets/js/ssh/SessionListener'
+import Session from '@/assets/js/ssh'
 
 export default {
   name: "SessionBody",
@@ -83,6 +88,40 @@ export default {
   },
   methods: {
     ...mapActions('PortForwarding', ['setSelectID']),
+    setSessionListener (sessionListener) {
+      sessionListener.on(SessionListener.MSG_SESSION_CONNECT_ATTEMPT, async (session) => {
+        session._stusConnect = SessionListener.MSG_SESSION_CONNECT_ATTEMPT
+        console.log(session)
+        await session.doSSHConnect()
+      })
+
+      sessionListener.on(SessionListener.MSG_SESSION_CONNECTED, (session) => {
+        session._stusConnect = SessionListener.MSG_SESSION_CONNECTED
+        console.log(session)
+      })
+
+      sessionListener.on(SessionListener.MSG_SESSION_DISCONNECTED, async (session) => {
+        session._stusConnect = SessionListener.MSG_SESSION_DISCONNECTED
+        console.log(session)
+        await session.disconnect()
+      })
+
+      sessionListener.on(SessionListener.MSG_SESSION_ERROR, async (session) => {
+        session._stusConnect = SessionListener.MSG_SESSION_ERROR
+        console.log(session)
+        await session.disconnect()
+      })
+    },
+    onClickConnect (session) {
+      const sessionListener = new SessionListener()
+      session = new Session(sessionListener, session)
+      
+      if (session) {
+        this.setSessionListener(session._sessionListener)
+        console.log(session)
+        session.openTunnel()
+      }
+    },
     onClickEdit (session) {
       const id = session.id
 
