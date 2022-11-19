@@ -2,7 +2,6 @@ import Constants from './Constants'
 import Security from '@/assets/js/security'
 
 const Defs = Constants.state
-
 const state = {
     arrTunneling: [],
     curDrawer: Defs.DRAWER_DIRECTION_PAGE || 0,
@@ -24,9 +23,6 @@ const state = {
 }
 
 const getters = {
-    isWelcomePage: state => () => {
-      return state.arrTunneling.length <= 0
-    },
     getDirectionTitle: state => () => {
       return state.session.direction.replace(/\b[a-z]/, value => value.toUpperCase())
     },
@@ -52,10 +48,8 @@ const getters = {
       return state.curDrawer === Defs.DRAWER_DESTINATION_PAGE
     },
     getTunnelingBodyTitleIcon: () => (session) => {
-      const direction = session.direction
-
-      if (direction !== null && direction.length > 0) {
-          switch (direction) {
+      if (session['direction'] !== null && session['direction'].length > 0) {
+          switch (session['direction']) {
               case Defs.STR_LOCAL:
                   return Defs.ICON_ALPHA_L_BOX
               case Defs.STR_REMOTE:
@@ -98,20 +92,18 @@ const getters = {
         }
     },
     getTunnelingBodyText: () => (session) => {
-        const direction = session.direction
-
-        if (direction !== null && direction.length > 0) {
-            switch (direction) {
-                case Defs.STR_LOCAL:
-                    return `From ${session.host}:${session.source_port} to ${session.destination_host}:${session.destination_port}`
-                case Defs.STR_REMOTE:
-                    return `From ${session.host}:${session.destination_port} to ${session.source_host}:${session.source_port}`
-                case Defs.STR_SOCKSV5:
-                    return `From ${session.host}:${session.source_port}`
-                default:
-                    break
-            }
-        }
+      if (session['direction'] !== null && session['direction'].length > 0) {
+          switch (session['direction']) {
+              case Defs.STR_LOCAL:
+                  return `From ${session.host}:${session.source_port} to ${session.destination_host}:${session.destination_port}`
+              case Defs.STR_REMOTE:
+                  return `From ${session.host}:${session.destination_port} to ${session.source_host}:${session.source_port}`
+              case Defs.STR_SOCKSV5:
+                  return `From ${session.host}:${session.source_port}`
+              default:
+                  break
+          }
+      }
     }
 }
 
@@ -178,52 +170,11 @@ const mutations ={
     MOVE_NEXT_BUTTON (state) {
       state.curDrawer++
     },
-    SET_DB_SESSION (state, row) {
-        const session = state.session
-        const arrTunneling = state.arrTunneling
-
-        if (session.id <= 0) {
-            session.id = row.id
-        }
-        session.password = Security.decodeData(row.password)
-        console.log(session)
-        arrTunneling.push(session)
-    },
-    SET_DB_ARR_TUNNELING (state, rows) {
-        rows.forEach(session => session['password'] = Security.decodeData(session['password']))
-
-        if (rows.length > 0) {
-            state.arrTunneling = rows
-        }
-    },
     SET_CUR_TABLE_STYLE (state, value) {
         state.curTableStyle = value
     },
     SET_SELECT_ID (state, id) {
-        state.selectID = id
-        state.session = state.arrTunneling.filter(session => session.id === id)[0]
-    },
-    UPDATE_ARR_TUNNELING (state, session) {
-        const arr = state.arrTunneling
-
-        arr.forEach(item => {
-            if (item['id'] === session['id']) {
-                item['source_host'] = session['source_host']
-                item['source_port'] = session['source_port']
-                item['host'] = session['host']
-                item['port'] = session['port']
-                item['username'] = session['username']
-                item['password'] = Security.decodeData(session['password'])
-                item['destination_host'] = session['destination_host']
-                item['destination_port'] = session['destination_port']
-                item['authentication_method'] = session['authentication_method']
-                item['passphrase'] = session['passphrase']
-                item['private_key_id'] = session['private_key_id']
-            }
-        })
-    },
-    DELETED_ARR_TUNNELING (state) {
-        state.arrTunneling = state.arrTunneling.filter(value => value.id !== state.selectID)
+      state.selectID = id
     }
 }
 
@@ -240,23 +191,11 @@ const actions = {
     moveNextButton ({ commit }) {
       commit('MOVE_NEXT_BUTTON')
     },
-    setDBSession ({ commit }, data) {
-      commit('SET_DB_SESSION', data)
-    },
-    setDBArrTunneling ({ commit }, list) {
-      commit('SET_DB_ARR_TUNNELING', list)
-    },
     setCurTableStyle ({ commit }, value) {
       commit('SET_CUR_TABLE_STYLE', value)
     },
     setSelectID ({ commit }, id) {
       commit('SET_SELECT_ID', id)
-    },
-    updateArrTunneling ({ commit }, session) {
-      commit('UPDATE_ARR_TUNNELING', session)
-    },
-    deletedArrTunneling ({ commit }) {
-      commit('DELETED_ARR_TUNNELING')
     }
 }
 

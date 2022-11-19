@@ -101,7 +101,7 @@
             <v-row align="center" dense>
               <v-col cols="8">
                 <v-text-field
-                    v-model="isRemote() ? state.session['destination_host'] : state.session['source_host']"
+                    v-model="isRemote() ? curSession['destination_host'] : curSession['source_host']"
                     disabled
                     outlined
                     dense
@@ -109,7 +109,7 @@
               </v-col>
               <v-col cols="4">
                 <v-text-field
-                    v-model="isRemote() ? state.session['destination_port'] : state.session['source_port']"
+                    v-model="isRemote() ? curSession['destination_port'] : curSession['source_port']"
                     disabled
                     outlined
                     dense
@@ -121,7 +121,7 @@
             <v-row align="center" dense>
               <v-col cols="8">
                 <v-text-field
-                    v-model="state.session['host']"
+                    v-model="curSession['host']"
                     outlined
                     dense
                     disabled
@@ -129,7 +129,7 @@
               </v-col>
               <v-col cols="4">
                 <v-text-field
-                    v-model="state.session['port']"
+                    v-model="curSession['port']"
                     outlined
                     dense
                     disabled
@@ -137,7 +137,7 @@
               </v-col>
               <v-col cols="12">
                 <v-text-field
-                    v-model="state.session['username']"
+                    v-model="curSession['username']"
                     outlined
                     dense
                     disabled
@@ -145,7 +145,7 @@
               </v-col>
               <v-col cols="12">
                 <v-text-field
-                    v-model="state.session['password']"
+                    v-model="curSession['password']"
                     disabled
                     outlined
                     dense
@@ -157,7 +157,7 @@
             <v-row align="center" dense>
               <v-col cols="8">
                 <v-text-field
-                    v-model="isRemote() ? state.session['source_host'] : state.session['destination_host']"
+                    v-model="isRemote() ? curSession['source_host'] : curSession['destination_host']"
                     disabled
                     outlined
                     dense
@@ -165,7 +165,7 @@
               </v-col>
               <v-col cols="4">
                 <v-text-field
-                    v-model="isRemote() ? state.session['source_port'] : state.session['destination_port']"
+                    v-model="isRemote() ? curSession['source_port'] : curSession['destination_port']"
                     disabled
                     outlined
                     dense
@@ -181,7 +181,7 @@
 </template>
 
 <script>
-import { mapState, mapActions, mapGetters } from 'vuex'
+import { mapState, mapGetters } from 'vuex'
 import { Card } from '@/components/Layout'
 import DB from '@/model'
 
@@ -193,9 +193,10 @@ export default {
   data: () => {
     return {
       drawer: false,
-      str: 'delete session',
+      str: 'delete',
       isDeleteInputError: false,
-      input: ''
+      input: '',
+      curSession: {}
     }
   },
   computed: {
@@ -205,7 +206,18 @@ export default {
       return this.input !== this.str
     }
   },
+  props: {
+    arrTunnel: Array
+  },
   watch: {
+    'state.selectID': {
+      handler() {
+        const info = this.arrTunnel.filter(value => value['_id'] === this.state.selectID)[0]
+        this.curSession = info['_session']
+      },
+      immediate: false,
+      deep: true
+    },
     input: {
       handler () {
         this.isDeleteInputError = false
@@ -221,7 +233,6 @@ export default {
     window.removeEventListener('keydown', this.keyDownHandler)
   },
   methods: {
-    ...mapActions('PortForwarding', ['deletedArrTunneling']),
     keyDownHandler (event) {
       switch (event.keyCode) {
         case 27: // ESC
@@ -249,7 +260,7 @@ export default {
       try {
         const deleted = await db.deletePortForwardingItem(id)
         if (deleted) {
-          this.deletedArrTunneling()
+          this.$emit('msgDeleteTunnel', id)
           this.close()
         }
       } catch (err) {

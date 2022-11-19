@@ -192,7 +192,7 @@
 </template>
 
 <script>
-import { mapState, mapActions, mapGetters } from 'vuex'
+import { mapState, mapGetters } from 'vuex'
 import { Card } from '@/components/Layout'
 import Security from '@/assets/js/security'
 import DB from '@/model'
@@ -205,7 +205,7 @@ export default {
   data: () => {
     return {
       drawer: false,
-      str: 'edit session',
+      str: 'edit',
       input: '',
       session: {},
       isEditInputError: false
@@ -217,6 +217,9 @@ export default {
     isValidToEdit () {
       return this.input !== this.str
     }
+  },
+  props: {
+    arrTunnel: Array
   },
   watch: {
     input: {
@@ -231,7 +234,8 @@ export default {
         this.clearValue()
         if (this.drawer) {
           const session = this.session
-          const curSession = this.state.session
+          const info = this.arrTunnel.filter(value => value['_id'] === this.state.selectID)[0]
+          const curSession = info['_session']
 
           session['id'] = curSession['id']
           session['direction'] = curSession['direction']
@@ -257,7 +261,6 @@ export default {
     window.removeEventListener('keydown', this.keyDownHandler)
   },
   methods: {
-    ...mapActions('PortForwarding', ['updateArrTunneling']),
     keyDownHandler (event) {
       switch (event.keyCode) {
         case 27: // ESC
@@ -291,7 +294,7 @@ export default {
       try {
         const isUpdated = await db.updatePortForwardingItem(session)
         if (isUpdated) {
-          this.updateArrTunneling(session)
+          this.$emit('msgUpdateSession', session)
           this.close()
         }
       } catch (err) {

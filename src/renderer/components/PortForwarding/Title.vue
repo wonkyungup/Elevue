@@ -48,15 +48,16 @@ export default {
       arrTableStyle: []
     }
   },
+  props: {
+    arrTunnel: Array
+  },
   watch: {
-    state: {
+    arrTunnel: {
       handler () {
-        const state = this.state
-
-        if (state.arrTunneling.length > 0) {
+        if (this.arrTunnel.length > 0) {
           this.isExistSession = true
-          this.curTableStyle = state.curTableStyle
-          this.arrTableStyle = state.arrTableStyle
+          this.curTableStyle = this.state.curTableStyle
+          this.arrTableStyle = this.state.arrTableStyle
         } else {
           this.isExistSession = false
           this.curTableStyle = ''

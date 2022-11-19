@@ -38,6 +38,10 @@ export default class Constants {
     static STR_DISPLAY_MD = 'md'
     static STR_DISPLAY_LG = 'lg'
     static STR_DISPLAY_XL = 'XL'
+    static STR_TYPE_SUCCESS = 'success'
+    static STR_TYPE_WARNING = 'warning'
+    static STR_TYPE_ERROR = 'error'
+    static STR_TYPE_INFO = 'info'
 
     static isMac = (Utils.getOs() === Constants.STR_MAC)
 
@@ -61,6 +65,12 @@ export default class Constants {
     static ICON_CARD_TEXT = 'mdi-card-text'
     static ICON_CARD_REMOVE = 'mdi-card-remove'
     static ICON_CANCEL = 'mdi-cancel'
+    static ICON_ALERT_CIRCLE = 'mdi-alert-circle'
+    static ICON_PLAY = 'mdi-play'
+    static ICON_STOP = 'mdi-stop'
+    static ICON_TRASH = 'mdi-delete'
+    static ICON_TEXT = 'mdi-text'
+    static ICON_CHECK = 'mdi-check'
 
     static DRAWER_DIRECTION_PAGE = 0
     static DRAWER_SOURCE_PAGE = 1
