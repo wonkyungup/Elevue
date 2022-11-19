@@ -192,7 +192,7 @@
 </template>
 
 <script>
-import { mapState, mapGetters } from 'vuex'
+import { mapState } from 'vuex'
 import { Card } from '@/components/Layout'
 import Security from '@/assets/js/security'
 import DB from '@/model'
@@ -213,13 +213,12 @@ export default {
   },
   computed: {
     ...mapState({ Defs: 'Constants', state: 'PortForwarding' }),
-    ...mapGetters('PortForwarding', ['isLocal', 'isRemote', 'isSocksv5']),
     isValidToEdit () {
       return this.input !== this.str
     }
   },
   props: {
-    arrTunnel: Array
+    target: Object
   },
   watch: {
     input: {
@@ -229,29 +228,26 @@ export default {
       immediate: false,
       deep: false
     },
-    drawer: {
+    target: {
       handler () {
-        this.clearValue()
-        if (this.drawer) {
-          const session = this.session
-          const info = this.arrTunnel.filter(value => value['_id'] === this.state.selectID)[0]
-          const curSession = info['_session']
+        const session = this.session
 
-          session['id'] = curSession['id']
-          session['direction'] = curSession['direction']
-          session['source_host'] = curSession['source_host']
-          session['source_port'] = curSession['source_port']
-          session['host'] = curSession['host']
-          session['port'] = curSession['port']
-          session['username'] = curSession['username']
-          session['password'] = curSession['password']
-          session['destination_host'] = curSession['destination_host']
-          session['destination_port'] = curSession['destination_port']
-          session['authentication_method'] = curSession['authentication_method']
-          session['passphrase'] = curSession['passphrase']
-          session['private_key_id'] = curSession['private_key_id']
-        }
-      }
+        session['id'] = this.target['id']
+        session['direction'] = this.target['direction']
+        session['source_host'] = this.target['source_host']
+        session['source_port'] = this.target['source_port']
+        session['host'] = this.target['host']
+        session['port'] = this.target['port']
+        session['username'] = this.target['username']
+        session['password'] = this.target['password']
+        session['destination_host'] = this.target['destination_host']
+        session['destination_port'] = this.target['destination_port']
+        session['authentication_method'] = this.target['authentication_method']
+        session['passphrase'] = this.target['passphrase']
+        session['private_key_id'] = this.target['private_key_id']
+      },
+      immediate: false,
+      deep: false
     }
   },
   mounted () {
@@ -270,10 +266,14 @@ export default {
           break
       }
     },
-    clearValue () {
-      this.input = ''
-      this.session = {}
-      this.isEditInputError = false
+    isLocal() {
+      return this.target['direction'] === this.Defs.STR_LOCAL
+    },
+    isRemote() {
+      return this.target['direction'] === this.Defs.STR_REMOTE
+    },
+    isSocksv5() {
+      return this.target['direction'] === this.Defs.STR_SOCKSV5
     },
     close () {
       this.drawer = false

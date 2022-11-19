@@ -158,7 +158,7 @@ export default {
         }
       },
       immediate: false,
-      deep: true
+      deep: false
     }
   },
   computed: {

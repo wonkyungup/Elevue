@@ -106,7 +106,6 @@ export default class Session {
                 if (err)  {
                     this.onSSHError('LOCAL FORWARDOUT', err)
                 } else {
-                    console.log(stream)
                     socket.pipe(stream)
                     stream.pipe(socket)
                 }

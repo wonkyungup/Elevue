@@ -65,7 +65,7 @@ export default {
         }
       },
       immediate: true,
-      deep: true
+      deep: false
     },
     curTableStyle: {
       handler () {

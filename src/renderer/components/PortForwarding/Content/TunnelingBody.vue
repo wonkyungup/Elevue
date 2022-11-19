@@ -106,16 +106,14 @@ export default {
       const id = session.id
 
       if (id > 0) {
-        this.setSelectID(id)
-        this.$emit('msgClickEditButton')
+        this.$emit('msgClickEditButton', id)
       }
     },
     onClickDelete (session) {
       const id = session.id
 
       if (id > 0) {
-        this.setSelectID(id)
-        this.$emit('msgClickDeleteButton')
+        this.$emit('msgClickDeleteButton', id)
       }
     }
   }

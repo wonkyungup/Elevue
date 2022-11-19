@@ -29,12 +29,12 @@
       />
       <EditSession
         ref="EditSession"
-        :arrTunnel="arrTunnel"
+        :target="target"
         v-on:msgUpdateSession="onEditTunnel"
       />
       <DeleteSession
         ref="DeleteSession"
-        :arrTunnel="arrTunnel"
+        :target="target"
         v-on:msgDeleteTunnel="onDeleteTunnel"
       />
     </template>
@@ -70,7 +70,8 @@ export default {
   },
   data: () => {
     return {
-      arrTunnel: []
+      arrTunnel: [],
+      target: {}
     }
   },
   computed: {
@@ -90,7 +91,8 @@ export default {
     onClickNewButton () {
       this.$refs['NewSession'].open()
     },
-    onClickEditButton () {
+    onClickEditButton (id) {
+      this.target = this.arrTunnel.filter(value => value['_id'] === id)[0]['_session']
       this.$refs['EditSession'].open()
     },
     onEditTunnel (session) {
@@ -110,7 +112,8 @@ export default {
         }
       })
     },
-    onClickDeleteButton () {
+    onClickDeleteButton (id) {
+      this.target = this.arrTunnel.filter(value => value['_id'] === id)[0]['_session']
       this.$refs['DeleteSession'].open()
     },
     onDeleteTunnel (id) {
@@ -158,7 +161,7 @@ export default {
         _this._stusConnect = SessionListener.MSG_SESSION_ERROR
 
         if (_this._isConnect) _this._isConnect = false
-        if (!_this.alert['isShow']) _this.alert['isShow'] = true
+        if (!_this._alert['isShow']) _this._alert['isShow'] = true
 
         _this._alert['icon'] = this.Defs.ICON_ALERT_CIRCLE
         _this._alert['type'] = this.Defs.STR_TYPE_ERROR

@@ -3,7 +3,6 @@ import Security from '@/assets/js/security'
 
 const Defs = Constants.state
 const state = {
-    arrTunneling: [],
     curDrawer: Defs.DRAWER_DIRECTION_PAGE || 0,
     curTableStyle: Defs.STR_TABLE_STYLE_AUTO,
     arrTableStyle: [Defs.STR_TABLE_STYLE_AUTO, Defs.STR_TABLE_STYLE_COL12, Defs.STR_TABLE_STYLE_COL6, Defs.STR_TABLE_STYLE_COL4, Defs.STR_TABLE_STYLE_COL2],
