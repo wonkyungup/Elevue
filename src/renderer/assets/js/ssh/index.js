@@ -7,6 +7,7 @@ import Security from '@/assets/js/security'
 const Defs = remote.getGlobal('Constants')
 const SSH = Client
 const net = require('net')
+const socksv5 = require('socksv5')
 
 export default class Session {
     constructor (listener, session) {
@@ -98,6 +99,9 @@ export default class Session {
             case Defs.STR_REMOTE:
                 this.onExecRemoteTunnel(session)
                 break
+            case Defs.STR_SOCKSV5:
+                this.onExecSocksv5Tunnel(session)
+                break
             default:
                 break
         }
@@ -141,12 +145,44 @@ export default class Session {
         })
     }
 
+    onExecSocksv5Tunnel (session) {
+        const server = socksv5.createServer((info, accept, deny) => {
+            this._ssh.forwardOut(info.srcAddr, info.srcPort, info.dstAddr, info.dstPort, (err, stream) => {
+                if (err) {
+                    this.onSSHError('SOCKSV5 FORWARDOUT', err)
+                    return deny()
+                }
+
+                const clientSocket = accept(true)
+                if (clientSocket) {
+                    stream.pipe(clientSocket).pipe(stream).on('close', () => {})
+                }
+            })
+        })
+
+        server.on('error', (err) => {
+            if (err) {
+                this.onSSHError('SOCKSV5 ERROR', err)
+            }
+        })
+
+        server.listen(session['source_port'], session['source_host'], (err) => {
+            if (err) {
+                this.onSSHError('SOCKSV5 LISTEN', err)
+            } else {
+                this._server = server
+                this._sessionListener.emit(SessionListener.MSG_SESSION_CONNECTED, this)
+            }
+        }).useAuth(socksv5.auth.None())
+    }
+
     closeExecTunnel () {
         const session = this._session
 
         switch (session.direction) {
             case Defs.STR_LOCAL:
-                this.closeExecLocalTunnel()
+            case Defs.STR_SOCKSV5:
+                this.closeExecCommonTunnel()
                 break
             case Defs.STR_REMOTE:
                 this.closeExecRemoteTunnel(session)
@@ -156,7 +192,7 @@ export default class Session {
         }
     }
 
-    closeExecLocalTunnel () {
+    closeExecCommonTunnel () {
         if (this._server) {
             this._server.close()
         }
@@ -164,7 +200,7 @@ export default class Session {
     }
 
     closeExecRemoteTunnel (session) {
-        this._ssh.unforwardIn(session['source_host'], session['source_port'], (err) => {
+        this._ssh.unforwardIn(session['destination_host'], session['destination_port'], (err) => {
             if (err)  {
                 this.onSSHError('REMOTE UNFORWARDIN', err)
             }
