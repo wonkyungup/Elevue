@@ -101,7 +101,7 @@
             <v-row align="center" dense>
               <v-col cols="8">
                 <v-text-field
-                    v-model="isRemote() ? state.session['destination_host'] : state.session['source_host']"
+                    v-model="isRemote() ? target['destination_host'] : target['source_host']"
                     disabled
                     outlined
                     dense
@@ -109,7 +109,7 @@
               </v-col>
               <v-col cols="4">
                 <v-text-field
-                    v-model="isRemote() ? state.session['destination_port'] : state.session['source_port']"
+                    v-model="isRemote() ? target['destination_port'] : target['source_port']"
                     disabled
                     outlined
                     dense
@@ -121,7 +121,7 @@
             <v-row align="center" dense>
               <v-col cols="8">
                 <v-text-field
-                    v-model="state.session['host']"
+                    v-model="target['host']"
                     outlined
                     dense
                     disabled
@@ -129,7 +129,7 @@
               </v-col>
               <v-col cols="4">
                 <v-text-field
-                    v-model="state.session['port']"
+                    v-model="target['port']"
                     outlined
                     dense
                     disabled
@@ -137,7 +137,7 @@
               </v-col>
               <v-col cols="12">
                 <v-text-field
-                    v-model="state.session['username']"
+                    v-model="target['username']"
                     outlined
                     dense
                     disabled
@@ -145,7 +145,7 @@
               </v-col>
               <v-col cols="12">
                 <v-text-field
-                    v-model="state.session['password']"
+                    v-model="target['password']"
                     disabled
                     outlined
                     dense
@@ -157,7 +157,7 @@
             <v-row align="center" dense>
               <v-col cols="8">
                 <v-text-field
-                    v-model="isRemote() ? state.session['source_host'] : state.session['destination_host']"
+                    v-model="isRemote() ? target['source_host'] : target['destination_host']"
                     disabled
                     outlined
                     dense
@@ -165,7 +165,7 @@
               </v-col>
               <v-col cols="4">
                 <v-text-field
-                    v-model="isRemote() ? state.session['source_port'] : state.session['destination_port']"
+                    v-model="isRemote() ? target['source_port'] : target['destination_port']"
                     disabled
                     outlined
                     dense
@@ -181,7 +181,7 @@
 </template>
 
 <script>
-import { mapState, mapActions, mapGetters } from 'vuex'
+import { mapState } from 'vuex'
 import { Card } from '@/components/Layout'
 import DB from '@/model'
 
@@ -193,17 +193,20 @@ export default {
   data: () => {
     return {
       drawer: false,
-      str: 'delete session',
+      str: 'delete',
       isDeleteInputError: false,
-      input: ''
+      input: '',
+      curSession: {}
     }
   },
   computed: {
-    ...mapState({ Defs: 'Constants', state: 'PortForwarding' }),
-    ...mapGetters('PortForwarding', ['isLocal', 'isRemote', 'isSocksv5']),
+    ...mapState({ Defs: 'Constants' }),
     isValidToDelete () {
       return this.input !== this.str
     }
+  },
+  props: {
+    target: Object
   },
   watch: {
     input: {
@@ -221,7 +224,6 @@ export default {
     window.removeEventListener('keydown', this.keyDownHandler)
   },
   methods: {
-    ...mapActions('PortForwarding', ['deletedArrTunneling']),
     keyDownHandler (event) {
       switch (event.keyCode) {
         case 27: // ESC
@@ -230,6 +232,15 @@ export default {
         default:
           break
       }
+    },
+    isLocal() {
+      return this.target['direction'] === this.Defs.STR_LOCAL
+    },
+    isRemote() {
+      return this.target['direction'] === this.Defs.STR_REMOTE
+    },
+    isSocksv5() {
+      return this.target['direction'] === this.Defs.STR_SOCKSV5
     },
     clearValue () {
       this.isDeleteInputError = false
@@ -244,12 +255,12 @@ export default {
     },
     async onDeleteSession () {
       const db = new DB()
-      const id = this.state.selectID
+      const id = this.target.id
 
       try {
         const deleted = await db.deletePortForwardingItem(id)
         if (deleted) {
-          this.deletedArrTunneling()
+          this.$emit('msgDeleteTunnel', id)
           this.close()
         }
       } catch (err) {

@@ -66,14 +66,14 @@ export default {
 
           db.insertPortForwardingItem(session).then(row => {
             if (row.id > 0) {
-              this.setDBSession(row)
+              this.$emit('msgNewSession', row)
               this.close()
             }
           })
         }
       },
       immediate: true,
-      deep: true
+      deep: false
     }
   },
   mounted () {
@@ -83,7 +83,7 @@ export default {
     window.removeEventListener('keydown', this.keyDownHandler)
   },
   methods: {
-    ...mapActions('PortForwarding', ['clearSessionValue', 'setDBSession']),
+    ...mapActions('PortForwarding', ['clearSessionValue']),
     keyDownHandler (event) {
       switch (event.keyCode) {
         case 27: // ESC
