@@ -43,10 +43,10 @@ const createMasterPassword = () => {
   }
 
   if (Defs.isMac) {
-    app.dock.setIcon(Defs.STATIC_IMG_APP_DOCK)
+    app.dock.setIcon(path.join(__static, path.sep, Defs.STATIC_IMG_APP_DOCK))
     app.dock.bounce()
   } else {
-    masterPassword.setIcon(Defs.STATIC_IMG_APP_DOCK)
+    masterPassword.setIcon(path.join(__static, path.sep, Defs.STATIC_IMG_APP_DOCK))
   }
 
   masterPassword.loadURL(Utils.setWinUrl('master-password'))
@@ -91,7 +91,7 @@ const createPortForwarding = () => {
 
 const createTray = () => {
   if (tray === null) {
-    tray = new Tray(Defs.STATIC_IMG_TRAY)
+    tray = new Tray(path.join(__static, path.sep, Defs.STATIC_IMG_TRAY))
   }
 
   const config = [
