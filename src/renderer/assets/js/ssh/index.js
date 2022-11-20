@@ -70,7 +70,7 @@ export default class Session {
     }
 
     async doSSHDisconnect () {
-        await this._ssh.end()
+        if (this._ssh) await this._ssh.end()
 
         this._ssh = null
         this._server = null
@@ -81,7 +81,7 @@ export default class Session {
         const stream = accept()
         stream.pause()
 
-        const socket = net.connect(session['destination_port'], session['destination_host'], () => {
+        const socket = net.connect(session['source_port'], session['source_host'], () => {
             stream.pipe(socket)
             socket.pipe(stream)
             stream.resume()
@@ -95,8 +95,11 @@ export default class Session {
             case Defs.STR_LOCAL:
                 this.onExecLocalTunnel(session)
                 break
+            case Defs.STR_REMOTE:
+                this.onExecRemoteTunnel(session)
+                break
             default:
-                break    
+                break
         }
     }
 
@@ -104,7 +107,7 @@ export default class Session {
         const server = net.createServer(socket => {
             this._ssh.forwardOut(session['source_host'], session['source_port'], session['destination_host'], session['destination_port'], (err, stream) => {
                 if (err)  {
-                    this.onSSHError('LOCAL FORWARDOUT', err)
+                    this.onSSHError('LOCAL FORWARDING', err)
                 } else {
                     socket.pipe(stream)
                     stream.pipe(socket)
@@ -128,12 +131,25 @@ export default class Session {
         })
     }
 
+    onExecRemoteTunnel (session) {
+        this._ssh.forwardIn(session['destination_host'], session['destination_port'], (err) => {
+            if (err) {
+                this.onSSHError('REMOTE FORWARDING', err)
+            } else {
+                this._sessionListener.emit(SessionListener.MSG_SESSION_CONNECTED, this)
+            }
+        })
+    }
+
     closeExecTunnel () {
         const session = this._session
 
         switch (session.direction) {
             case Defs.STR_LOCAL:
-                this.closeExecLocalTunnel(session)
+                this.closeExecLocalTunnel()
+                break
+            case Defs.STR_REMOTE:
+                this.closeExecRemoteTunnel(session)
                 break
             default:
                 break    
@@ -144,6 +160,15 @@ export default class Session {
         if (this._server) {
             this._server.close()
         }
+        this._sessionListener.emit(SessionListener.MSG_SESSION_DISCONNECTED, this)
+    }
+
+    closeExecRemoteTunnel (session) {
+        this._ssh.unforwardIn(session['source_host'], session['source_port'], (err) => {
+            if (err)  {
+                this.onSSHError('REMOTE UNFORWARDIN', err)
+            }
+        })
         this._sessionListener.emit(SessionListener.MSG_SESSION_DISCONNECTED, this)
     }
 }
