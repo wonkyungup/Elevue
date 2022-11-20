@@ -33,10 +33,11 @@
                     small
                     @click="onClickConnect(item)"
                   ><v-icon>{{ Defs.ICON_PLAY }}</v-icon></v-btn>
+<!--                  edit text = :disabled="item['_isConnect']"-->
                   <v-btn
                       icon
                       small
-                      :disabled="item['_isConnect']"
+                      disabled
                       @click="onClickEdit(item['_session'])"
                   >
                     <v-icon>{{ Defs.ICON_TEXT }}</v-icon>

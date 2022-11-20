@@ -170,7 +170,7 @@ const mutations ={
       state.curDrawer++
     },
     SET_CUR_TABLE_STYLE (state, value) {
-        state.curTableStyle = value
+      state.curTableStyle = value
     },
     SET_SELECT_ID (state, id) {
       state.selectID = id
