@@ -45,9 +45,8 @@ export default class Constants {
 
     static isMac = (Utils.getOs() === Constants.STR_MAC)
 
-    static STATIC_IMG_TRAY = path.join(__static, path.sep, 'Tray-logo.png')
-    static STATIC_IMG_APP = path.join(__static, path.sep, 'App_logo.png')
-    static STATIC_IMG_APP_DOCK = path.join(__static, path.sep, 'App_logo_dock.png')
+    static STATIC_IMG_TRAY = 'Tray-logo.png'
+    static STATIC_IMG_APP_DOCK = 'App_logo_dock.png'
 
     static ICON_PLUS = 'mdi-plus'
     static ICON_ACCOUNT = 'mdi-account'
