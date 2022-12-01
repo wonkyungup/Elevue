@@ -9,6 +9,7 @@ export default class Constants {
     static TYPE_SEPARATOR = 'separator'
 
     static MENU_PORT_FORWARDING = 'Port Forwarding'
+    static MENU_IP_LOOKUP = 'IP lookup'
     static MENU_QUIT = 'Quit'
 
     static NOTIFICATION_TITLE = Constants.APP_TITLE
