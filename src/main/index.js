@@ -101,9 +101,14 @@ const createTray = () => {
         portForwarding.show()
       }
     },
+    { type: Defs.TYPE_SEPARATOR },
     {
-      type: Defs.TYPE_SEPARATOR
+      label: Defs.MENU_IP_LOOKUP,
+      click: () => {
+        console.log('On Tray IP lookup Click')
+      }
     },
+    { type: Defs.TYPE_SEPARATOR },
     { label: Defs.MENU_QUIT,
       click: () => {
         if (portForwarding) {
